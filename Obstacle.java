@@ -4,5 +4,5 @@
  *
  */
 public class Obstacle {
-
+	// TODO define and implement methods
 }
