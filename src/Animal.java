@@ -8,7 +8,6 @@ public class Animal {
 	public AnimalEnum type;
 	int x, y;
 	
-	
 	public Animal(AnimalEnum type) {	
 		this.type = type;
 	}
