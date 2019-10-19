@@ -28,9 +28,9 @@ public class Animal {
 	}
 	
 	private boolean isRabbit() {
-		return this.type.compareTo(AnimalEnum.R1) == 0 ||
+		return this.type.compareTo(AnimalEnum.R1) == 0 || 
 				this.type.compareTo(AnimalEnum.R2) == 0 ||
-						this.type.compareTo(AnimalEnum.R3) == 0 ;
+						this.type.compareTo(AnimalEnum.R3) == 0;
 	}
 	
 	private boolean isFox() {
@@ -46,8 +46,12 @@ public class Animal {
 		return false;
 	}
 	
-	public AnimalEnum getPieceEnum() {
+	public AnimalEnum getAnimalType() {
 		return type;
+	}
+	
+	public String toString() {
+		return type.toString();
 	}
 	
 	
