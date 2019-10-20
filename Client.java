@@ -47,7 +47,7 @@ public class Client {
 			
 		}
 		
-		System.out.println("Conragulations, you have won the completed the game");
+		System.out.println("Conragulations, you have completed the game");
 		
 
 	}
