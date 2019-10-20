@@ -22,7 +22,7 @@ public class Animal {
 	 * @param numOfSquares
 	 * @return
 	 */
-	public boolean move(int numOfSquares) {
+	public boolean move() {
 		//first check if it is rabbit or fox, then validate the move before moving it
 		return false;
 	}
