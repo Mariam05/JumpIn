@@ -2,10 +2,10 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 /**
- * Puts board and pieces together. 
- * Gets and validates moves.
- * BIG NOTE: X values correspond to the row. Y values correspond to the column.
- * @author tomar
+ * Puts board and pieces together. Gets and validates moves. BIG NOTE: X values
+ * correspond to the row. Y values correspond to the column.
+ * 
+ * @author Mariam Almalki
  *
  */
 public class GameEngine {
@@ -18,7 +18,7 @@ public class GameEngine {
 	private Animal fox2;
 
 	private static final int NUM_TO_WIN = 3;
-	
+
 	private enum Direction {
 		UP, DOWN, RIGHT, LEFT, INVALID
 	};
@@ -50,9 +50,9 @@ public class GameEngine {
 
 		// Add pieces to board. Fox positions are specified by their head
 		board.getSquare(0, 1).addAnimal(fox1);
-		board.getSquare(1, 1).addAnimal(fox1);
-		board.getSquare(3, 4).addAnimal(fox2);
+		board.getSquare(1, 1).addAnimal(fox1); //head
 		board.getSquare(3, 3).addAnimal(fox2);
+		board.getSquare(3, 4).addAnimal(fox2); //head
 		board.getSquare(0, 3).addAnimal(rabbit1);
 		board.getSquare(2, 4).addAnimal(rabbit2);
 		board.getSquare(4, 1).addAnimal(rabbit3);
@@ -64,26 +64,6 @@ public class GameEngine {
 	public boolean hasWon() {
 		return rabbitsInHoles == 3;
 	}
-
-//	public int getCurrPositiontoMove() {
-//		Scanner scanner = new Scanner(System.in);
-//		int currentLocation;
-//		System.out.println("What piece would you like to move? Enter position as xy ");
-//		try { 
-//			currentLocation = scanner.nextInt();
-//			//Error handling: if more than 2 digits entered or incorrect index
-//			if (currentLocation / 100 != 0 || currentLocation%10 > 4 || 
-//					currentLocation % 10 < 0 || currentLocation / 10 < 0 || currentLocation / 10 > 4 ) { 
-//				System.out.println("Incorrect input. Try again.");
-//				return getCurrPositiontoMove();
-//			}
-//		} catch (Exception e) {
-//			System.out.println("Incorrect input. Try again.");
-//			return getCurrPositiontoMove();
-//		}
-//		
-//		return currentLocation;
-//	}
 
 	public Animal getAnimalToMove() {
 		Scanner scanner = new Scanner(System.in);
@@ -113,7 +93,7 @@ public class GameEngine {
 		return null; // Can we prevent this?
 	}
 
-	// TODO: Store results in global vars so that they can be used in the move
+	// TODO: Store results in global variables so that they can be used in the move
 	// method
 	public int getPositiontoGo() {
 		Scanner scanner = new Scanner(System.in);
@@ -135,7 +115,7 @@ public class GameEngine {
 
 		return newLocation;
 	}
-	
+
 	private Direction getDirection(int currX, int currY, int newX, int newY) {
 		Direction d = Direction.INVALID;
 
@@ -147,10 +127,9 @@ public class GameEngine {
 					invalidDirectionMessage();
 				} else if (currY < newY) {
 					return Direction.RIGHT;
-		
+
 				} else {
 					return Direction.LEFT;
-					//valid = true;
 				}
 			} else if (currY == newY) { // moving vertically
 				if (currX == newX) {
@@ -164,7 +143,7 @@ public class GameEngine {
 				invalidDirectionMessage();
 			}
 		}
-		
+
 		return d;
 	}
 
@@ -172,71 +151,107 @@ public class GameEngine {
 		System.out.println("Invalid destination. Please try again.");
 		this.startNewRound();
 	}
-	
-	private boolean validateFoxMove(Animal animal, int newX, int newY) {
+
+	/**
+	 * Make sure that the fox's move is valid, and if yes then move it.
+	 * 
+	 * @param animal the fox to move
+	 * @param newX the new X position (row) to go to 
+	 * @param newY the new Y position (column) to go to
+	 * @return
+	 */
+	private void validateFoxMove(Animal animal, int newX, int newY) {
 		int currX = animal.getXPosition();
 		int currY = animal.getYPosition();
-		System.out.println("CurrX: " + currX  + " CurrY: " + currY);
-		System.out.println("NewX: " + newX  + " NewY: " + newY);
 		
 		Direction d = getDirection(currX, currY, newX, newY);
 		
-		/* Make sure that the user is not trying to move fox 1 horizontally and that
-		they are not trying to move fox 2 vertically */
-		
-		//If we are dealing with Fox1, which moves vertically:
+		//If it is fox1
 		if(animal.type.compareTo(AnimalEnum.F1) == 0) {
-			//Ensure that the player isn't asking us to move it horizontally
-			if (d.compareTo(Direction.RIGHT) == 0 || d.compareTo(Direction.LEFT) == 0) {
-				invalidDirectionMessage();
-			}
-			
-			//If the player wants to slide the fox up, we will reference the fox from it's tail
-			if (d.compareTo(Direction.UP) == 0) {
-				int headPos = currX - 1;
-				//Make sure that every square in between is empty before moving the fox
-				for (int i = newX; i < headPos ; i++) {
-					if (!(board.getSquare(i,currY).getSquareType().compareTo(Square.squareType.EMPTY) == 0)){
-						invalidDirectionMessage();
-					}
-				} 
-					
-				board.getSquare(newX, currY).addAnimal(animal); //fox's tail
-				board.getSquare(newX + 1, currY).addAnimal(animal); //fox's head. This will be set as f1's position
-									
-				}
-			} else { //otherwise the fox is sliding down
-				for (int i = currX+1; i <= newX; i++) {
-					if (!(board.getSquare(i,currY).getSquareType().compareTo(Square.squareType.EMPTY) == 0)){
-						invalidDirectionMessage();
-					}
-				}
-				
-				board.getSquare(newX -1, currY).addAnimal(animal); //fox's tail
-				board.getSquare(newX, currY).addAnimal(animal); //fox's head. This will be set as f1's position
-						
-				
-			}	
-		
-		if(animal.type.compareTo(AnimalEnum.F2) == 0 && 
-				(d.compareTo(Direction.UP) == 0 || d.compareTo(Direction.DOWN) == 0)) {
-			invalidDirectionMessage();
+			this.handleFox1Move(animal, currX, currY, newX, d);	
 		}
 		
-		
-
-		return false;
+		//If it is fox2
+		if(animal.type.compareTo(AnimalEnum.F2) == 0) {
+			this.handleFox2Move(animal, currY, currX, newY, d);
+		} 
 	}
 
+	private void handleFox1Move(Animal animal, int currX, int currY, int newX, Direction d) {
+		//Ensure that the player isn't asking us to move it horizontally
+		if (d.compareTo(Direction.RIGHT) == 0 || d.compareTo(Direction.LEFT) == 0) {
+			invalidDirectionMessage();
+		}
+
+		if (d.compareTo(Direction.UP) == 0) {
+			int headPos = currX - 1;
+			//Make sure that every square in between is empty before moving the fox
+			for (int i = newX; i < headPos ; i++) {
+				if (!(board.getSquare(i,currY).getSquareType().compareTo(Square.squareType.EMPTY) == 0)){
+					invalidDirectionMessage();
+				}
+			} 
+
+			board.getSquare(newX, currY).addAnimal(animal); //fox's tail
+			board.getSquare(newX + 1, currY).addAnimal(animal); //fox's head. This will be set as f1's position
+								
+		} else if (d.compareTo(Direction.DOWN) == 0) { //otherwise the fox is sliding down
+							
+			for (int i = currX+1; i <= newX; i++) {
+				if (!(board.getSquare(i,currY).getSquareType().compareTo(Square.squareType.EMPTY) == 0)){
+					invalidDirectionMessage();
+				}
+			}				
+			board.getSquare(newX -1, currY).addAnimal(animal); //fox's tail
+			board.getSquare(newX, currY).addAnimal(animal); //fox's head. This will be set as f1's position		
+		}	
+		board.getSquare(currX, currY).removeAnimal();
+		board.getSquare(currX-1, currY).removeAnimal();	
+	}
+	
+	private void handleFox2Move(Animal animal, int currY, int currX, int newY, Direction d) {
+		
+		//Ensure that the player isn't asking us to move it vertically
+		if (d.compareTo(Direction.UP) == 0 || d.compareTo(Direction.DOWN) == 0) {
+			invalidDirectionMessage();
+		}
+
+		if (d.compareTo(Direction.LEFT) == 0) {
+			int headPos = currY - 1;
+			//Make sure that every square in between is empty before moving the fox
+			for (int i = newY; i < headPos ; i++) {
+				if (!(board.getSquare(currX,i).getSquareType().compareTo(Square.squareType.EMPTY) == 0)){
+					invalidDirectionMessage();
+				}
+			} 
+
+			board.getSquare(currX, newY).addAnimal(animal); //fox's tail
+			board.getSquare(currX, newY + 1).addAnimal(animal); //fox's head. This will be set as f1's position
+								
+		} else if (d.compareTo(Direction.RIGHT) == 0) { //otherwise the fox is sliding down
+							
+			for (int i = currY+1; i <= newY; i++) {
+				if (!(board.getSquare(currX,i).getSquareType().compareTo(Square.squareType.EMPTY) == 0)){
+					invalidDirectionMessage();
+				}
+			}				
+			board.getSquare(currX, newY-1).addAnimal(animal); //fox's tail
+			board.getSquare(currX, newY).addAnimal(animal); //fox's head. This will be set as f1's position		
+		}	
+		board.getSquare(currX, currY).removeAnimal();
+		board.getSquare(currX-1, currY).removeAnimal();	
+	}
+	
+	
 	private boolean validateRabbitMove(Animal animal, int newX, int newY) {
 		int currX = animal.getXPosition();
-		
+
 		int currY = animal.getYPosition();
 
 		System.out.println("CurrX: " + currX + " CurrY: " + currY);
 		System.out.println("NewX: " + newX + " NewY: " + newY);
 		Direction d = getDirection(currX, currY, newX, newY);
-		
+
 		return false;
 	}
 
@@ -260,6 +275,7 @@ public class GameEngine {
 
 	public void printGameInstructions() {
 		// TODO: implement method and call it at beginning of game
+		// Get Abdulla to do this
 	}
 
 	// put board and pieces together
@@ -269,5 +285,9 @@ public class GameEngine {
 		GameEngine newGame = new GameEngine();
 
 		newGame.startNewRound();
+
+		while(!newGame.hasWon()) {
+			newGame.startNewRound();
+		}
 	}
 }

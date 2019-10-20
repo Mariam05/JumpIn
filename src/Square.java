@@ -1,5 +1,7 @@
-/*
- * Each square has a type: piece, whole, or empty
+/**
+ * 
+ * @author Mariam Almalki
+ *
  */
 public class Square {
 	
