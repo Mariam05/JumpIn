@@ -115,7 +115,7 @@ public class GameEngine {
 	public int getPositiontoGo() {
 		Scanner scanner = new Scanner(System.in);
 		int newLocation;
-		System.out.println("Where would you like to move it? Enter position as xy ");
+		System.out.println("Where would you like to move it? Enter position as RowCol ");
 		try {
 			newLocation = scanner.nextInt();
 			// Error handling: if more than 2 digits entered
@@ -142,7 +142,7 @@ public class GameEngine {
 			if (currX == newX) { // moving vertically - now check if it up or down
 				if (currY == newY) {
 					System.out.println("You're already here. Please enter another position.");
-					this.getPositiontoGo();
+					this.startNewRound();
 				} else if (currY < newY) {
 					return Direction.DOWN;
 		
@@ -153,7 +153,7 @@ public class GameEngine {
 			} else if (currY == newY) { // moving horizontally
 				if (currX == newX) {
 					System.out.println("You're already here. Please enter another position.");
-					this.getPositiontoGo();
+					this.startNewRound();
 				} else if (currX < newX) {
 					// moving right
 					return Direction.RIGHT;
@@ -165,7 +165,7 @@ public class GameEngine {
 				}
 			} else {
 				System.out.println("Invalid direction. Please enter another position.");
-				this.getPositiontoGo();
+				this.startNewRound();
 			}
 		}
 		
@@ -183,8 +183,11 @@ public class GameEngine {
 
 	private boolean validateRabbitMove(Animal animal, int newX, int newY) {
 		int currX = animal.getXPosition();
+		
 		int currY = animal.getYPosition();
 
+		System.out.println("CurrX: " + currX + " CurrY: " + currY);
+		System.out.println("NewX: " + newX + " NewY: " + newY);
 		Direction d = getDirection(currX, currY, newX, newY);
 		
 		return false;
@@ -192,12 +195,13 @@ public class GameEngine {
 
 	public void startNewRound() {
 		this.board.printBoard();
+		this.moveAnimal(this.getAnimalToMove(), this.getPositiontoGo());
 	}
 
 	public void moveAnimal(Animal animal, int xy) {
 
-		int newX = xy % 10; // x is j and y is i in board[i][j]
-		int newY = xy / 10;
+		int newX = xy / 10; // x is j and y is i in board[i][j]
+		int newY = xy % 10;
 
 		if (animal.isFox()) {
 			validateFoxMove(animal, newX, newY);
@@ -218,6 +222,5 @@ public class GameEngine {
 		GameEngine newGame = new GameEngine();
 
 		newGame.startNewRound();
-		newGame.moveAnimal(newGame.getAnimalToMove(), newGame.getPositiontoGo());
 	}
 }

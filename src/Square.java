@@ -11,9 +11,9 @@ public class Square {
 	
 	private squareType type;
 	
-	public Square(int x, int y) {
-		this.x = x;
-		this.y = y;
+	public Square(int i, int j) {
+		this.x = i;
+		this.y = j;
 		hasMushroom = false;
 		hasAnimal = false;
 		type = squareType.EMPTY;
