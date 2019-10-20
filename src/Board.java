@@ -10,25 +10,13 @@ public class Board {
 	private static final int WIDTH = 5;
 	private static final int LENGTH = 5;
 	
-	private Animal rabbit1;
-	private Animal rabbit2;
-	private Animal rabbit3;
-	private Animal fox1;
-	private Animal fox2;
-	
-	private int rabbitsInHoles;
-	
-	 
-	
-	public Board() {
+	public Board() {		
 		
-		rabbitsInHoles = 0;
-		
-		board = new Square[WIDTH][LENGTH];
+		board = new Square[LENGTH][WIDTH];
 		
 		//Initialize the board, which is a grid of squares
-		for (int i = 0; i< WIDTH; i++) {
-			for (int j = 0; j < LENGTH; j++) {
+		for (int i = 0; i< LENGTH; i++) {
+			for (int j = 0; j < WIDTH; j++) {
 				board[i][j] = new Square(i,j);
 			}
 		}
@@ -42,22 +30,8 @@ public class Board {
 		
 		//set which squares contain the mushrooms
 		board[1][3].setMushroom();
-		board[4][2].setMushroom();
-		
-		//instantiate pieces
-		rabbit1 = new Animal(AnimalEnum.R1);
-		rabbit2 = new Animal(AnimalEnum.R2);
-		rabbit3 = new Animal(AnimalEnum.R3);
-		
-		fox1 = new Animal(AnimalEnum.F1);
-		fox2 = new Animal(AnimalEnum.F2);
-		
-		//Add pieces to board. Fox positions are specified by their head
-		board[1][1].addAnimal(fox1); 
-		board[3][4].addAnimal(fox2);
-		board[0][3].addAnimal(rabbit1);
-		board[2][4].addAnimal(rabbit2);
-		board[4][1].addAnimal(rabbit3);
+		board[4][1].setMushroom();
+
 	}
 	
 	public Square getSquare(int x, int y) {
@@ -69,11 +43,15 @@ public class Board {
 	}
 	
 	public void printBoard() {
-		for (int i = 0; i < WIDTH; i++) {
-			for (int j = 0; j < LENGTH; j++) {
-				System.out.print("|"+ board[i][j]);
+		
+		System.out.println("        0     1     2     3     4   \n");
+		
+		for (int i = 0; i < LENGTH; i++) {
+			System.out.print(i+ "    ");
+			for (int j = 0; j < WIDTH; j++) {
+				System.out.print(board[i][j].toString());
 			}
-			System.out.println();
+			System.out.print("|\n");
 		}
 	}
 	
