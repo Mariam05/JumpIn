@@ -17,7 +17,7 @@ public class GameEngine {
 	private Animal fox2;
 
 	private enum Direction {
-		UP, DOWN, RIGHT, LEFT
+		UP, DOWN, RIGHT, LEFT, INVALID
 	};
 
 	private HashMap<AnimalEnum, Animal> animals;
@@ -132,37 +132,52 @@ public class GameEngine {
 
 		return newLocation;
 	}
+	
+	private Direction getDirection(int currX, int currY, int newX, int newY) {
+		Direction d = Direction.INVALID;
+
+		boolean valid = false;
+		while (!valid) {
+			// How are we getting the animal's position
+			if (currX == newX) { // moving vertically - now check if it up or down
+				if (currY == newY) {
+					System.out.println("You're already here. Please enter another position.");
+					this.getPositiontoGo();
+				} else if (currY < newY) {
+					return Direction.DOWN;
+		
+				} else {
+					return Direction.UP;
+					//valid = true;
+				}
+			} else if (currY == newY) { // moving horizontally
+				if (currX == newX) {
+					System.out.println("You're already here. Please enter another position.");
+					this.getPositiontoGo();
+				} else if (currX < newX) {
+					// moving right
+					return Direction.RIGHT;
+					//valid = true;
+				} else {
+					// moving left
+					return Direction.LEFT;
+					//valid = true;
+				}
+			} else {
+				System.out.println("Invalid direction. Please enter another position.");
+				this.getPositiontoGo();
+			}
+		}
+		
+		return d;
+	}
 
 	private boolean validateFoxMove(Animal animal, int newX, int newY) {
 		int currX = animal.getXPosition();
 		int currY = animal.getYPosition();
-		Direction d;
-
-		// How are we getting the animal's position
-		if (currX == newX) {  // moving vertically - now check if it up or down
-			if (currY == newY) {
-				// TODO: same position - handle this
-			} else if (currY < newY) {
-				// moving down
-				d = Direction.DOWN;
-			} else {
-				d = Direction.UP;
-			}
-		} else if (currY == newY) { // moving horizontally
-			if (currX == newX) {
-				// TODO: same position - handle this
-			} else if (currX < newX) {
-				// moving right
-				d = Direction.RIGHT;
-			} else {
-				// moving left
-				d = Direction.LEFT;
-			}
-		} else {
-			System.out.println("Invalid direction. Please try again.");
-			this.getPositiontoGo();
-		}
 		
+		Direction d = getDirection(currX, currY, newX, newY);
+
 		return false;
 	}
 
@@ -170,6 +185,8 @@ public class GameEngine {
 		int currX = animal.getXPosition();
 		int currY = animal.getYPosition();
 
+		Direction d = getDirection(currX, currY, newX, newY);
+		
 		return false;
 	}
 
@@ -200,10 +217,7 @@ public class GameEngine {
 
 		GameEngine newGame = new GameEngine();
 
-		// newGame.getAnimalToMove();
-
 		newGame.startNewRound();
-		newGame.getAnimalToMove();
-
+		newGame.moveAnimal(newGame.getAnimalToMove(), newGame.getPositiontoGo());
 	}
 }
