@@ -243,16 +243,64 @@ public class GameEngine {
 	}
 	
 	
-	private boolean validateRabbitMove(Animal animal, int newX, int newY) {
+	private void validateRabbitMove(Animal animal, int newX, int newY) {
 		int currX = animal.getXPosition();
-
 		int currY = animal.getYPosition();
-
-		System.out.println("CurrX: " + currX + " CurrY: " + currY);
-		System.out.println("NewX: " + newX + " NewY: " + newY);
-		Direction d = getDirection(currX, currY, newX, newY);
-
-		return false;
+		
+		// If destination is already filled
+		if(board.getSquare(newX, newY).hasAnimal() 
+				|| board.getSquare(newX, newY).hasMushroom()) {
+			this.invalidDirectionMessage();
+		}
+		// If destination is empty, check if the path rabbit takes is full of obstacles
+		else {
+			// Getting the proposed direction 
+			Direction d = getDirection(currX, currY, newX, newY);
+			// Checking of the paths are filled for each direction
+			if(d == Direction.UP) {
+				for(int k = currY; k < newY; k++) {
+					if(board.getSquare(currX, k).getSquareType().compareTo(Square.squareType.EMPTY) == 0 ||
+							board.getSquare(currX, k).getSquareType().compareTo(Square.squareType.HOLE) == 0) {
+						this.invalidDirectionMessage();
+					}
+					else {
+						//return true;
+					}
+				}
+			}
+			else if(d == Direction.DOWN) {
+				for(int k = currY; k > newY; k--) {
+					if(board.getSquare(currX, k).getSquareType().compareTo(Square.squareType.EMPTY) == 0) {
+						this.invalidDirectionMessage();
+					}
+					else {
+						//return true;
+					}
+				}
+			}
+			else if(d == Direction.LEFT) {
+				for(int k = currX; k > newX; k--) {
+					if(board.getSquare(k, currY).getSquareType().compareTo(Square.squareType.EMPTY) == 0) {
+						this.invalidDirectionMessage();
+					}
+					else {
+						//return true;
+					}
+				}
+			}
+			else if(d == Direction.RIGHT) {
+				for(int k = currX; k < newX; k++) {
+					if(board.getSquare(k, currY).getSquareType().compareTo(Square.squareType.EMPTY) == 0) {
+						this.invalidDirectionMessage();
+					}
+					else {
+						//return true;
+					}
+				}
+			}
+		}
+		
+		//return false;
 	}
 
 	public void startNewRound() {
