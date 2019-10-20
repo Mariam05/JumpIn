@@ -2,8 +2,9 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 /**
- * Puts board and pieces together Gets and validates moves
- * 
+ * Puts board and pieces together. 
+ * Gets and validates moves.
+ * BIG NOTE: X values correspond to the row. Y values correspond to the column.
  * @author tomar
  *
  */
@@ -16,6 +17,8 @@ public class GameEngine {
 	private Animal fox1;
 	private Animal fox2;
 
+	private static final int NUM_TO_WIN = 3;
+	
 	private enum Direction {
 		UP, DOWN, RIGHT, LEFT, INVALID
 	};
@@ -139,44 +142,88 @@ public class GameEngine {
 		boolean valid = false;
 		while (!valid) {
 			// How are we getting the animal's position
-			if (currX == newX) { // moving vertically - now check if it up or down
+			if (currX == newX) { // moving horizontally - now check if it is right or left
 				if (currY == newY) {
-					System.out.println("You're already here. Please enter another position.");
-					this.startNewRound();
+					invalidDirectionMessage();
 				} else if (currY < newY) {
-					return Direction.DOWN;
+					return Direction.RIGHT;
 		
 				} else {
-					return Direction.UP;
-					//valid = true;
-				}
-			} else if (currY == newY) { // moving horizontally
-				if (currX == newX) {
-					System.out.println("You're already here. Please enter another position.");
-					this.startNewRound();
-				} else if (currX < newX) {
-					// moving right
-					return Direction.RIGHT;
-					//valid = true;
-				} else {
-					// moving left
 					return Direction.LEFT;
 					//valid = true;
 				}
+			} else if (currY == newY) { // moving vertically
+				if (currX == newX) {
+					invalidDirectionMessage();
+				} else if (currX < newX) {
+					return Direction.DOWN;
+				} else {
+					return Direction.UP;
+				}
 			} else {
-				System.out.println("Invalid direction. Please enter another position.");
-				this.startNewRound();
+				invalidDirectionMessage();
 			}
 		}
 		
 		return d;
 	}
 
+	private void invalidDirectionMessage() {
+		System.out.println("Invalid destination. Please try again.");
+		this.startNewRound();
+	}
+	
 	private boolean validateFoxMove(Animal animal, int newX, int newY) {
 		int currX = animal.getXPosition();
 		int currY = animal.getYPosition();
+		System.out.println("CurrX: " + currX  + " CurrY: " + currY);
+		System.out.println("NewX: " + newX  + " NewY: " + newY);
 		
 		Direction d = getDirection(currX, currY, newX, newY);
+		
+		/* Make sure that the user is not trying to move fox 1 horizontally and that
+		they are not trying to move fox 2 vertically */
+		
+		//If we are dealing with Fox1, which moves vertically:
+		if(animal.type.compareTo(AnimalEnum.F1) == 0) {
+			//Ensure that the player isn't asking us to move it horizontally
+			if (d.compareTo(Direction.RIGHT) == 0 || d.compareTo(Direction.LEFT) == 0) {
+				invalidDirectionMessage();
+			}
+			
+			//If the player wants to slide the fox up, we will reference the fox from it's tail
+			if (d.compareTo(Direction.UP) == 0) {
+				int headPos = currX - 1;
+				//Make sure that every square in between is empty before moving the fox
+				for (int i = newX; i < headPos ; i++) {
+					if (!(board.getSquare(i,currY).getSquareType().compareTo(Square.squareType.EMPTY) == 0)){
+						invalidDirectionMessage();
+					}
+				} 
+					
+				board.getSquare(newX, currY).addAnimal(animal); //fox's tail
+				board.getSquare(newX + 1, currY).addAnimal(animal); //fox's head. This will be set as f1's position
+									
+				}
+			} else { //otherwise the fox is sliding down
+				for (int i = currX+1; i <= newX; i++) {
+					if (!(board.getSquare(i,currY).getSquareType().compareTo(Square.squareType.EMPTY) == 0)){
+						invalidDirectionMessage();
+					}
+				}
+				
+				board.getSquare(newX -1, currY).addAnimal(animal); //fox's tail
+				board.getSquare(newX, currY).addAnimal(animal); //fox's head. This will be set as f1's position
+						
+				
+			}	
+		
+		if(animal.type.compareTo(AnimalEnum.F2) == 0 && 
+				(d.compareTo(Direction.UP) == 0 || d.compareTo(Direction.DOWN) == 0)) {
+			invalidDirectionMessage();
+		}
+		
+		
 
 		return false;
 	}

@@ -3,7 +3,7 @@
  */
 public class Square {
 	
-	private enum squareType {PIECE, EMPTY, HOLE}; //the reason mushrooms and animals are both piece is so that it's easier to validate moves
+	public enum squareType {PIECE, EMPTY, HOLE}; //the reason mushrooms and animals are both piece is so that it's easier to validate moves
 	private int x, y;
 	private Animal p;
 	private boolean hasAnimal;
