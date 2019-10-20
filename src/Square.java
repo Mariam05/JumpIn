@@ -30,6 +30,16 @@ public class Square {
 		if (hasAnimal) {
 			hasAnimal = false;
 		}
+		
+		type = squareType.EMPTY;
+	}
+	
+	public boolean hasAnimal() {
+		return hasAnimal;
+	}
+	
+	public boolean hasMushroom() {
+		return hasMushroom;
 	}
 	
 	public squareType getSquareType() {

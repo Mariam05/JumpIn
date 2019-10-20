@@ -16,35 +16,27 @@ public class Animal {
 		this.x = x;
 		this.y = y;
 	}
-	
-	/**
-	 * this method will call validate rabbit move and validate fox move
-	 * @param numOfSquares
-	 * @return
-	 */
-	public boolean move() {
-		//first check if it is rabbit or fox, then validate the move before moving it
-		return false;
-	}
-	
-	private boolean isRabbit() {
+			
+	public boolean isRabbit() {
 		return this.type.compareTo(AnimalEnum.R1) == 0 || 
 				this.type.compareTo(AnimalEnum.R2) == 0 ||
 						this.type.compareTo(AnimalEnum.R3) == 0;
 	}
 	
-	private boolean isFox() {
+	public int getXPosition() {
+		return x;
+	}
+	
+	public int getYPosition() {
+		return y;
+	}
+	
+	public boolean isFox() {
 		return this.type.compareTo(AnimalEnum.F1) ==  0 ||
 				this.type.compareTo(AnimalEnum.F2) ==  0;
 	}
 	
-	private boolean validateRabbitMove() {
-		return false;
-	}
-	
-	private boolean validateFoxMove() {
-		return false;
-	}
+
 	
 	public AnimalEnum getAnimalType() {
 		return type;
