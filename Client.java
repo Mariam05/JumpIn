@@ -23,7 +23,7 @@ public class Client {
 			// input rabbit
 			String animal = input.nextLine();
 			
-			while((game.getAnimals().contains(animal))) {
+			while(~(game.getAnimals().contains(animal))) {
 				System.out.println("Please enter valid rabbit or fox");
 			}
 			
