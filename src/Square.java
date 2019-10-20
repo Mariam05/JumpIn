@@ -3,7 +3,7 @@
  */
 public class Square {
 	
-	private enum squareType {PIECE, EMPTY, HOLE};
+	private enum squareType {PIECE, EMPTY, HOLE}; //the reason mushrooms and animals are both piece is so that it's easier to validate moves
 	private int x, y;
 	private Animal p;
 	private boolean hasAnimal;
@@ -30,6 +30,18 @@ public class Square {
 		if (hasAnimal) {
 			hasAnimal = false;
 		}
+	}
+	
+	public squareType getSquareType() {
+		return type;
+	}
+	
+	//I don't like that this method returns null.. Think of another way to implement it @me
+	public Animal getAnimal() {
+		if (hasAnimal) {
+			return p;
+		}
+		return null;
 	}
 	
 	public void setHole() {
