@@ -1,6 +1,6 @@
 /**
- * Change this class to animal
- * @author tomar
+ * 
+ * @author Mariam Almalki
  *
  */
 public class Animal {
