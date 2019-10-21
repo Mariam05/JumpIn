@@ -3,14 +3,16 @@ import java.util.Scanner;
 
 
 /**
- * Puts board and pieces together. Gets and validates moves. BIG NOTE: X values
- * correspond to the row. Y values correspond to the column.
+ * Assembles board and pieces together. Gets and validates moves. 
  * 
- * @author Mariam Almalki
+ * BIG NOTE: X values correspond to the row. Y values correspond to the column.
+ * 
+ * @author Mariam Almalki, Nazifa Tanzim
  *
  */
 public class GameEngine {
 
+	//The board and animal objects
 	private Board board;
 	private Animal rabbit1;
 	private Animal rabbit2;
@@ -18,15 +20,24 @@ public class GameEngine {
 	private Animal fox1;
 	private Animal fox2;
 
-	private static final int NUM_TO_WIN = 3;
+	private static final int NUM_TO_WIN = 3; //The number of rabbits in the game needed to go in a hole
 
+	/**
+	 * To hold the direction that the player wants to move
+	 */
 	private enum Direction {
 		UP, DOWN, RIGHT, LEFT, INVALID
 	};
+	
+	/**
+	 * Maps the animal with their type, ensures there isn't more than one animal per type
+	 */
+	private HashMap<AnimalEnum, Animal> animals; 
 
-	private HashMap<AnimalEnum, Animal> animals;
-
-	private int rabbitsInHoles;
+	/**
+	 * The number of rabbits currently in a hole
+	 */
+	private int rabbitsInHoles; 
 
 	/**
 	 * Assemble the board with the pieces
@@ -62,10 +73,18 @@ public class GameEngine {
 
 	}
 
+	/**
+	 * Checks if the player has won based on the number of rabbits in a hole
+	 * @return true if the player has won
+	 */
 	public boolean hasWon() {
-		return rabbitsInHoles == 3;
+		return rabbitsInHoles == NUM_TO_WIN;
 	}
 
+	/**
+	 * Prompts the user to choose which animal they want to move
+	 * @return the animal to move
+	 */
 	public Animal getAnimalToMove() {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Which piece would you like to move? Enter the corresponding number: \n"
@@ -94,8 +113,10 @@ public class GameEngine {
 		return null; // Can we prevent this?
 	}
 
-	// TODO: Store results in global variables so that they can be used in the move
-	// method
+	/**
+	 * Prompts the user for the position they want the animal to go to
+	 * @return an integer (RowCol) representing the position
+	 */
 	public int getPositiontoGo() {
 		Scanner scanner = new Scanner(System.in);
 		int newLocation;
@@ -117,6 +138,14 @@ public class GameEngine {
 		return newLocation;
 	}
 
+	/**
+	 * Determines the direction that the player wants the animal to move in
+	 * @param currX the animal's current row position
+	 * @param currY the animal's current column position
+	 * @param newX the destination's row position
+	 * @param newY the destination's column position
+	 * @return the direction to move in
+	 */
 	private Direction getDirection(int currX, int currY, int newX, int newY) {
 		Direction d = Direction.INVALID;
 
@@ -148,6 +177,9 @@ public class GameEngine {
 		return d;
 	}
 
+	/**
+	 * Re - prompts user for correct input if their move is invalid
+	 */
 	private void invalidDirectionMessage() {
 		System.out.println("Invalid destination. Please try again.");
 		this.startNewRound();
@@ -159,7 +191,6 @@ public class GameEngine {
 	 * @param animal the fox to move
 	 * @param newX   the new X position (row) to go to
 	 * @param newY   the new Y position (column) to go to
-	 * @return
 	 */
 	private void validateFoxMove(Animal animal, int newX, int newY) {
 		int currX = animal.getXPosition();
@@ -178,6 +209,14 @@ public class GameEngine {
 		}
 	}
 
+	/**
+	 * Move fox1 (which goes vertically) to the desired location
+	 * @param animal fox1 
+	 * @param currX it's current row position
+	 * @param currY it's current column position
+	 * @param newX the new row position
+	 * @param d the direction it's going (either up or down)
+	 */
 	private void handleFox1Move(Animal animal, int currX, int currY, int newX, Direction d) {
 		// Ensure that the player isn't asking us to move it horizontally
 		if (d.compareTo(Direction.RIGHT) == 0 || d.compareTo(Direction.LEFT) == 0) {
@@ -210,10 +249,18 @@ public class GameEngine {
 		board.getSquare(currX - 1, currY).removeAnimal();
 	}
 
+	/**
+	 * Move fox2 (which goes horizontally) to the desired location
+	 * @param animal fox2
+	 * @param currY it's current column position
+	 * @param currX it's current row position
+	 * @param newY the new column position
+	 * @param d the direction it's going (either right or left)
+	 */
 	private void handleFox2Move(Animal animal, int currY, int currX, int newY, Direction d) {
 
 		// Ensure that the player isn't asking us to move it vertically
-		if (d.compareTo(Direction.UP) == 0 || d.compareTo(Direction.DOWN) == 0) {
+		if (d.compareTo(Direction.UP) == 0 || d.compareTo(Direction.DOWN) == 0 || d.compareTo(Direction.INVALID) == 0 ) {
 			invalidDirectionMessage();
 		}
 
@@ -243,14 +290,20 @@ public class GameEngine {
 		board.getSquare(currX - 1, currY).removeAnimal();
 	}
 
+	/**
+	 * Moves the rabbit to the desired location
+	 * @param animal the rabbit to move
+	 * @param newX its new row position
+	 * @param newY its new column position
+	 * @param currX its current row position
+	 * @param currY its current column position
+	 */
 	private void handleRabbitMove(Animal animal, int newX, int newY, int currX, int currY) {
 		
 		//Check if the rabbit is currently in a hole
 		if (board.getSquare(currX, currY).isHole()) {
 			this.rabbitsInHoles--;
 		}
-		
-		
 		
 		//If new position is a hole
 		if (board.getSquare(newX, newY).isHole()) {
@@ -263,12 +316,18 @@ public class GameEngine {
 		board.getSquare(newX, newY).addAnimal(animal);
 	}
 
+	/**
+	 * Ensures that the desired position to go to is valid
+	 * @param animal the rabbit to be moved
+	 * @param newX the new row to move it to
+	 * @param newY the new column to move it to
+	 */
 	private void validateRabbitMove(Animal animal, int newX, int newY) {
 		int currX = animal.getXPosition();
 		int currY = animal.getYPosition();
 
 		// If destination is already filled
-		if (board.getSquare(newX, newY).hasAnimal() || board.getSquare(newX, newY).hasMushroom()) {
+		if (board.getSquare(newX, newY).hasAnimal() || board.getSquare(newX, newY).hasMushroom() ) {
 			this.invalidDirectionMessage();
 		}
 		
@@ -276,6 +335,9 @@ public class GameEngine {
 		else {
 			// Getting the proposed direction
 			Direction d = getDirection(currX, currY, newX, newY);
+			if (d.compareTo(Direction.INVALID) == 0) {
+				this.invalidDirectionMessage();
+			}
 			// Checking of the paths are filled for each direction
 			if (d.compareTo(Direction.UP) == 0) {
 				for (int k = currY; k < newY; k++) {
@@ -311,11 +373,19 @@ public class GameEngine {
 		this.handleRabbitMove(animal, newX, newY, currX, currY);
 	}
 
+	/**
+	 * Prints the current board and prompts the user to move an animal
+	 */
 	public void startNewRound() {
 		this.board.printBoard();
 		this.moveAnimal(this.getAnimalToMove(), this.getPositiontoGo());
 	}
 
+	/**
+	 * Will determine whether the animal chosen is a rabbit or fox and then move them accordingly
+	 * @param animal the animal to move
+	 * @param xy the destimation to move them to as RowCol
+	 */
 	public void moveAnimal(Animal animal, int xy) {
 
 		int newX = xy / 10; // x is j and y is i in board[i][j]
@@ -329,27 +399,56 @@ public class GameEngine {
 
 	}
 
+	/**
+	 * Print out the game instructions at the beginning of the game
+	 * @author Abdulla Al - wazzan
+	 */
 	public void printGameInstructions() {
-		// TODO: implement method and call it at beginning of game
-		// print rules
-		// Explain what every piece/abbreviation represents
-		// say that an asterisk means that a rabbit is in a hole
-		// maybe just copy/paste the youtube video's link at the end if they want "more info"
+		String title = "JumpIN Instructions: \n\n";
+		String obstacles = "\tThe obstacles are: Mushroom, Fox, Rabbit, Hole.\n\n"
+						 + "\tFoxes take up two spaces, head and tail. "
+						 + "All other obstacles occupy one square.\n\n";
+		
+		String movements = "The following explains how the obstacles move around the board:\n\n"
+				
+						 + "\tRabbit:\n"
+				
+						 + "\t\tRabbits can only move by jumping over one adjacent obstacle, empty holes are NOT obstacles.\n"
+						 + "\t\tOnce a rabbit is in a hole, it can be jumped over by other rabbits.\n"
+						 + "\t\tSide note: Rabbits can jump out of their holes to faciliate another rabbit's path.\n\n"
+						 + "\t\tRabbits can jump over a fox's waist, or from its head to tail or tail to head.\n\n"
+						 
+						 + "\tFoxes: \n"
+						 
+						 + "\t\tFoxes can slide depending on their initial direction, however many spots needed.\n\n"
+						
+						 + "\tMushrooms and holes are stationary.\n\n";
+		
+		String objective = "The objective of the game is to move the rabbits and foxes, through a series of movements\n"
+				 		 + "around the obstacles untill all the rabbits are safely in their hole.\n";
+		String abbreviations = "In this game, the following abbreviations are used to represent each object on the board: " +
+				 		 "\n\tR1 - Rabbit 1\n\tR2 - Rabbit 2\n\tR3 - Rabbit 3\n\tF1 - Fox 1\n\tF2 - Fox 2\n\tMS - Mushroom\n\t O - hole \n\t" +
+				 		 "When a rabbit has an asterisk beside it means that it is in a hole";
+		
+		
+		System.out.println(title + obstacles + movements  + objective + abbreviations);
 		
 	}
 
-	// put board and pieces together
-	// validate moves
+	/**
+	 * The client for the game. Creates a new game and keeps prompting player for input until they have won
+	 * @param args
+	 */
 	public static void main(String[] args) {
 
 		GameEngine newGame = new GameEngine();
 
-		//newGame.startNewRound();
-
+		newGame.printGameInstructions();
+		
 		while (!newGame.hasWon()) {
 			newGame.startNewRound();
 		}
 		
-		System.out.println("CONGRATS! YOU SOLVED THE PUZZLE!");
+		System.out.println("GOOD JOB! YOU SOLVED THE PUZZLE!"); //make them feel good 
 	}
 }
