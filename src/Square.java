@@ -30,11 +30,14 @@ public class Square {
 	}
 	
 	public void removeAnimal() {
-		if (hasAnimal) {
-			hasAnimal = false;
+		if (hasAnimal) hasAnimal = false;
+		
+		if (isHole) {
+			type = squareType.HOLE;
+		}else {
+			type = squareType.EMPTY;
 		}
 		
-		type = squareType.EMPTY;
 	}
 	
 	public boolean hasAnimal() {
@@ -66,6 +69,11 @@ public class Square {
 		return isHole;
 	}
 	
+	public boolean isEmpty() {
+		if(type.compareTo(squareType.EMPTY) == 0) return true;
+		return false;
+	}
+	
 	public void setMushroom() {
 		hasMushroom = true;
 		type = squareType.PIECE;
@@ -87,15 +95,15 @@ public class Square {
 		case EMPTY: 
 			squareString = "|     "; 
 			break;
-		case HOLE: 
-			squareString = "|  O  "; 
-			break;
 		case PIECE: 
 			if(hasMushroom) {
 				squareString = "| MS  ";
 			} else {
 			squareString = "| " + p.toString()+ "  ";
 			}
+			break;
+		case HOLE: 
+			squareString = "|  O  "; 
 			break;
 		default: 
 			squareString = "|     ";

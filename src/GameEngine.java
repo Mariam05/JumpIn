@@ -188,7 +188,7 @@ public class GameEngine {
 			int headPos = currX - 1;
 			// Make sure that every square in between is empty before moving the fox
 			for (int i = newX; i < headPos; i++) {
-				if (!(board.getSquare(i, currY).getSquareType().compareTo(Square.squareType.EMPTY) == 0)) {
+				if (!(board.getSquare(i, currY).isEmpty())) {
 					invalidDirectionMessage();
 				}
 			}
@@ -199,7 +199,7 @@ public class GameEngine {
 		} else if (d.compareTo(Direction.DOWN) == 0) { // otherwise the fox is sliding down
 
 			for (int i = currX + 1; i <= newX; i++) {
-				if (!(board.getSquare(i, currY).getSquareType().compareTo(Square.squareType.EMPTY) == 0)) {
+				if (!(board.getSquare(i, currY).isEmpty())) {
 					invalidDirectionMessage();
 				}
 			}
@@ -221,7 +221,7 @@ public class GameEngine {
 			int headPos = currY - 1;
 			// Make sure that every square in between is empty before moving the fox
 			for (int i = newY; i < headPos; i++) {
-				if (!(board.getSquare(currX, i).getSquareType().compareTo(Square.squareType.EMPTY) == 0)) {
+				if (!(board.getSquare(currX, i).isEmpty())) {
 					invalidDirectionMessage();
 				}
 			}
@@ -232,7 +232,7 @@ public class GameEngine {
 		} else if (d.compareTo(Direction.RIGHT) == 0) { // otherwise the fox is sliding down
 
 			for (int i = currY + 1; i <= newY; i++) {
-				if (!(board.getSquare(currX, i).getSquareType().compareTo(Square.squareType.EMPTY) == 0)) {
+				if (!(board.getSquare(currX, i).isEmpty())) {
 					invalidDirectionMessage();
 				}
 			}
@@ -246,15 +246,21 @@ public class GameEngine {
 	private void handleRabbitMove(Animal animal, int newX, int newY, int currX, int currY) {
 		
 		//Check if the rabbit is currently in a hole
+		if (board.getSquare(currX, currY).isHole()) {
+			this.rabbitsInHoles--;
+		}
 		
 		
 		
-		board.getSquare(currX, currY).removeAnimal();
-		if (board.getSquare(newX, newY).getSquareType().compareTo(Square.squareType.HOLE) == 0) {
+		//If new position is a hole
+		if (board.getSquare(newX, newY).isHole()) {
 			this.rabbitsInHoles++;
 			System.out.println("You got a rabbit in a hole!");
-			board.getSquare(newX, newY).addAnimal(animal); //If the rabbit went into a hole, don't show it anymore.
 		}
+		
+		//Remove the animal from it's current position
+		board.getSquare(currX, currY).removeAnimal();
+		board.getSquare(newX, newY).addAnimal(animal);
 	}
 
 	private void validateRabbitMove(Animal animal, int newX, int newY) {
@@ -265,33 +271,37 @@ public class GameEngine {
 		if (board.getSquare(newX, newY).hasAnimal() || board.getSquare(newX, newY).hasMushroom()) {
 			this.invalidDirectionMessage();
 		}
+		
 		// If destination is empty, check if the path rabbit takes is full of obstacles
 		else {
 			// Getting the proposed direction
 			Direction d = getDirection(currX, currY, newX, newY);
 			// Checking of the paths are filled for each direction
-			if (d == Direction.UP) {
+			if (d.compareTo(Direction.UP) == 0) {
 				for (int k = currY; k < newY; k++) {
-					if (board.getSquare(currX, k).getSquareType().compareTo(Square.squareType.EMPTY) == 0
-							|| board.getSquare(currX, k).getSquareType().compareTo(Square.squareType.HOLE) == 0) {
+					if (board.getSquare(currX, k).isEmpty()
+							|| (board.getSquare(currX, k).isHole() && !board.getSquare(currX, k).hasAnimal())) {
 						this.invalidDirectionMessage();
 					} 
 				}
 			} else if (d == Direction.DOWN) {
 				for (int k = currY; k > newY; k--) {
-					if (board.getSquare(currX, k).getSquareType().compareTo(Square.squareType.EMPTY) == 0) {
+					if (board.getSquare(currX, k).isEmpty() || 
+							(board.getSquare(currX, k).isHole() && !board.getSquare(currX, k).hasAnimal())) {
 						this.invalidDirectionMessage();
 					}
 				}
 			} else if (d == Direction.LEFT) {
 				for (int k = currX; k > newX; k--) {
-					if (board.getSquare(k, currY).getSquareType().compareTo(Square.squareType.EMPTY) == 0) {
+					if (board.getSquare(k, currY).isEmpty() ||
+							board.getSquare(k, currY).isHole() && !board.getSquare(k, currY).hasAnimal()){
 						this.invalidDirectionMessage();
 					} 
 				}
 			} else if (d == Direction.RIGHT) {
 				for (int k = currX; k < newX; k++) {
-					if (board.getSquare(k, currY).getSquareType().compareTo(Square.squareType.EMPTY) == 0) {
+					if (board.getSquare(k, currY).isEmpty() || 
+							board.getSquare(k, currY).isHole() && !board.getSquare(k, currY).hasAnimal()) {
 						this.invalidDirectionMessage();
 					} 
 				}
