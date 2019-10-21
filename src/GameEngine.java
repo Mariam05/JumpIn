@@ -331,11 +331,7 @@ public class GameEngine {
 
 	public void printGameInstructions() {
 		// TODO: implement method and call it at beginning of game
-		// print rules
-		// Explain what every piece/abbreviation represents
-		// say that an asterisk means that a rabbit is in a hole
-		// maybe just copy/paste the youtube video's link at the end if they want "more info"
-		
+		// Get Abdulla to do this
 	}
 
 	// put board and pieces together
@@ -344,12 +340,10 @@ public class GameEngine {
 
 		GameEngine newGame = new GameEngine();
 
-		//newGame.startNewRound();
+		newGame.startNewRound();
 
 		while (!newGame.hasWon()) {
 			newGame.startNewRound();
 		}
-		
-		System.out.println("CONGRATS! YOU SOLVED THE PUZZLE!");
 	}
 }
