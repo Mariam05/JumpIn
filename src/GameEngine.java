@@ -3,10 +3,11 @@ import java.util.Scanner;
 
 
 /**
- * Puts board and pieces together. Gets and validates moves. BIG NOTE: X values
- * correspond to the row. Y values correspond to the column.
+ * Puts board and pieces together. Gets and validates moves. 
  * 
- * @author Mariam Almalki
+ * BIG NOTE: X values correspond to the row. Y values correspond to the column.
+ * 
+ * @author Mariam Almalki, Nazifa Tanzim
  *
  */
 public class GameEngine {
@@ -18,7 +19,7 @@ public class GameEngine {
 	private Animal fox1;
 	private Animal fox2;
 
-	private static final int NUM_TO_WIN = 3;
+	private static final int NUM_TO_WIN = 3; //The number of rabbits 
 
 	private enum Direction {
 		UP, DOWN, RIGHT, LEFT, INVALID
@@ -63,7 +64,7 @@ public class GameEngine {
 	}
 
 	public boolean hasWon() {
-		return rabbitsInHoles == 3;
+		return rabbitsInHoles == NUM_TO_WIN;
 	}
 
 	public Animal getAnimalToMove() {
@@ -338,13 +339,10 @@ public class GameEngine {
 		
 	}
 
-	// put board and pieces together
-	// validate moves
+	
 	public static void main(String[] args) {
 
 		GameEngine newGame = new GameEngine();
-
-		//newGame.startNewRound();
 
 		while (!newGame.hasWon()) {
 			newGame.startNewRound();
