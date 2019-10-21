@@ -30,7 +30,7 @@ public class Board {
 		
 		//set which squares contain the mushrooms
 		board[1][3].setMushroom();
-		board[4][1].setMushroom();
+		board[4][2].setMushroom();
 
 	}
 	

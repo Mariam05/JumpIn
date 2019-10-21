@@ -10,6 +10,7 @@ public class Square {
 	private Animal p;
 	private boolean hasAnimal;
 	private boolean hasMushroom;
+	private boolean isHole;
 	
 	private squareType type;
 	
@@ -58,6 +59,11 @@ public class Square {
 	
 	public void setHole() {
 		type = squareType.HOLE;
+		isHole = true;
+	}
+	
+	public boolean isHole() {
+		return isHole;
 	}
 	
 	public void setMushroom() {
