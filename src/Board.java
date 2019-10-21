@@ -1,15 +1,28 @@
 /**
- * This class creates the board of the game with all piece configurations on it
+ * This class creates the board of the game with all the static objects that go on it
  * @author Mariam Almalki
  *
  */
 public class Board {
 	
-	private Square[][] board;
+	/**
+	 * A 2D array of squares that makes up the board
+	 */
+	private Square[][] board; 
 	
+	/**
+	 * The width of the board (i.e. num of columns)
+	 */
 	private static final int WIDTH = 5;
+	
+	/**
+	 * The length of the board (i.e. num of rows)
+	 */
 	private static final int LENGTH = 5;
 	
+	/**
+	 * Instantiates the array of squares and sets certain squares to be either holes or mushrooms
+	 */
 	public Board() {		
 		
 		board = new Square[LENGTH][WIDTH];
@@ -34,14 +47,19 @@ public class Board {
 
 	}
 	
+	/**
+	 * Returns the square at the specific position
+	 * @param x the square's row number
+	 * @param y the square's column number
+	 * @return the desired square
+	 */
 	public Square getSquare(int x, int y) {
 		return board[x][y];
 	}
 	
-	public void placePiece(int x, int y, Animal p) {
-		board[x][y].addAnimal(p);
-	}
-	
+	/**
+	 * Print the current state of the board
+	 */
 	public void printBoard() {
 		
 		System.out.println("        0     1     2     3     4   \n");
