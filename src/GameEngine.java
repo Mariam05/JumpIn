@@ -94,7 +94,7 @@ public class GameEngine {
 		try {
 			piece = scanner.nextInt();
 			// Error handling: if invalid number:
-			if (piece > 5 || piece < 0) {
+			if (piece > 5 || piece < 1) {
 				System.out.println("Incorrect input. Try again.");
 				return getAnimalToMove();
 			}
