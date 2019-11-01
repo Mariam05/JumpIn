@@ -1,0 +1,6 @@
+All - Software Design
+Mariam - Game Engine and Board class implementation
+Nazifa - Game Engine implementation
+Abdulla - Final UML generation, CRC cards, and select methods in Game Engine (i.e. printGameInstructions())
+Taher - Square class
+Hassan - Animal class 
