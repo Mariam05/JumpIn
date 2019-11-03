@@ -11,7 +11,7 @@ public class Game {
     private Parser parser;
     private CommandWord commandWords;
     private Board board;
-    private Piece fox1, fox2, mushroom1, mushroom2, mushroom3, rabbit1, rabbit2, rabbit3, hole1, hole2, hole3, hole4, hole5;
+    private Piece fox1, fox2, mushroom1, mushroom2, rabbit1, rabbit2, rabbit3, hole1, hole2, hole3, hole4, hole5;
     
     /**
      * 
@@ -25,18 +25,16 @@ public class Game {
     	fox2 = new Fox("F2", Fox.FoxType.VERTICAL);
     	mushroom1 = new Mushroom("MS");
     	mushroom2 = new Mushroom("MS");
-    	mushroom3 = new Mushroom("MS");
     	rabbit1 = new Rabbit("R1");
     	rabbit2 = new Rabbit("R2");
     	rabbit3 = new Rabbit("R3");
-    	hole1 = new Hole("HO");
-    	hole2 = new Hole("HO");
-    	hole3 = new Hole("HO");
-    	hole4 = new Hole("HO");
-    	hole5 = new Hole("HO");
     	
     	//add the pieces to the board
- 
+    	board.addPiece(fox1,1 , 2);
+    	board.addPiece(fox2, 4, 3);
+    	board.addPiece(rabbit1, 3, 0);
+    	board.addPiece(rabbit2, 4, 2);
+    	board.addPiece(rabbit3, 1, 4);
     }
     
     public void handleMove(Piece piece) {

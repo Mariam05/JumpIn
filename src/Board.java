@@ -21,7 +21,7 @@ public class Board {
 	private static final int LENGTH = 5;
 	
 	/**
-	 * Instantiates the array of squares and sets certain squares to be either holes or mushrooms
+	 * Instantiates the array of squares 
 	 */
 	public Board() {		
 		
@@ -30,23 +30,18 @@ public class Board {
 		//Initialize the board, which is a grid of squares
 		for (int i = 0; i< LENGTH; i++) {
 			for (int j = 0; j < WIDTH; j++) {
-				board[i][j] = new Square(i,j);
+				board[i][j] = new Square();
 			}
 		}
-		
-		//set which squares contain holes. 
-		board[0][0].setHole(); //left upper corner
-		board[0][4].setHole(); //right upper corner
-		board[4][0].setHole(); //left bottom corner
-		board[2][2].setHole(); //right bottom corner
-		board[4][4].setHole(); //middle
-		
-		//set which squares contain the mushrooms
-		board[1][3].setMushroom();
-		board[4][2].setMushroom();
 
 	}
 	
+	/**
+	 * Adds a piece to the board
+	 * @param piece The piece to add
+	 * @param x the x position to add the piece to (i.e. the column)
+	 * @param y the y position to add the piece to (i.e. the row)
+	 */
 	public void addPiece(Piece piece, int x, int y) {
 		board[y][x].addPiece(piece);
 	}
@@ -69,8 +64,7 @@ public class Board {
 	 * @return
 	 */
 	public boolean isSpotEmpty(int x, int y) {
-		//TODO: IMPLEMENT THIS
-		return false;
+		return board[y][x].hasPiece();
 	}
 	
 	/**
