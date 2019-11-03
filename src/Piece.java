@@ -17,17 +17,17 @@ public abstract class Piece {
 	/**
 	 * Used to identify which piece it is
 	 */
-	protected String pieceName;
+	private String pieceName;
 	
 	/**
 	 * What kind of piece is it. This may not be necessary...
 	 */
-	protected Type pieceType;
+	private Type pieceType;
 	
 	/**
 	 * Where it is currently located on the board
 	 */
-	protected int currPosition;
+	private int currPosition;
 	
 	/**
 	 * Constructor to make a generic piece with a name and associated type
@@ -45,13 +45,8 @@ public abstract class Piece {
 	 * @param destinationPos
 	 * @return
 	 */
-	public abstract boolean validateMove(int currPos, int destinationPos);
+	public abstract boolean validateMove(int destinationPos);
 	
-	/**
-	 * Each piece must return a string that will symbolize it on the baord
-	 */
-	@Override
-	public abstract String toString();
 	
 	/**
 	 * Get the type of piece
@@ -78,11 +73,30 @@ public abstract class Piece {
 	}
 	
 	/**
-	 * Return the name of the piece. 
-	 * @return
+	 * Get the piece's x position
+	 * @return int x position
 	 */
-	public String getName() {
+	public int getXPos() {
+		return getPosition() / 10; //the first digit in the entered pos
+	}
+	
+	
+	/**
+	 * Get the piece's y position
+	 * @return int y position
+	 */
+	public int getYPos() {
+		return getPosition() % 10; //the second digit in the entered pos
+	}
+	
+	/**
+	 * Return a string representation of the piece that can be used
+	 * to symbolize it on the baord.
+	 */
+	@Override
+	public String toString() {
 		return this.pieceName;
 	}
+	
 	
 }

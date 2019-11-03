@@ -13,16 +13,8 @@ public class Mushroom extends Piece {
 	 * Also return false because you can't move a mushroom. 
 	 */
 	@Override
-	public boolean validateMove(int currPos, int destinationPos) {
+	public boolean validateMove(int destinationPos) {
 		return false;
-	}
-
-	/**
-	 * Return a symbol to use on the board
-	 */
-	@Override
-	public String toString() {
-		return "MS";
 	}
 
 }

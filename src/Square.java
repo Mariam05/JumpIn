@@ -13,6 +13,7 @@ public class Square {
 
 	private int x, y; //the position of the square on the board. Not entirely necessary to have but kept preventatively.
 	private Animal p;
+	private Piece piece;
 	private boolean hasAnimal; //whether an animal is occupying the square
 	private boolean hasMushroom; //whether a mushroom is occupying a square
 	private boolean isHole; //Whether there is a hole in the square
@@ -33,6 +34,10 @@ public class Square {
 		type = squareType.EMPTY;
 	}
 
+	public void addPiece(Piece piece) {
+		this.piece = piece;
+	}
+	
 	/**
 	 * This method Will add animal p on the square
 	 * @param p the Animal object to add

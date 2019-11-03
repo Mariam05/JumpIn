@@ -3,7 +3,7 @@
  * @author Mariam Almalki
  *
  */
-public class CommandWords {
+public class CommandWord {
 	
 	 /**
 	  * A constant array that holds all valid command words
@@ -15,7 +15,7 @@ public class CommandWords {
     /**
      * Constructor - initialise the command words.
      */
-    public CommandWords()
+    public CommandWord()
     {
         // nothing to do at the moment...
     }

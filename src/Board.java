@@ -47,6 +47,10 @@ public class Board {
 
 	}
 	
+	public void addPiece(Piece piece, int x, int y) {
+		board[y][x].addPiece(piece);
+	}
+	
 	/**
 	 * Returns the square at the specific position
 	 * @param x the square's row number
@@ -55,6 +59,29 @@ public class Board {
 	 */
 	public Square getSquare(int x, int y) {
 		return board[x][y];
+	}
+	
+	
+	/**
+	 * Checks if a spot on the board is occupied by a piece
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public boolean isSpotEmpty(int x, int y) {
+		//TODO: IMPLEMENT THIS
+		return false;
+	}
+	
+	/**
+	 * Checks if a user inputted coordination is out of range
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public boolean outOfRange(int x, int y) {
+		//TODO: IMPLEMENT THIS
+		return false;
 	}
 	
 	/**
