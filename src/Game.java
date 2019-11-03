@@ -71,7 +71,6 @@ public class Game {
 			board.printBoard();
 			command = parser.getCommand();
 		}
-		;
 	}
 
 	/**
