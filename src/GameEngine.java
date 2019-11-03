@@ -1,6 +1,7 @@
 import java.util.HashMap;
 import java.util.Scanner;
 
+
 /**
  * Assembles board and pieces together. Gets and validates moves. 
  * 
@@ -13,15 +14,25 @@ public class GameEngine {
 
 	//The board and animal objects
 	private Board board;
-	private Rabbit rabbit1, rabbit2, rabbit3;
-	private Fox fox1, fox2;
+	private Animal rabbit1;
+	private Animal rabbit2;
+	private Animal rabbit3;
+	private Animal fox1;
+	private Animal fox2;
 
 	private static final int NUM_TO_WIN = 3; //The number of rabbits in the game needed to go in a hole
 
 	/**
+	 * To hold the direction that the player wants to move
+	 */
+	private enum Direction {
+		UP, DOWN, RIGHT, LEFT, INVALID
+	};
+	
+	/**
 	 * Maps the animal with their type, ensures there isn't more than one animal per type
 	 */
-	private HashMap<AnimalEnum, Piece> animals; 
+	private HashMap<AnimalEnum, Animal> animals; 
 
 	/**
 	 * The number of rabbits currently in a hole
@@ -36,14 +47,13 @@ public class GameEngine {
 		animals = new HashMap<>();
 
 		// instantiate pieces
-		rabbit1 = new Rabbit("R1");
-		rabbit2 = new Rabbit("R2");
-		rabbit3 = new Rabbit("R3");
+		rabbit1 = new Animal(AnimalEnum.R1);
+		rabbit2 = new Animal(AnimalEnum.R2);
+		rabbit3 = new Animal(AnimalEnum.R3);
 
-		fox1 = new Fox("F1");
-		fox2 = new Fox("F2");
+		fox1 = new Animal(AnimalEnum.F1);
+		fox2 = new Animal(AnimalEnum.F2);
 
-		// Storing pieces in a hash map
 		animals.put(AnimalEnum.R1, rabbit1);
 		animals.put(AnimalEnum.R2, rabbit2);
 		animals.put(AnimalEnum.R3, rabbit3);
@@ -75,7 +85,7 @@ public class GameEngine {
 	 * Prompts the user to choose which animal they want to move
 	 * @return the animal to move
 	 */
-	public Piece getAnimalToMove() {
+	public Animal getAnimalToMove() {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Which piece would you like to move? Enter the corresponding number: \n"
 				+ "1 - R1\n2 - R2\n3 - R3\n4 - F1\n5 - F2");
@@ -129,11 +139,238 @@ public class GameEngine {
 	}
 
 	/**
+	 * Determines the direction that the player wants the animal to move in
+	 * @param currX the animal's current row position
+	 * @param currY the animal's current column position
+	 * @param newX the destination's row position
+	 * @param newY the destination's column position
+	 * @return the direction to move in
+	 */
+	private Direction getDirection(int currX, int currY, int newX, int newY) {
+		Direction d = Direction.INVALID;
+
+		boolean valid = false;
+		while (!valid) {
+			// How are we getting the animal's position
+			if (currX == newX) { // moving horizontally - now check if it is right or left
+				if (currY == newY) {
+					invalidDirectionMessage();
+				} else if (currY < newY) {
+					return Direction.RIGHT;
+
+				} else {
+					return Direction.LEFT;
+				}
+			} else if (currY == newY) { // moving vertically
+				if (currX == newX) {
+					invalidDirectionMessage();
+				} else if (currX < newX) {
+					return Direction.DOWN;
+				} else {
+					return Direction.UP;
+				}
+			} else {
+				invalidDirectionMessage();
+			}
+		}
+
+		return d;
+	}
+
+	/**
 	 * Re - prompts user for correct input if their move is invalid
 	 */
 	private void invalidDirectionMessage() {
 		System.out.println("Invalid destination. Please try again.");
 		this.startNewRound();
+	}
+
+	/**
+	 * Make sure that the fox's move is valid, and if yes then move it.
+	 * 
+	 * @param animal the fox to move
+	 * @param newX   the new X position (row) to go to
+	 * @param newY   the new Y position (column) to go to
+	 */
+	private void validateFoxMove(Animal animal, int newX, int newY) {
+		int currX = animal.getXPosition();
+		int currY = animal.getYPosition();
+
+		Direction d = getDirection(currX, currY, newX, newY);
+
+		// If it is fox1
+		if (animal.type.compareTo(AnimalEnum.F1) == 0) {
+			this.handleFox1Move(animal, currX, currY, newX, d);
+		}
+
+		// If it is fox2
+		if (animal.type.compareTo(AnimalEnum.F2) == 0) {
+			this.handleFox2Move(animal, currY, currX, newY, d);
+		}
+	}
+
+	/**
+	 * Move fox1 (which goes vertically) to the desired location
+	 * @param animal fox1 
+	 * @param currX it's current row position
+	 * @param currY it's current column position
+	 * @param newX the new row position
+	 * @param d the direction it's going (either up or down)
+	 */
+	private void handleFox1Move(Animal animal, int currX, int currY, int newX, Direction d) {
+		// Ensure that the player isn't asking us to move it horizontally
+		if (d.compareTo(Direction.RIGHT) == 0 || d.compareTo(Direction.LEFT) == 0) {
+			invalidDirectionMessage();
+		}
+
+		if (d.compareTo(Direction.UP) == 0) {
+			int headPos = currX - 1;
+			// Make sure that every square in between is empty before moving the fox
+			for (int i = newX; i < headPos; i++) {
+				if (!(board.getSquare(i, currY).isEmpty())) {
+					invalidDirectionMessage();
+				}
+			}
+
+			board.getSquare(newX, currY).addAnimal(animal); // fox's tail
+			board.getSquare(newX + 1, currY).addAnimal(animal); // fox's head. This will be set as f1's position
+
+		} else if (d.compareTo(Direction.DOWN) == 0) { // otherwise the fox is sliding down
+
+			for (int i = currX + 1; i <= newX; i++) {
+				if (!(board.getSquare(i, currY).isEmpty())) {
+					invalidDirectionMessage();
+				}
+			}
+			board.getSquare(newX - 1, currY).addAnimal(animal); // fox's tail
+			board.getSquare(newX, currY).addAnimal(animal); // fox's head. This will be set as f1's position
+		}
+		board.getSquare(currX, currY).removeAnimal();
+		board.getSquare(currX - 1, currY).removeAnimal();
+	}
+
+	/**
+	 * Move fox2 (which goes horizontally) to the desired location
+	 * @param animal fox2
+	 * @param currY it's current column position
+	 * @param currX it's current row position
+	 * @param newY the new column position
+	 * @param d the direction it's going (either right or left)
+	 */
+	private void handleFox2Move(Animal animal, int currY, int currX, int newY, Direction d) {
+
+		// Ensure that the player isn't asking us to move it vertically
+		if (d.compareTo(Direction.UP) == 0 || d.compareTo(Direction.DOWN) == 0 || d.compareTo(Direction.INVALID) == 0 ) {
+			invalidDirectionMessage();
+		}
+
+		if (d.compareTo(Direction.LEFT) == 0) {
+			int headPos = currY - 1;
+			// Make sure that every square in between is empty before moving the fox
+			for (int i = newY; i < headPos; i++) {
+				if (!(board.getSquare(currX, i).isEmpty())) {
+					invalidDirectionMessage();
+				}
+			}
+
+			board.getSquare(currX, newY).addAnimal(animal); // fox's tail
+			board.getSquare(currX, newY + 1).addAnimal(animal); // fox's head. This will be set as f1's position
+
+		} else if (d.compareTo(Direction.RIGHT) == 0) { // otherwise the fox is sliding down
+
+			for (int i = currY + 1; i <= newY; i++) {
+				if (!(board.getSquare(currX, i).isEmpty())) {
+					invalidDirectionMessage();
+				}
+			}
+			board.getSquare(currX, newY - 1).addAnimal(animal); // fox's tail
+			board.getSquare(currX, newY).addAnimal(animal); // fox's head. This will be set as f1's position
+		}
+		board.getSquare(currX, currY).removeAnimal();
+		board.getSquare(currX - 1, currY).removeAnimal();
+	}
+
+	/**
+	 * Moves the rabbit to the desired location
+	 * @param animal the rabbit to move
+	 * @param newX its new row position
+	 * @param newY its new column position
+	 * @param currX its current row position
+	 * @param currY its current column position
+	 */
+	private void handleRabbitMove(Animal animal, int newX, int newY, int currX, int currY) {
+		
+		//Check if the rabbit is currently in a hole
+		if (board.getSquare(currX, currY).isHole()) {
+			this.rabbitsInHoles--;
+		}
+		
+		//If new position is a hole
+		if (board.getSquare(newX, newY).isHole()) {
+			this.rabbitsInHoles++;
+			System.out.println("You got a rabbit in a hole!");
+		}
+		
+		//Remove the animal from it's current position
+		board.getSquare(currX, currY).removeAnimal();
+		board.getSquare(newX, newY).addAnimal(animal);
+	}
+
+	/**
+	 * Ensures that the desired position to go to is valid
+	 * @param animal the rabbit to be moved
+	 * @param newX the new row to move it to
+	 * @param newY the new column to move it to
+	 */
+	private void validateRabbitMove(Animal animal, int newX, int newY) {
+		int currX = animal.getXPosition();
+		int currY = animal.getYPosition();
+
+		// If destination is already filled
+		if (board.getSquare(newX, newY).hasAnimal() || board.getSquare(newX, newY).hasMushroom() ) {
+			this.invalidDirectionMessage();
+		}
+		
+		// If destination is empty, check if the path rabbit takes is full of obstacles
+		else {
+			// Getting the proposed direction
+			Direction d = getDirection(currX, currY, newX, newY);
+			if (d.compareTo(Direction.INVALID) == 0) {
+				this.invalidDirectionMessage();
+			}
+			// Checking of the paths are filled for each direction
+			if (d.compareTo(Direction.UP) == 0) {
+				for (int k = currY; k < newY; k++) {
+					if (board.getSquare(currX, k).isEmpty()
+							|| (board.getSquare(currX, k).isHole() && !board.getSquare(currX, k).hasAnimal())) {
+						this.invalidDirectionMessage();
+					} 
+				}
+			} else if (d == Direction.DOWN) {
+				for (int k = currY; k > newY; k--) {
+					if (board.getSquare(currX, k).isEmpty() || 
+							(board.getSquare(currX, k).isHole() && !board.getSquare(currX, k).hasAnimal())) {
+						this.invalidDirectionMessage();
+					}
+				}
+			} else if (d == Direction.LEFT) {
+				for (int k = currX; k > newX; k--) {
+					if (board.getSquare(k, currY).isEmpty() ||
+							board.getSquare(k, currY).isHole() && !board.getSquare(k, currY).hasAnimal()){
+						this.invalidDirectionMessage();
+					} 
+				}
+			} else if (d == Direction.RIGHT) {
+				for (int k = currX; k < newX; k++) {
+					if (board.getSquare(k, currY).isEmpty() || 
+							board.getSquare(k, currY).isHole() && !board.getSquare(k, currY).hasAnimal()) {
+						this.invalidDirectionMessage();
+					} 
+				}
+			}
+		}
+
+		this.handleRabbitMove(animal, newX, newY, currX, currY);
 	}
 
 	/**
@@ -147,27 +384,19 @@ public class GameEngine {
 	/**
 	 * Will determine whether the animal chosen is a rabbit or fox and then move them accordingly
 	 * @param animal the animal to move
-	 * @param xy the destination to move them to as RowCol
+	 * @param xy the destimation to move them to as RowCol
 	 */
-	public void moveAnimal(Piece animal, int xy) {
+	public void moveAnimal(Animal animal, int xy) {
 
 		int newX = xy / 10; // x is j and y is i in board[i][j]
 		int newY = xy % 10;
 
-		if(animal.validateMove(this.board, animal, animal.getPosition(), xy)) {
-			if(animal.getPieceType().compareTo(rabbit1.getPieceType()) == 0) {
-				if(animal.isInHole()) {
-					this.rabbitsInHoles++;
-				}
-				else {
-					this.rabbitsInHoles--;
-				}
-			}
-			this.startNewRound();
+		if (animal.isFox()) {
+			validateFoxMove(animal, newX, newY);
+		} else if (animal.isRabbit()) {
+			validateRabbitMove(animal, newX, newY);
 		}
-		else {
-			this.invalidDirectionMessage();
-		}
+
 	}
 
 	/**
