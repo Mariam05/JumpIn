@@ -13,3 +13,6 @@
 /Piece.class
 /Rabbit.class
 /Square.class
+/ButtonListener.class
+/GameListener.class
+/GameEvent.class

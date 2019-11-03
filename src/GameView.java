@@ -1,10 +1,14 @@
 //package viewformilestone2;
 
+//package viewformilestone2;
+
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -13,11 +17,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-public class GameView extends JFrame {
-
-	/**
-	 * 
-	 */
+public class GameView extends JFrame implements ActionListener, GameListener{
+	Game gameModel = new Game();
 	private static final long serialVersionUID = 1L;
 	private Container container;
 	private JButton board[][];// This will be a board of squares
@@ -25,6 +26,7 @@ public class GameView extends JFrame {
 	Image piece,whiteRabbit,yellowRabbit,greyRabbit,mushroom,fox1,fox2,hole;
 	private int dimensions[] = {0,0,0,4,4,0,4,4,2,2};// this will be used twice firstly to add holes and secondly
 	// to change the background of buttons
+	Game game = new Game();
 	
 	public GameView() {
 		super();
@@ -46,19 +48,33 @@ public class GameView extends JFrame {
 		board = new JButton[SIZE][SIZE];
 		for(int i=0; i < SIZE; i++) {
 			for(int j=0; j < SIZE; j++) {
-				board[i][j] = new JButton();
-				board[i][j].setPreferredSize(new Dimension(200, 200));
-				board[i][j].setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
-				board[i][j].setBackground(new Color(0,204,0));// the backGround of the buttons
-				board[i][j].setOpaque(true);
-                container.add(board[i][j]);
+				JButton button = new JButton();
+				board[i][j] = button;
+				button.setPreferredSize(new Dimension(200, 200));
+				button.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+				button.setBackground(new Color(0,204,0));// the backGround of the buttons
+				button.setOpaque(true);
+                container.add(button);
+                button.addActionListener(new ButtonListener(i,j));
 			}
 		}
+		//gameModel.add
 		// We are changing the holes background color to make it darker green
-		
 		for(int i=1; i < dimensions.length;i++) {
 	    	 board[dimensions[i-1]][dimensions[i]].setBackground(new Color(0, 102, 0));
 	    }
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void handleGameMoveEvent(GameEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 	/*
 	 * All the animals, mushrooms and holes will be added by using this method
