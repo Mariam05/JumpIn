@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 /**
  * 
  * @author Nazifa Tanzim
@@ -152,6 +153,8 @@ public class Fox extends Piece{
 	}
 }
 =======
+=======
+>>>>>>> 2f7569ce2c651fd6d6eea382a42f46946cfba70e
 
 public class Fox extends Piece{
 
@@ -172,4 +175,7 @@ public class Fox extends Piece{
 	}
 
 }
+<<<<<<< HEAD
+>>>>>>> 2f7569ce2c651fd6d6eea382a42f46946cfba70e
+=======
 >>>>>>> 2f7569ce2c651fd6d6eea382a42f46946cfba70e

@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 /**
  * 
  * @author Nazifa Tanzim
@@ -126,6 +127,8 @@ public class Rabbit extends Piece{
 	}
 }
 =======
+=======
+>>>>>>> 2f7569ce2c651fd6d6eea382a42f46946cfba70e
 
 public class Rabbit extends Piece {
 
@@ -147,4 +150,7 @@ public class Rabbit extends Piece {
 
 	
 }
+<<<<<<< HEAD
+>>>>>>> 2f7569ce2c651fd6d6eea382a42f46946cfba70e
+=======
 >>>>>>> 2f7569ce2c651fd6d6eea382a42f46946cfba70e
