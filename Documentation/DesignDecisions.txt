@@ -1,0 +1,2 @@
+Design Decisions
+Should we be able to move a mushroom? Should setPosition call validateMove()?
