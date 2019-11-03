@@ -108,7 +108,7 @@ public class Game {
 		if (piece instanceof Fox) {
 			handleFoxMove(piece, command);
 		} else if (piece instanceof Rabbit) {
-			handleRabbitMove(piece);
+			handleRabbitMove(piece, command);
 		}
 	}
 
@@ -189,8 +189,67 @@ public class Game {
 		}
 	}
 
-	public void handleRabbitMove(Piece rabbit) {
+	public void handleRabbitMove(Piece rabbit, Command command) {
+		Rabbit r = (Rabbit) rabbit;
+		int destination = Integer.parseInt(command.getDestination());
+		int newX = destination / 10;
+		int newY = destination % 10;
+		int currX = r.getXPos();
+		int currY = r.getYPos();
 
+		// If destination is already filled
+		if (board.getSquare(newX, newY).hasPiece()) {
+			System.out.println("Selected position is filled");
+			// TODO handle invalid move
+		}
+		
+		// If destination is empty, check if the path rabbit takes is full of obstacles
+		else {
+			// Check if rabbit isn't just moving to adjacent spot
+			if(r.validateMove(destination)) {
+				// Checking of the paths are filled for each direction
+				if (currX < newX) { // moving up
+					for (int k = currY; k < newY; k++) {
+						// If there is an empty space in the path
+						if (!(board.getSquare(currX, k).hasPiece())) {
+							// TODO handle invalid move
+							// break;
+						} 
+					}
+				} 
+				else if (currX > newX) { // moving down
+					for (int k = currY; k > newY; k--) {
+						// If there is an empty space in the path
+						if (!(board.getSquare(currX, k).hasPiece())) {
+							System.out.println("current square " + currX + "" + k);
+							// TODO handle invalid move
+							// break;
+						}
+					}
+				} else if (currY > newY) { // moving left
+					for (int k = currX; k > newX; k--) {
+						// If there is an empty space in the path
+						if (!(board.getSquare(k, currY).hasPiece())){
+							// TODO handle invalid move
+							// break;
+						} 
+					}
+				} else if (currY < newY) { // moving right
+					for (int k = currX; k < newX; k++) {
+						// If there is an empty space in the path
+						if (!(board.getSquare(k, currY).hasPiece())) {
+							// TODO handle invalid move
+							// break;
+						} 
+					}
+				}
+
+			}
+			// Invalid direction (i.e. non-linear/diagonal)
+			else {
+				// TODO handle invalid move
+			}
+		}
 	}
 	
 	public void printGameInstructions() {
