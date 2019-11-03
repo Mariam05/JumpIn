@@ -1,3 +1,4 @@
+package contoller;
 /**
  * This class creates the board of the game with all the static objects that go on it
  * @author Mariam Almalki

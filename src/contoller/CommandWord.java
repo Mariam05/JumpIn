@@ -1,3 +1,4 @@
+package contoller;
 /**
  * This class holds all the valid words that can be used by the player
  * @author Mariam Almalki
