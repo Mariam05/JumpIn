@@ -1,4 +1,3 @@
-
 /**
  * This is the main class for the JumpIn came. 
  * Acts as the controller
