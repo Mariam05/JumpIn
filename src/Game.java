@@ -18,8 +18,8 @@ public class Game {
 	private boolean quitGame;
 
 	/**
-	 * Instantiate the parser and commandWords objects. 
-	 * Set up the board with the pieces
+	 * Instantiate the parser and commandWords objects. Set up the board with the
+	 * pieces
 	 */
 	public Game() {
 		parser = new Parser();
@@ -50,7 +50,7 @@ public class Game {
 		board.addPiece(fox1, fox1.getXPos() - 1, fox1.getYPos()); // add fox1 tail
 
 		board.addPiece(fox2, 1, 1);
-		board.addPiece(fox2, fox2.getXPos() , fox2.getYPos() -1); // add fox2 tail
+		board.addPiece(fox2, fox2.getXPos(), fox2.getYPos() - 1); // add fox2 tail
 
 		board.addPiece(rabbit1, 3, 0);
 		board.addPiece(rabbit2, 4, 2);
@@ -67,7 +67,10 @@ public class Game {
 	public void startNewRound() {
 		board.printBoard();
 		Command command = parser.getCommand();
-		processCommand(command);
+		while(processCommand(command)) {
+			board.printBoard();
+			command = parser.getCommand();
+		};
 	}
 
 	/**
@@ -75,7 +78,7 @@ public class Game {
 	 */
 	private void invalidCommandMessage() {
 		System.out.println("Invalid command. Please try again.");
-		this.startNewRound();
+		//this.startNewRound();
 	}
 
 	/**
@@ -84,28 +87,35 @@ public class Game {
 	 * @param command The command to be processed.
 	 * @return false If the command ends the game, true otherwise.
 	 */
-	public void processCommand(Command command) {
+	public boolean processCommand(Command command) {
 
 		if (command.isUnknown()) {
 			invalidCommandMessage();
+			return false;
 		}
 
 		String commandWord = command.getCommandWord();
 
 		if (commandWord.equalsIgnoreCase("help")) {
 			printGameInstructions();
-			
-		} else if (commandWord.equalsIgnoreCase("move")) {
-			
-			if (!validatePieceSelected(command)) invalidCommandMessage(); // check if selected piece is valid
-			if (!validateDestinationSelected(command)) invalidCommandMessage(); //check if chosen destination is valid
 
-			handleMove(command);
+		} else if (commandWord.equalsIgnoreCase("move")) {
+
+			if (!validatePieceSelected(command)) {
+				invalidCommandMessage();
+				return false; // check if selected piece is valid
+			}
+			if (!validateDestinationSelected(command)) {
+				invalidCommandMessage();
+				return false; // check if chosen destination is valid
+			}
+
+			return handleMove(command);
 		} else if (commandWord.equals("quit")) {
 			quitGame = true;
-		} else {
-			invalidCommandMessage();
-		}
+		} 
+
+		return false;
 	}
 
 	/**
@@ -124,15 +134,16 @@ public class Game {
 	}
 
 	/**
-	 * Checks if the user entered a valid destination to go to.
-	 * i.e. if it is within the constraints of the board
+	 * Checks if the user entered a valid destination to go to. i.e. if it is within
+	 * the constraints of the board
+	 * 
 	 * @param command the command that the user entered
 	 * @return true if the destination is valid
 	 */
 	private boolean validateDestinationSelected(Command command) {
 		return !board.isOutOfRange(command.getX(), command.getY());
 	}
-	
+
 	/**
 	 * 
 	 * After user input, we need to validate: - the command is valid - the piece
@@ -153,100 +164,107 @@ public class Game {
 	}
 
 	/**
-	 * Handle a move command. 
-	 * Gets the piece that the user wants to move and processes
-	 * the command based on the type of piece (i.e. rabbit or fox)
+	 * Handle a move command. Gets the piece that the user wants to move and
+	 * processes the command based on the type of piece (i.e. rabbit or fox)
+	 * 
 	 * @param command
 	 */
-	public void handleMove(Command command) {
+	public boolean handleMove(Command command) {
 		Piece piece = getPieceFromCommand(command);
 		if (piece instanceof Fox) {
-			handleFoxMove(piece, command);
+			return handleFoxMove(piece, command);
 		} else if (piece instanceof Rabbit) {
 			handleRabbitMove(piece, command);
 		}
+		
+		return true;
 	}
 
-	public void handleFoxMove(Piece fox, Command command) {
+	/**
+	 * return true if move was handled
+	 * @param fox
+	 * @param command
+	 * @return
+	 */
+	public boolean handleFoxMove(Piece fox, Command command) {
 		Fox f = (Fox) fox;
 		int newX = command.getX();
 		int newY = command.getY();
 		int currX = f.getXPos();
 		int currY = f.getYPos();
 
+		if (!fox.validateMove(newX, newY)) {
+			invalidCommandMessage();
+			return false; // Check that the move type is legal for the animal
+		}
+			
+
 		// If fox moves horizontally, check horizontal path on board
 		if (f.getFoxType().compareTo(Fox.FoxType.HORIZONTAL) == 0) {
-			// If the direction is valid, continue checking the path
-			if (f.validateMove(newX, newY)) {
-				if (currX < newX) { //moving right
-					for (int i = currX + 2; i <= newX; i++) { //add 2 because tail is on the left of head
-						if (board.getSquare(i, currY).hasPiece()) {
-							invalidCommandMessage();
-						}
+			if (currX < newX) { // moving right
+				for (int i = currX + 2; i <= newX; i++) { // add 2 because tail is on the left of head
+					if (board.getSquare(i, currY).hasPiece()) {
+						invalidCommandMessage();
+						return false;
 					}
-					
-					board.removePiece(currX, currY); // remove tail of fox
-					board.removePiece(currX + 1, currY); // remove head of fox
-					
-					board.addPiece(fox, newX, currY); // add head of fox
-					board.addPiece(fox, newX - 1, currY); // add tail of fox
-						
-					
-				} else { //moving left
-					
-					for (int i = currX - 1; i <= newX; i++) { //if there are obstacles in the way, reprompt
-						if (board.getSquare(i, currY).hasPiece()) {
-							invalidCommandMessage();
-						}
-					}
-					
-					board.removePiece(currX, currY); // remove tail of fox
-					board.removePiece(currX + 1, currY); // remove head of fox
-					
-					board.addPiece(fox, newX + 1, currY); //add head of fox
-					board.addPiece(fox, newX, currY);
-					
-					
 				}
+
+				board.removePiece(currX, currY); // remove tail of fox
+				board.removePiece(currX + 1, currY); // remove head of fox
+
+				board.addPiece(fox, newX, currY); // add head of fox
+				board.addPiece(fox, newX - 1, currY); // add tail of fox
+
+			} else { // moving left
+
+				for (int i = currX - 1; i <= newX; i++) { // reprompt if path isn't clear
+					if (board.getSquare(i, currY).hasPiece()) {
+						invalidCommandMessage();
+						return false;
+					}
+				}
+
+				board.removePiece(currX, currY); // remove tail of fox
+				board.removePiece(currX + 1, currY); // remove head of fox
+
+				board.addPiece(fox, newX + 1, currY); // add head of fox
+				board.addPiece(fox, newX, currY);
+
 			}
-		}
-		// If fox moves vertically, check vertical path on board
-		else if (f.getFoxType().compareTo(Fox.FoxType.VERTICAL) == 0) {
-			// If the direction is valid, continue checking the path
-			if (f.validateMove(newX, newY)) {
-				// if currX < newX i.e. going up
-				if (currX < currY) {
-					int headPos = currX - 1;
-					// Make sure that every square in between is empty before moving the fox
-					for (int i = newX; i < headPos; i++) {
-						// Returns false if the path is not clear
-						if (board.getSquare(i, currY).hasPiece()) {
-							// invalidDirectionMessage();
-						}
+		} else if (f.getFoxType().compareTo(Fox.FoxType.VERTICAL) == 0) { // this fox moves vertically
+			if (currY > newY) { // moving up
+				for (int i = newY; i < currY; i++) { // reprompt if path isn't clear
+					if (board.getSquare(i, currY).hasPiece()) {
+						invalidCommandMessage();
+						return false;
 					}
-					// Moves the fox up if the path is clear
-					board.getSquare(newX, currY).addPiece(fox); // fox's tail
-					board.getSquare(newX + 1, currY).addPiece(fox); // fox's head. This will be set as f1's position
 				}
-				// else moving up
-				else {
-					// Make sure that every square in between is empty before moving the fox
-					for (int i = currX + 1; i <= newX; i++) {
-						// Returns false if the path is not clear
-						if (board.getSquare(i, currY).hasPiece()) {
-							// invalidDirectionMessage();
-						}
+				
+				board.removePiece(currX, currY); // remove fox tail
+				board.removePiece(currX, currY + 1); // remove fox head
+				
+				board.addPiece(fox, newX, newY - 1);
+				board.addPiece(fox, newX, newY); //add tail
+				
+			} else { // moving down
+				for (int i = currY + 2; i <= newY; i++) { // reprompt if path isn't clear
+					if (board.getSquare(currX, i).hasPiece()) {
+						invalidCommandMessage();
+						return false;
 					}
-					// Moves fox down if the path is clear
-					board.getSquare(newX - 1, currY).addPiece(fox); // fox's tail
-					board.getSquare(newX, currY).addPiece(fox); // fox's head. This will be set as f1's position
 				}
-				// Removes fox from original spot
-				board.getSquare(currX, currY).removePiece();
-				board.getSquare(currX - 1, currY).removePiece();
+				
+				board.removePiece(currX, currY); // remove fox tail
+				board.removePiece(currX, currY + 1); // remove fox head
+				
+				board.addPiece(fox, newX, newY); // add head
+				board.addPiece(fox, newX, newY - 1); //add tail
 			}
+		
 		}
+		return true;
 	}
+	
 
 	public void handleRabbitMove(Piece rabbit, Command command) {
 		Rabbit r = (Rabbit) rabbit;
