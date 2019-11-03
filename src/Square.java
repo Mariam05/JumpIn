@@ -11,6 +11,7 @@ public class Square {
 
 	private Piece piece;
 	private boolean hasPiece;
+	private boolean isHole;
 
 	/**
 	 * The Constructor will create an empty square and specify its position by using
@@ -30,17 +31,33 @@ public class Square {
 	public boolean hasPiece() {
 		return hasPiece;
 	}
+	
+	public void addHole() {
+		isHole = true;
+	}
+	
+	public boolean isHole() {
+		return isHole;
+	}
 
 	/**
 	 * This method will print what is on the square.
 	 * 
 	 * @return the string representation of the square
 	 */
+	@Override
 	public String toString() {
-		if (hasPiece) {
-			return "|  " + piece.toString() + "  |";
+		
+		if(isHole() && hasPiece()) {
+			return "|  " + piece.toString() + "* ";
 		}
-		return "|    |";
+		if (isHole()) {
+			return "|  HO  ";
+		}
+		if (hasPiece) {
+			return "|  " + piece.toString() + "  ";
+		}
+		return "|      ";
 	}
 
 

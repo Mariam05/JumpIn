@@ -21,7 +21,7 @@ public class Board {
 	private static final int LENGTH = 5;
 	
 	/**
-	 * Instantiates the array of squares 
+	 * Instantiates the array of squares and sets the hole positions
 	 */
 	public Board() {		
 		
@@ -33,6 +33,13 @@ public class Board {
 				board[i][j] = new Square();
 			}
 		}
+		
+		//Set the holes of the board. Hole positions don't change
+		board[0][0].addHole();
+		board[0][4].addHole();
+		board[4][0].addHole();
+		board[4][4].addHole();
+		board[2][2].addHole();
 
 	}
 	
@@ -46,6 +53,10 @@ public class Board {
 		board[y][x].addPiece(piece);
 	}
 	
+	
+	public void addHole(int x, int y) {
+		board[y][x].addHole();
+	}
 	/**
 	 * Returns the square at the specific position
 	 * @param x the square's row number
