@@ -12,7 +12,7 @@ public class Square {
 	}; // the reason mushrooms and animals are both piece is so that it's easier to validate moves
 
 	private int x, y; //the position of the square on the board. Not entirely necessary to have but kept preventatively.
-	private Animal p;
+	private Piece p;
 	private boolean hasAnimal; //whether an animal is occupying the square
 	private boolean hasMushroom; //whether a mushroom is occupying a square
 	private boolean isHole; //Whether there is a hole in the square
@@ -37,7 +37,7 @@ public class Square {
 	 * This method Will add animal p on the square
 	 * @param p the Animal object to add
 	 */
-	public void addAnimal(Animal p) {
+	public void addAnimal(Piece p) {
 		this.p = p;
 		p.setPosition(x, y);
 		type = squareType.PIECE;
@@ -88,7 +88,7 @@ public class Square {
 	 * if no animal occupies the square then it'll return null
 	 * @return the animal on the square
 	 */
-	public Animal getAnimal() {
+	public Piece getAnimal() {
 		if (hasAnimal) {
 			return p;
 		}

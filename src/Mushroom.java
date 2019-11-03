@@ -6,15 +6,7 @@
 public class Mushroom extends Piece {
 
 	protected Mushroom(String pieceName) {
-		super(pieceName, Type.MUSHROOM);
-	}
-
-	/**
-	 * Also return false because you can't move a mushroom. 
-	 */
-	@Override
-	public boolean validateMove(int currPos, int destinationPos) {
-		return false;
+		super(pieceName);
 	}
 
 	/**
@@ -23,6 +15,15 @@ public class Mushroom extends Piece {
 	@Override
 	public String toString() {
 		return "MS";
+	}
+
+	/**
+	 * Also return false because you can't move a mushroom. 
+	 */
+	@Override
+	protected boolean validateMove(Board board, Piece animal, int currPos, int destinationPos) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

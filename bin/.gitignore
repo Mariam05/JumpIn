@@ -1,9 +1,23 @@
+/Animal.class
 /AnimalEnum.class
 /Board.class
 /GameEngine$Direction.class
 /GameEngine.class
+/Mushroom.class
+/Piece$Type.class
+/Piece.class
 /Square$squareType.class
 /Square.class
+<<<<<<< HEAD
+/Fox.class
+/Rabbit.class
+/Piece$Direction.class
+=======
 /Piece.class
 /Piece$Type.class
 /Mushroom.class
+/CommandWords.class
+/Command.class
+/Fox.class
+/Rabbit.class
+>>>>>>> 2f7569ce2c651fd6d6eea382a42f46946cfba70e
