@@ -39,6 +39,10 @@ public class Square {
 	public boolean isHole() {
 		return isHole;
 	}
+	
+	public void removePiece() {
+		this.hasPiece = false;
+	}
 
 	/**
 	 * This method will print what is on the square.

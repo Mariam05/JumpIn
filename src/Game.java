@@ -105,19 +105,87 @@ public class Game {
 		//get the piece specified
 		Piece piece = null;
 		if (piece instanceof Fox) {
-			handleFoxMove(piece);
+			handleFoxMove(piece, command);
 		} else if (piece instanceof Rabbit) {
 			handleRabbitMove(piece);
 		}
 	}
 
-	public void handleFoxMove(Piece fox) {
+	public void handleFoxMove(Piece fox, Command command) {
 		Fox f = (Fox) fox;
+		int destination = Integer.parseInt(command.getDestination());
+		int newX = destination / 10;
+		int newY = destination % 10;
+		int currX = f.getXPos();
+		int currY = f.getYPos();
+		
 		// If fox moves horizontally, check horizontal path on board
 		if(f.getFoxType().compareTo(Fox.FoxType.HORIZONTAL) == 0) {
-			
+			// If the direction is valid, continue checking the path
+			if(f.validateMove(destination)) {
+				// Is currY < newY i.e. moving right
+				if(currY < newY) {
+					for (int i = currY + 1; i <= newY; i++) {
+						if (board.getSquare(currX, i).hasPiece()) {
+							//invalidDirectionMessage();
+						}
+					}
+					// Moving fox right
+					board.getSquare(currX, newY - 1).addPiece(fox); // fox's tail
+					board.getSquare(currX, newY).addPiece(fox); // fox's head. This will be set as f1's position
+				}
+				// else moving left
+				else {
+					for (int i = currY + 1; i <= newY; i++) {
+						if (board.getSquare(currX, i).hasPiece()) {
+							//invalidDirectionMessage();
+						}
+					}
+					// Moving fox right
+					board.getSquare(currX, newY).addPiece(fox); // fox's tail
+					board.getSquare(currX, newY + 1).addPiece(fox); // fox's head. This will be set as f1's position
+				}
+				// Removing from old position
+				board.getSquare(currX, currY).removePiece(); // fox's head
+				board.getSquare(currX, currY - 1).removePiece(); // fox's tail
+			}
 		}
 		// If fox moves vertically, check vertical path on board
+		else if(f.getFoxType().compareTo(Fox.FoxType.VERTICAL) == 0) {
+			// If the direction is valid, continue checking the path
+			if(f.validateMove(destination)) {
+				// if currX < newX i.e. going up
+				if(currX < currY) {
+					int headPos = currX - 1;
+					// Make sure that every square in between is empty before moving the fox
+					for (int i = newX; i < headPos; i++) {
+						// Returns false if the path is not clear
+						if (board.getSquare(i, currY).hasPiece()) {
+							//invalidDirectionMessage();
+						}
+					}
+					// Moves the fox up if the path is clear
+					board.getSquare(newX, currY).addPiece(fox); // fox's tail
+					board.getSquare(newX + 1, currY).addPiece(fox); // fox's head. This will be set as f1's position
+				}
+				// else moving up
+				else {
+					// Make sure that every square in between is empty before moving the fox
+					for (int i = currX + 1; i <= newX; i++) {
+						// Returns false if the path is not clear
+						if (board.getSquare(i, currY).hasPiece()) { 
+							//invalidDirectionMessage();
+						}
+					}
+					// Moves fox down if the path is clear
+					board.getSquare(newX - 1, currY).addPiece(fox); // fox's tail
+					board.getSquare(newX, currY).addPiece(fox); // fox's head. This will be set as f1's position
+				}
+				// Removes fox from original spot
+				board.getSquare(currX, currY).removePiece();
+				board.getSquare(currX - 1, currY).removePiece();
+			}
+		}
 	}
 
 	public void handleRabbitMove(Piece rabbit) {
