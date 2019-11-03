@@ -1,4 +1,3 @@
-
 /**
  * This class contains information regarding the pieces on the board
  * @author Mariam Almalki

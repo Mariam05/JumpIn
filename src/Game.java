@@ -145,24 +145,150 @@ public class Game {
 		// get the piece specified
 		Piece piece = getPieceFromCommand(command);
 		if (piece instanceof Fox) {
-			handleFoxMove(piece);
+			handleFoxMove(piece, command);
 		} else if (piece instanceof Rabbit) {
-			handleRabbitMove(piece);
+			handleRabbitMove(piece, command);
 		}
 	}
 
-	public void handleFoxMove(Piece fox) {
+	public void handleFoxMove(Piece fox, Command command) {
 		Fox f = (Fox) fox;
+		int destination = Integer.parseInt(command.getDestination());
+		int newX = destination / 10;
+		int newY = destination % 10;
+		int currX = f.getXPos();
+		int currY = f.getYPos();
+		
 		// If fox moves horizontally, check horizontal path on board
-		if (f.getFoxType().compareTo(Fox.FoxType.HORIZONTAL) == 0) {
-
+		if(f.getFoxType().compareTo(Fox.FoxType.HORIZONTAL) == 0) {
+			// If the direction is valid, continue checking the path
+			if(f.validateMove(destination)) {
+				// Is currY < newY i.e. moving right
+				if(currY < newY) {
+					for (int i = currY + 1; i <= newY; i++) {
+						if (board.getSquare(currX, i).hasPiece()) {
+							//invalidDirectionMessage();
+						}
+					}
+					// Moving fox right
+					board.getSquare(currX, newY - 1).addPiece(fox); // fox's tail
+					board.getSquare(currX, newY).addPiece(fox); // fox's head. This will be set as f1's position
+				}
+				// else moving left
+				else {
+					for (int i = currY + 1; i <= newY; i++) {
+						if (board.getSquare(currX, i).hasPiece()) {
+							//invalidDirectionMessage();
+						}
+					}
+					// Moving fox right
+					board.getSquare(currX, newY).addPiece(fox); // fox's tail
+					board.getSquare(currX, newY + 1).addPiece(fox); // fox's head. This will be set as f1's position
+				}
+				// Removing from old position
+				board.getSquare(currX, currY).removePiece(); // fox's head
+				board.getSquare(currX, currY - 1).removePiece(); // fox's tail
+			}
 		}
 		// If fox moves vertically, check vertical path on board
-
+		else if(f.getFoxType().compareTo(Fox.FoxType.VERTICAL) == 0) {
+			// If the direction is valid, continue checking the path
+			if(f.validateMove(destination)) {
+				// if currX < newX i.e. going up
+				if(currX < currY) {
+					int headPos = currX - 1;
+					// Make sure that every square in between is empty before moving the fox
+					for (int i = newX; i < headPos; i++) {
+						// Returns false if the path is not clear
+						if (board.getSquare(i, currY).hasPiece()) {
+							//invalidDirectionMessage();
+						}
+					}
+					// Moves the fox up if the path is clear
+					board.getSquare(newX, currY).addPiece(fox); // fox's tail
+					board.getSquare(newX + 1, currY).addPiece(fox); // fox's head. This will be set as f1's position
+				}
+				// else moving up
+				else {
+					// Make sure that every square in between is empty before moving the fox
+					for (int i = currX + 1; i <= newX; i++) {
+						// Returns false if the path is not clear
+						if (board.getSquare(i, currY).hasPiece()) { 
+							//invalidDirectionMessage();
+						}
+					}
+					// Moves fox down if the path is clear
+					board.getSquare(newX - 1, currY).addPiece(fox); // fox's tail
+					board.getSquare(newX, currY).addPiece(fox); // fox's head. This will be set as f1's position
+				}
+				// Removes fox from original spot
+				board.getSquare(currX, currY).removePiece();
+				board.getSquare(currX - 1, currY).removePiece();
+			}
+		}
 	}
 
-	public void handleRabbitMove(Piece rabbit) {
+	public void handleRabbitMove(Piece rabbit, Command command) {
+		Rabbit r = (Rabbit) rabbit;
+		int destination = Integer.parseInt(command.getDestination());
+		int newX = destination / 10;
+		int newY = destination % 10;
+		int currX = r.getXPos();
+		int currY = r.getYPos();
 
+		// If destination is already filled
+		if (board.getSquare(newX, newY).hasPiece()) {
+			System.out.println("Selected position is filled");
+			// TODO handle invalid move
+		}
+		
+		// If destination is empty, check if the path rabbit takes is full of obstacles
+		else {
+			// Check if rabbit isn't just moving to adjacent spot
+			if(r.validateMove(destination)) {
+				// Checking of the paths are filled for each direction
+				if (currX < newX) { // moving up
+					for (int k = currY; k < newY; k++) {
+						// If there is an empty space in the path
+						if (!(board.getSquare(currX, k).hasPiece())) {
+							// TODO handle invalid move
+							// break;
+						} 
+					}
+				} 
+				else if (currX > newX) { // moving down
+					for (int k = currY; k > newY; k--) {
+						// If there is an empty space in the path
+						if (!(board.getSquare(currX, k).hasPiece())) {
+							System.out.println("current square " + currX + "" + k);
+							// TODO handle invalid move
+							// break;
+						}
+					}
+				} else if (currY > newY) { // moving left
+					for (int k = currX; k > newX; k--) {
+						// If there is an empty space in the path
+						if (!(board.getSquare(k, currY).hasPiece())){
+							// TODO handle invalid move
+							// break;
+						} 
+					}
+				} else if (currY < newY) { // moving right
+					for (int k = currX; k < newX; k++) {
+						// If there is an empty space in the path
+						if (!(board.getSquare(k, currY).hasPiece())) {
+							// TODO handle invalid move
+							// break;
+						} 
+					}
+				}
+
+			}
+			// Invalid direction (i.e. non-linear/diagonal)
+			else {
+				// TODO handle invalid move
+			}
+		}
 	}
 
 	public void printGameInstructions() {
@@ -193,8 +319,6 @@ public class Game {
 		String commands = "The following are the list of command words you can use: \n" +
 				 commandWords.getCommandWords()  + "\n" 
 				 + "For move, the format is: move [name of piece to move] [position to move it to in the format of RowCol]\n";
-		
-				
 
 		System.out.println(title + obstacles + movements + objective + abbreviations + commands);
 
@@ -231,3 +355,15 @@ public class Game {
 	}
 
 }
+
+ 
+
+	
+
+
+
+
+
+	
+	
+

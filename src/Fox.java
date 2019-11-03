@@ -47,8 +47,6 @@ public class Fox extends Piece {
 	@Override
 	public void setPosition(int x, int y) {
 		super.setPosition(x, y);
-
-		System.out.println("X pos: " + x + " Y Pos: "+ y);
 		setTailPos();
 		System.out.println("X pos: " + tailXPos + " Y Pos: "+ tailYPos);
 	}
