@@ -4,6 +4,7 @@ import java.util.HashMap;
  * This is the main class for the JumpIn came. Acts as the controller
  * 
  * @author Mariam Almalki
+ * @author Nazifa Tanzim
  * @version 2.0 of JumpIn
  *
  */
@@ -230,4 +231,3 @@ public class Game {
 		game.play();
 	}
 }
-

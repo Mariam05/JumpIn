@@ -94,7 +94,7 @@ public class Board {
 	 */
 	public void printBoard() {
 		
-		System.out.println("        0     1     2     3     4   \n");
+		System.out.println("        0      1      2      3      4   \n");
 		
 		for (int i = 0; i < LENGTH; i++) {
 			System.out.print(i+ "    ");
