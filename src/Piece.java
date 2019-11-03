@@ -1,3 +1,4 @@
+
 /**
  * This class contains information regarding the pieces on the board
  * @author Mariam Almalki
@@ -11,7 +12,7 @@ public abstract class Piece {
 	 *
 	 */
 	public enum Type {
-		RABBIT, FOX, MUSHROOM, HOLE
+		RABBIT, FOX, MUSHROOM
 	}
 	
 	/**
@@ -97,6 +98,5 @@ public abstract class Piece {
 	public String toString() {
 		return this.pieceName;
 	}
-	
 	
 }

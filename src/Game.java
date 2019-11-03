@@ -52,9 +52,4 @@ public class Game {
     public void handleRabbitMove(Piece rabbit) {
     	
     }
-    
-    
-    
-    
-    
 }
