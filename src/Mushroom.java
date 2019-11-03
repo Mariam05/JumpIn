@@ -13,7 +13,7 @@ public class Mushroom extends Piece {
 	 * Also return false because you can't move a mushroom. 
 	 */
 	@Override
-	public boolean validateMove(int destinationPos) {
+	public boolean validateMove(int x, int y) {
 		return false;
 	}
 

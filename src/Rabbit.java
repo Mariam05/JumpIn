@@ -16,14 +16,12 @@ public class Rabbit extends Piece {
 	 * An invalid move is if it is simply moving to one of the squares beside it
 	 */
 	@Override
-	public boolean validateMove(int destinationPos) {
+	public boolean validateMove(int x, int y) {
 		int currX = getXPos();
 		int currY = getYPos();
-		int newX = destinationPos / 10;
-		int newY = destinationPos % 10;
 		
-		if (Math.abs(currX - newX) < 2) return false; 
-		if (Math.abs(currY - newY) < 2) return false;
+		if (Math.abs(currX - x) < 2) return false; 
+		if (Math.abs(currY - y) < 2) return false;
 		
 		return true;
 	}

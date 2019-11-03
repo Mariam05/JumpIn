@@ -54,10 +54,24 @@ public class Board {
 		piece.setPosition(x, y);
 	}
 	
+	/**
+	 * Remove the piece at the specified square's location
+	 * @param x
+	 * @param y
+	 */
+	public void removePiece(int x, int y) {
+		board[y][x].removePiece();
+	}
 	
+	/**
+	 * Put a hole on the board
+	 * @param x
+	 * @param y
+	 */
 	public void addHole(int x, int y) {
 		board[y][x].addHole();
 	}
+	
 	/**
 	 * Returns the square at the specific position
 	 * @param x the square's row number
@@ -83,10 +97,10 @@ public class Board {
 	 * Checks if a user inputted coordination is out of range
 	 * @param x
 	 * @param y
-	 * @return
+	 * @return true if destination is out of range
 	 */
-	public boolean outOfRange(int x, int y) {
-		//TODO: IMPLEMENT THIS
+	public boolean isOutOfRange(int x, int y) {
+		if (x > WIDTH || x < 0 || y > LENGTH || y < 0) return true;
 		return false;
 	}
 	

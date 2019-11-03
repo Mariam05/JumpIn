@@ -10,8 +10,6 @@ public class Fox extends Piece {
 	};
 
 	private FoxType foxType;
-	private int tailXPos;
-	private int tailYPos;
 
 	protected Fox(String pieceName, FoxType foxType) {
 		super(pieceName, Type.FOX);
@@ -26,46 +24,7 @@ public class Fox extends Piece {
 	public FoxType getFoxType() {
 		return this.foxType;
 	}
-	/**
-	 * Each fox is refered to by its head. This method sets its tail position.
-	 */
-	private void setTailPos() {
-		if (foxType.compareTo(FoxType.HORIZONTAL) == 0) {
-			tailXPos = getXPos() - 1; //The head is to the right of the tail on the board
-			tailYPos = getYPos();
-		} else if (foxType.compareTo(FoxType.VERTICAL) == 0) {
-			tailYPos = getYPos() - 1; //The head is below the tail on the board
-			tailXPos = getXPos();
-		}
-	}
 	
-	/**
-	 * When you set a position for a fox, you set the position to it's head location.
-	 * This method will also set it's tail position by calling the 
-	 * internal setTailPos() helper method. 
-	 */
-	@Override
-	public void setPosition(int x, int y) {
-		super.setPosition(x, y);
-		setTailPos();
-		System.out.println("X pos: " + tailXPos + " Y Pos: "+ tailYPos);
-	}
-	
-	/**
-	 * Get the X position of the tail
-	 * @return int of X position
-	 */
-	public int getTailXPos() {
-		return tailXPos;
-	}
-	
-	/**
-	 * Get the Y position of the tail
-	 * @return int of Y position
-	 */
-	public int getTailYPos() {
-		return tailYPos;
-	}
 	
 	/**
 	 * Make sure that the fox's move is valid. i.e. that the user is not trying to
@@ -77,16 +36,14 @@ public class Fox extends Piece {
 	 * @param destinationPos the position that the player wants the fox to move.
 	 */
 	@Override
-	public boolean validateMove(int destinationPos) {
+	public boolean validateMove(int x, int y) {
 		int currX = getXPos();
 		int currY = getYPos();
-		int newX = destinationPos / 10;
-		int newY = destinationPos % 10;
 
 		if (foxType.compareTo(FoxType.HORIZONTAL) == 0) {
-			if (currX == newX) return true;
+			if (currY == y) return true;
 		} else if (foxType.compareTo(FoxType.VERTICAL) == 0) {
-			if (currY == newY) return true;
+			if (currX == x) return true;
 		}
 		return false;
 	}

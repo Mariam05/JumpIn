@@ -45,7 +45,7 @@ public abstract class Piece {
 	 * @param destinationPos
 	 * @return
 	 */
-	public abstract boolean validateMove(int destinationPos);
+	public abstract boolean validateMove(int x, int y);
 	
 	
 	/**

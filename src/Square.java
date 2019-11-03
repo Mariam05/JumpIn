@@ -42,6 +42,7 @@ public class Square {
 	
 	public void removePiece() {
 		this.hasPiece = false;
+		piece = null;
 	}
 
 	/**

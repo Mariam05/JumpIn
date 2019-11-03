@@ -39,7 +39,7 @@ public class Parser {
         String part3 = null;
 
         System.out.println("Enter a command");
-        System.out.println("> ");     // print prompt
+        System.out.print("> ");     // print prompt
 
         inputLine = reader.nextLine();
 
