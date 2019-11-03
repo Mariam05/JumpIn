@@ -11,7 +11,7 @@ public abstract class Piece {
 	 *
 	 */
 	public enum Type {
-		RABBIT, FOX, MUSHROOM, HOLE
+		RABBIT, FOX, MUSHROOM
 	}
 	
 	/**

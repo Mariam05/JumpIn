@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 /AnimalEnum.class
 /Board.class
 /GameEngine$Direction.class
@@ -17,6 +18,34 @@
 /Hole.class
 /Fox$FoxType.class
 /CommandWord.class
+=======
+/Animal.class
+/AnimalEnum.class
+/Board.class
+/GameEngine$Direction.class
+/GameEngine.class
+/Mushroom.class
+/Piece$Type.class
+/Piece.class
+/Square$squareType.class
+/Square.class
+<<<<<<< HEAD
+/Fox.class
+/Rabbit.class
+/Piece$Direction.class
+=======
+/Piece.class
+/Piece$Type.class
+/Mushroom.class
+/CommandWords.class
+/Command.class
+/Fox.class
+/Rabbit.class
+<<<<<<< HEAD
+>>>>>>> 2f7569ce2c651fd6d6eea382a42f46946cfba70e
+=======
+>>>>>>> 2f7569ce2c651fd6d6eea382a42f46946cfba70e
+>>>>>>> 2bc6b5c55da729d1174729d8068f39993dfa953a
 =======
 /Animal.class
 /AnimalEnum.class
