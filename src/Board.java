@@ -27,14 +27,14 @@ public class Board {
 		
 		board = new Square[LENGTH][WIDTH];
 		
-		//Initialize the board, which is a grid of squares
-		for (int i = 0; i< LENGTH; i++) {
-			for (int j = 0; j < WIDTH; j++) {
+		// Initialize the board, which is a grid of squares
+		for (int i = 0; i< LENGTH; i++) { //row
+			for (int j = 0; j < WIDTH; j++) { //column
 				board[i][j] = new Square();
 			}
 		}
 		
-		//Set the holes of the board. Hole positions don't change
+		// Set the holes of the board. Hole positions don't change
 		board[0][0].addHole();
 		board[0][4].addHole();
 		board[4][0].addHole();
@@ -51,6 +51,7 @@ public class Board {
 	 */
 	public void addPiece(Piece piece, int x, int y) {
 		board[y][x].addPiece(piece);
+		piece.setPosition(x, y);
 	}
 	
 	
@@ -64,7 +65,7 @@ public class Board {
 	 * @return the desired square
 	 */
 	public Square getSquare(int x, int y) {
-		return board[x][y];
+		return board[y][x];
 	}
 	
 	

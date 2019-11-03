@@ -1,5 +1,5 @@
 /**
- * 
+ * X is col, Y is row
  * @author tomar
  *
  */
@@ -32,8 +32,10 @@ public class Fox extends Piece {
 	private void setTailPos() {
 		if (foxType.compareTo(FoxType.HORIZONTAL) == 0) {
 			tailXPos = getXPos() - 1; //The head is to the right of the tail on the board
+			tailYPos = getYPos();
 		} else if (foxType.compareTo(FoxType.VERTICAL) == 0) {
 			tailYPos = getYPos() - 1; //The head is below the tail on the board
+			tailXPos = getXPos();
 		}
 	}
 	
@@ -43,9 +45,12 @@ public class Fox extends Piece {
 	 * internal setTailPos() helper method. 
 	 */
 	@Override
-	public void setPosition(int pos) {
-		super.setPosition(pos);;
+	public void setPosition(int x, int y) {
+		super.setPosition(x, y);
+
+		System.out.println("X pos: " + x + " Y Pos: "+ y);
 		setTailPos();
+		System.out.println("X pos: " + tailXPos + " Y Pos: "+ tailYPos);
 	}
 	
 	/**

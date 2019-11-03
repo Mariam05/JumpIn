@@ -12,7 +12,7 @@ public class Square {
 	private Piece piece;
 	private boolean hasPiece;
 	private boolean isHole;
-
+	private int x, y;
 	/**
 	 * The Constructor will create an empty square and specify its position by using
 	 * i and j that the user will pass. Also, set isHole and isOccupied to false

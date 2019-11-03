@@ -28,7 +28,7 @@ public abstract class Piece {
 	/**
 	 * Where it is currently located on the board
 	 */
-	private int currPosition;
+	private int x, y;
 	
 	/**
 	 * Constructor to make a generic piece with a name and associated type
@@ -61,16 +61,9 @@ public abstract class Piece {
 	 * Set the position of thep piece
 	 * @param position in the form of rowCol
 	 */
-	public void setPosition(int pos) {
-		this.currPosition = pos;
-	}
-	
-	/**
-	 * Get the position of the piece in the form of rowCol
-	 * @return int currPosition
-	 */
-	public int getPosition() {
-		return this.currPosition;
+	public void setPosition(int x, int y) {
+		this.x = x;
+		this.y = y;
 	}
 	
 	/**
@@ -78,7 +71,8 @@ public abstract class Piece {
 	 * @return int x position
 	 */
 	public int getXPos() {
-		return getPosition() / 10; //the first digit in the entered pos
+		//System.out.println("X pos: " + x);
+		return x; //the first digit in the entered pos
 	}
 	
 	
@@ -87,7 +81,7 @@ public abstract class Piece {
 	 * @return int y position
 	 */
 	public int getYPos() {
-		return getPosition() % 10; //the second digit in the entered pos
+		return y; //the second digit in the entered pos
 	}
 	
 	/**
