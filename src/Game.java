@@ -14,6 +14,7 @@ public class Game {
 	private Board board;
 	private Piece fox1, fox2, mushroom1, mushroom2, rabbit1, rabbit2, rabbit3;
 	private HashMap<String, Piece> animalPieces;
+	private boolean invalidCommand;
 
 	/**
 	 * Instantiate the parser and commandWords objects.
@@ -56,16 +57,22 @@ public class Game {
      *  Main play routine.  Loops until end of play.
      */
     public void play() {            
-        printGameInstructions();
+
 
         // Enter the main command loop.  Here we repeatedly read commands and
         // execute them until the game is over.
                 
         boolean finished = false;
+        boolean invalidCommand = false;
+        
         while (! finished) {
+        	
         	board.printBoard();
             Command command = parser.getCommand();
             finished = processCommand(command);
+            if(!invalidCommand) {
+            	finished = processCommand(parser.getCommand());
+            }
         }
         System.out.println("Thank you for playing. Good bye.");
     }
@@ -80,7 +87,7 @@ public class Game {
 
         if(command.isUnknown()) {
             System.out.println("I don't know what you mean...");
-            return false;
+            return false; //reprompt
         }
 
         String commandWord = command.getCommandWord();
@@ -88,6 +95,7 @@ public class Game {
             printGameInstructions();
         }
         else if (commandWord.equalsIgnoreCase("move")) {
+        	if(!validatePieceSelected(command)) ;
             handleMove(command);
         }
         else if (commandWord.equals("quit")) {
@@ -100,10 +108,42 @@ public class Game {
         return wantToQuit;
     }
     
-
+    /**
+     * Checks if the user entered a valid piece to move
+     * @param command the command that the user entered
+     * @return true if the piece is valid
+     */
+    private boolean validatePieceSelected(Command command) {
+    	String piece = command.getPiece();
+    	for (String s : animalPieces.keySet()) {
+    		if(piece.equalsIgnoreCase(s)) return true;
+    	}
+    	return false;
+    }
+/**
+ * 
+ * After user input, we need to validate:
+ * - the command is valid
+ * - the piece /piece name is valid
+ * - the destination coordinates are valid
+ * - the move is valid by invoking validateMove
+ * - validate by checking the path 
+ * 
+ * 
+ * @param command
+ */
+    private Piece getPieceFromCommand(Command command) {
+    	String pieceString = command.getPiece();
+    	for (String s : animalPieces.keySet()) {
+    		if(pieceString.equalsIgnoreCase(s)) return animalPieces.get(s);
+    	}
+    	
+    	return null; //The piece is invalid
+    }
+    
 	public void handleMove(Command command) {
 		//get the piece specified
-		Piece piece = null;
+		Piece piece = getPieceFromCommand(command);
 		if (piece instanceof Fox) {
 			handleFoxMove(piece);
 		} else if (piece instanceof Rabbit) {
@@ -154,6 +194,7 @@ public class Game {
 	
 	public static void main(String[] args) {
 		Game game = new Game();
+		game.printGameInstructions();
 		game.play();
 	}
 }

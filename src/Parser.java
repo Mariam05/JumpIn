@@ -37,6 +37,8 @@ public class Parser {
         String part2 = null;
         String part3 = null;
 
+        System.out.println("Enter help, quit, or a command to move in the format of: move [name of piece to move] "
+        		+ "[position to move it to in the format of RowCol]");
         System.out.println("> ");     // print prompt
 
         inputLine = reader.nextLine();
