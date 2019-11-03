@@ -112,7 +112,12 @@ public class Game {
 	}
 
 	public void handleFoxMove(Piece fox) {
-		
+		Fox f = (Fox) fox;
+		// If fox moves horizontally, check horizontal path on board
+		if(f.getFoxType().compareTo(Fox.FoxType.HORIZONTAL) == 0) {
+			
+		}
+		// If fox moves vertically, check vertical path on board
 	}
 
 	public void handleRabbitMove(Piece rabbit) {

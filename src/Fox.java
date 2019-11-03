@@ -20,6 +20,13 @@ public class Fox extends Piece {
 	}
 
 	/**
+	 * 
+	 * @return the type of the fox
+	 */
+	public FoxType getFoxType() {
+		return this.foxType;
+	}
+	/**
 	 * Each fox is refered to by its head. This method sets its tail position.
 	 */
 	private void setTailPos() {

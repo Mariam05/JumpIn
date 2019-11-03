@@ -27,8 +27,4 @@ public class Rabbit extends Piece {
 		
 		return true;
 	}
-
-	
-
-	
 }
