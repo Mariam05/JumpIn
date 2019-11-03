@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 /**
  * 
  * @author Nazifa Tanzim
@@ -152,30 +150,3 @@ public class Fox extends Piece{
 		return this.getName();
 	}
 }
-=======
-=======
->>>>>>> 2f7569ce2c651fd6d6eea382a42f46946cfba70e
-
-public class Fox extends Piece{
-
-	protected Fox(String pieceName) {
-		super(pieceName, Type.FOX);
-	}
-
-	@Override
-	public boolean validateMove(int currPos, int destinationPos) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-}
-<<<<<<< HEAD
->>>>>>> 2f7569ce2c651fd6d6eea382a42f46946cfba70e
-=======
->>>>>>> 2f7569ce2c651fd6d6eea382a42f46946cfba70e
