@@ -67,18 +67,19 @@ public class Game {
 	public void startNewRound() {
 		board.printBoard();
 		Command command = parser.getCommand();
-		while(processCommand(command)) {
+		while (processCommand(command)) {
 			board.printBoard();
 			command = parser.getCommand();
-		};
+		}
+		;
 	}
 
 	/**
 	 * Re - prompts user for correct input if their move is invalid
 	 */
-	private void invalidCommandMessage() {
+	private boolean invalidCommandMessage() {
 		System.out.println("Invalid command. Please try again.");
-		//this.startNewRound();
+		return false;
 	}
 
 	/**
@@ -101,19 +102,15 @@ public class Game {
 
 		} else if (commandWord.equalsIgnoreCase("move")) {
 
-			if (!validatePieceSelected(command)) {
-				invalidCommandMessage();
-				return false; // check if selected piece is valid
-			}
-			if (!validateDestinationSelected(command)) {
-				invalidCommandMessage();
-				return false; // check if chosen destination is valid
-			}
+			if (!validatePieceSelected(command))
+				return invalidCommandMessage();
+			if (!validateDestinationSelected(command))
+				return invalidCommandMessage();
 
 			return handleMove(command);
 		} else if (commandWord.equals("quit")) {
 			quitGame = true;
-		} 
+		}
 
 		return false;
 	}
@@ -176,15 +173,16 @@ public class Game {
 		} else if (piece instanceof Rabbit) {
 			handleRabbitMove(piece, command);
 		}
-		
+
 		return true;
 	}
 
 	/**
 	 * return true if move was handled
+	 * 
 	 * @param fox
 	 * @param command
-	 * @return
+	 * @return true if fox moved succesfully
 	 */
 	public boolean handleFoxMove(Piece fox, Command command) {
 		Fox f = (Fox) fox;
@@ -193,20 +191,15 @@ public class Game {
 		int currX = f.getXPos();
 		int currY = f.getYPos();
 
-		if (!fox.validateMove(newX, newY)) {
-			invalidCommandMessage();
-			return false; // Check that the move type is legal for the animal
-		}
-			
+		if (!fox.validateMove(newX, newY))
+			return invalidCommandMessage(); // Check that the move type is legal for the animal
 
 		// If fox moves horizontally, check horizontal path on board
 		if (f.getFoxType().compareTo(Fox.FoxType.HORIZONTAL) == 0) {
 			if (currX < newX) { // moving right
 				for (int i = currX + 2; i <= newX; i++) { // add 2 because tail is on the left of head
-					if (board.getSquare(i, currY).hasPiece()) {
-						invalidCommandMessage();
-						return false;
-					}
+					if (board.getSquare(i, currY).hasPiece())
+						return invalidCommandMessage();
 				}
 
 				board.removePiece(currX, currY); // remove tail of fox
@@ -218,10 +211,8 @@ public class Game {
 			} else { // moving left
 
 				for (int i = currX - 1; i <= newX; i++) { // reprompt if path isn't clear
-					if (board.getSquare(i, currY).hasPiece()) {
-						invalidCommandMessage();
-						return false;
-					}
+					if (board.getSquare(i, currY).hasPiece())
+						return invalidCommandMessage();
 				}
 
 				board.removePiece(currX, currY); // remove tail of fox
@@ -234,97 +225,93 @@ public class Game {
 		} else if (f.getFoxType().compareTo(Fox.FoxType.VERTICAL) == 0) { // this fox moves vertically
 			if (currY > newY) { // moving up
 				for (int i = newY; i < currY; i++) { // reprompt if path isn't clear
-					if (board.getSquare(i, currY).hasPiece()) {
-						invalidCommandMessage();
-						return false;
-					}
+					if (board.getSquare(i, currY).hasPiece())
+						return invalidCommandMessage();
 				}
-				
+
 				board.removePiece(currX, currY); // remove fox tail
 				board.removePiece(currX, currY + 1); // remove fox head
-				
+
 				board.addPiece(fox, newX, newY - 1);
-				board.addPiece(fox, newX, newY); //add tail
-				
+				board.addPiece(fox, newX, newY); // add tail
+
 			} else { // moving down
 				for (int i = currY + 2; i <= newY; i++) { // reprompt if path isn't clear
-					if (board.getSquare(currX, i).hasPiece()) {
-						invalidCommandMessage();
-						return false;
-					}
+					if (board.getSquare(currX, i).hasPiece())
+						return invalidCommandMessage();
 				}
-				
+
 				board.removePiece(currX, currY); // remove fox tail
 				board.removePiece(currX, currY + 1); // remove fox head
-				
+
 				board.addPiece(fox, newX, newY); // add head
-				board.addPiece(fox, newX, newY - 1); //add tail
+				board.addPiece(fox, newX, newY - 1); // add tail
 			}
-		
+
 		}
 		return true;
 	}
-	
 
-	public void handleRabbitMove(Piece rabbit, Command command) {
+	/**
+	 * Handle a move of a rabbit
+	 * 
+	 * @param rabbit
+	 * @param command
+	 * @return
+	 */
+	public boolean handleRabbitMove(Piece rabbit, Command command) {
 		Rabbit r = (Rabbit) rabbit;
 		int newX = command.getX();
 		int newY = command.getY();
 		int currX = r.getXPos();
 		int currY = r.getYPos();
 
+		if (!rabbit.validateMove(newX, newY)) {
+			System.out.println("Got here");
+			return invalidCommandMessage();
+		}
+
 		// If destination is already filled
-		if (board.getSquare(newX, newY).hasPiece()) {
-			System.out.println("Selected position is filled");
-			// TODO handle invalid move
-		}
+		if (board.getSquare(newX, newY).hasPiece()) 
+			return invalidCommandMessage();
 
-		// If destination is empty, check if the path rabbit takes is full of obstacles
-		else {
-			// Check if rabbit isn't just moving to adjacent spot
-			if (r.validateMove(newX, newY)) {
-				// Checking of the paths are filled for each direction
-				if (currX < newX) { // moving up
-					for (int k = currY; k < newY; k++) {
-						// If there is an empty space in the path
-						if (!(board.getSquare(currX, k).hasPiece())) {
-							// TODO handle invalid move
-							// break;
-						}
-					}
-				} else if (currX > newX) { // moving down
-					for (int k = currY; k > newY; k--) {
-						// If there is an empty space in the path
-						if (!(board.getSquare(currX, k).hasPiece())) {
-							System.out.println("current square " + currX + "" + k);
-							// TODO handle invalid move
-							// break;
-						}
-					}
-				} else if (currY > newY) { // moving left
-					for (int k = currX; k > newX; k--) {
-						// If there is an empty space in the path
-						if (!(board.getSquare(k, currY).hasPiece())) {
-							// TODO handle invalid move
-							// break;
-						}
-					}
-				} else if (currY < newY) { // moving right
-					for (int k = currX; k < newX; k++) {
-						// If there is an empty space in the path
-						if (!(board.getSquare(k, currY).hasPiece())) {
-							// TODO handle invalid move
-							// break;
-						}
-					}
-				}
-
+		// Checking of the paths are filled for each direction
+		if (currX < newX) { // moving right
+			System.out.println("Moving right");
+			for (int k = currX + 1; k < newX; k++) { // check for empty squares
+				if (!(board.getSquare(k, currY).hasPiece()))
+					invalidCommandMessage();
 			}
-			// Invalid direction (i.e. non-linear/diagonal)
-			else {
-				// TODO handle invalid move
+		} else if (currX > newX) { // moving left
+			System.out.println("Moving left");
+			for (int k = currX - 1; k > newX; k--) { // check for empty squares
+				if (!(board.getSquare(k, currY).hasPiece()))
+					invalidCommandMessage();
+			}
+		} else if (currY > newY) { // moving up
+			System.out.println("Moving up");
+			for (int k = currY - 1; k > newY; k--) { // check for empty squares
+				if (!(board.getSquare(currX, k).hasPiece()))
+					invalidCommandMessage();
+			}
+		} else if (currY < newY) { // moving down
+			System.out.println("Moving down");
+			for (int k = currY + 1; k < newY; k++) { // check for empty squares
+				if (!(board.getSquare(currX, k).hasPiece()))
+					invalidCommandMessage();
 			}
 		}
+
+		// Move is validated, complete the action
+		board.removePiece(currX, currY);
+		board.addPiece(rabbit, newX, newY);
+
+		if (board.getSquare(newX, newY).isHole())
+			rabbitsInHoles++; // if rabbit entered a hole
+		if (board.getSquare(currX, currY).isHole())
+			rabbitsInHoles--; // if the rabbit was in a hole and now is not
+
+		return true;
 	}
 
 	public void printGameInstructions() {
@@ -361,21 +348,12 @@ public class Game {
 	}
 
 	/**
-	 * Checks if the player has won based on the number of rabbits in a hole
-	 * 
-	 * @return true if the player has won
-	 */
-	public boolean hasWon() {
-		return rabbitsInHoles == 3;
-	}
-
-	/**
 	 * Game is over if either (a) player quits or (b) player wins
 	 * 
 	 * @return true if game is over
 	 */
 	public boolean gameOver() {
-		if (hasWon()) {
+		if (rabbitsInHoles == 3) { // all rabbits in a hole, player won
 			System.out.println("Congrats! You solved the puzzle!");
 			return true;
 		}
