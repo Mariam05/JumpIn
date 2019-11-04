@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * This is the main class for the JumpIn came. Acts as the controller
@@ -16,6 +18,8 @@ public class Game {
 	private HashMap<String, Piece> animalPieces;
 	private int rabbitsInHoles;
 	private boolean quitGame;
+	private List<ButtonListener> listenerButtons;
+	private GameView view;
 
 	/**
 	 * Instantiate the parser and commandWords objects. Set up the board with the
@@ -27,6 +31,7 @@ public class Game {
 		animalPieces = new HashMap<>();
 		board = new Board();
 		quitGame = false;
+		listenerButtons = new ArrayList<>();
 
 		// Instantiate the pieces on the board
 		fox1 = new Fox("F1", Fox.FoxType.HORIZONTAL);
@@ -60,7 +65,11 @@ public class Game {
 		board.addPiece(mushroom2, 3, 1);
 
 	}
-
+	
+	public Board getBoard() {
+		return this.board;
+	}
+	
 	/**
 	 * Main play routine. Loops until end of play.
 	 */

@@ -13,23 +13,20 @@ public class Board {
 	/**
 	 * The width of the board (i.e. num of columns)
 	 */
-	private static final int WIDTH = 5;
+	static final int SIZE = 5;
 	
-	/**
-	 * The length of the board (i.e. num of rows)
-	 */
-	private static final int LENGTH = 5;
 	
 	/**
 	 * Instantiates the array of squares and sets the hole positions
+	 * Holes are set here because they are part of the board (i.e. cannot be moved/ are not pieces)
 	 */
 	public Board() {		
 		
-		board = new Square[LENGTH][WIDTH];
+		board = new Square[LENGTH][SIZE];
 		
 		// Initialize the board, which is a grid of squares
 		for (int i = 0; i< LENGTH; i++) { //row
-			for (int j = 0; j < WIDTH; j++) { //column
+			for (int j = 0; j < SIZE; j++) { //column
 				board[i][j] = new Square();
 			}
 		}
@@ -100,7 +97,7 @@ public class Board {
 	 * @return true if destination is out of range
 	 */
 	public boolean isOutOfRange(int x, int y) {
-		if (x > WIDTH || x < 0 || y > LENGTH || y < 0) return true;
+		if (x > SIZE || x < 0 || y > LENGTH || y < 0) return true;
 		return false;
 	}
 	
@@ -113,7 +110,7 @@ public class Board {
 		
 		for (int i = 0; i < LENGTH; i++) {
 			System.out.print(i+ "    ");
-			for (int j = 0; j < WIDTH; j++) {
+			for (int j = 0; j < SIZE; j++) {
 				System.out.print(board[i][j].toString());
 			}
 			System.out.print("|\n");

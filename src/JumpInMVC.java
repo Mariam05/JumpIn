@@ -1,4 +1,10 @@
-
+/**
+ * The main program for the MVC Gui that initializes the three classes
+ * and ties everything together. 
+ * @author Mariam 
+ * @version JumpIn 2.0
+ *
+ */
 public class JumpInMVC {
 
 	

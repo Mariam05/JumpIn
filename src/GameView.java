@@ -24,21 +24,22 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-public class GameView extends JFrame{
+public class GameView extends JFrame implements ActionListener{
 	
-	Game gameModel = new Game();
 	private static final long serialVersionUID = 1L;
 	private Container container;
-	private JButton board[][];// This will be a board of squares
-	private final int SIZE = 5;// This is the size of the board 5 X 5
+	JButton board[][];// This will be a board of squares
+	
+	private int size; //The size of the board
+	
 	Image piece,whiteRabbit,yellowRabbit,greyRabbit,mushroom,fox1,fox2,hole;
 	private int dimensions[] = {0,0,0,4,4,0,4,4,2,2};// this will be used twice firstly to add holes and secondly
 	// to change the background of buttons
+	
 	private Game game;
 	private JMenuBar menuBar;
 	private JMenu menu;
-	private JMenuItem menuItemHelp;
-	private JMenuItem menuItemQuit;
+	private JMenuItem menuItemHelp,menuItemQuit,menuItemReset ;
 	private Command command;
 	
 	
@@ -48,8 +49,10 @@ public class GameView extends JFrame{
 		
 		this.game = model;
 		
+		size = model.getBoard().SIZE;
+		
 		container = new Container();
-		container.setLayout(new GridLayout(SIZE,SIZE));
+		container.setLayout(new GridLayout(size,size));
 		
 		add(container);
 		
@@ -63,47 +66,44 @@ public class GameView extends JFrame{
 	    addPiecesOnBoard();
 	}
 	
+	public int getBoardSize() {
+		return this.size;
+		
+	}
 	
 	public void addMenuItems() {
 		menuBar = new JMenuBar();
 		menu = new JMenu("JumpIN");
-		menu.setMnemonic(KeyEvent.VK_A);
 		menuBar.add(menu);
 		
 		menuItemHelp = new JMenuItem("Help");
 		menu.add(menuItemHelp);
-		//This can also be implemented by adding an action listener on the list that will remove the one that is selected
-//		menuItem.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				command = new Command("help", null, null);
-//				game.processCommand(command);
-//			}
-//			
-//		});
 		
 		menuItemQuit = new JMenuItem("Quit");
 		menu.add(menuItemQuit);
-		//This can also be implemented by adding an action listener on the list that will remove the one that is selected
-		menuItemQuit.addActionListener(new ActionListener() {
+		
+		//TODO: MAKE SURE THIS WORKS. THIS FUNCTIONALITY IS UNTESTED!!
+		menuItemReset = new JMenuItem("Reset");
+		menu.add(menuItemReset);
+		menuItemReset.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				command = new Command("quit", null, null);
-				game.processCommand(command);
+				createBoard();	
 			}
 			
 		});
 		
 		add(menuBar, BorderLayout.NORTH);
 	}
+	
 	/*
 	 * The board will be created then we are adding the buttons in side it and
 	 * also adding background color
 	 */
 	public void createBoard() {
-		board = new JButton[SIZE][SIZE];
-		for(int i=0; i < SIZE; i++) {
-			for(int j=0; j < SIZE; j++) {
+		board = new JButton[size][size];
+		for(int i=0; i < size; i++) {
+			for(int j=0; j < size; j++) {
 				JButton button = new JButton();
 				board[i][j] = button;
 				button.setPreferredSize(new Dimension(200, 200));
@@ -114,13 +114,25 @@ public class GameView extends JFrame{
                 button.addActionListener(new ButtonListener(i,j));
 			}
 		}
-		//gameModel.add
+		
 		// We are changing the holes background color to make it darker green
 		for(int i=1; i < dimensions.length;i++) {
 	    	 board[dimensions[i-1]][dimensions[i]].setBackground(new Color(0, 102, 0));
 	    }
 	}
 	
+	/**
+	 * Give the animal buttons names so that the names can be passed to a command
+	 */
+	public void setInitialButtonNames() {
+		board[4][1].setName("R1");
+		board[0][3].setName("R2");
+		board[2][4].setName("R3");
+		board[3][3].setName("F1");
+		board[1][1].setName("F2");
+		board[3][4].setName("F1");
+		board[0][1].setName("F2");
+	}
 	
 	/*
 	 * All the animals, mushrooms and holes will be added by using this method
@@ -137,6 +149,7 @@ public class GameView extends JFrame{
 	    piece = mushroom.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
 	    board[1][3].setIcon(new ImageIcon(piece));
 	    board[4][2].setIcon(new ImageIcon(piece));
+	    
 	    //we are adding the white-rabbits
 	    whiteRabbit = new ImageIcon(this.getClass().getResource("/whiteRabbit.png")).getImage();
 	    piece = whiteRabbit.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
@@ -163,6 +176,8 @@ public class GameView extends JFrame{
 	    piece = fox1.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
 	    board[3][4].setIcon(new ImageIcon(piece));
 	    board[0][1].setIcon(new ImageIcon(piece));
+	    
+	    
 	}
 	
 	/**
@@ -215,5 +230,12 @@ public class GameView extends JFrame{
                  new GameView(game);
             }
         });
+	}
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
