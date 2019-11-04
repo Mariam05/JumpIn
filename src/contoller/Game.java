@@ -197,12 +197,13 @@ public class Game {
 		int currY = f.getYPos();
 		
 		
-
-		if (!fox.validateMove(newX, newY))
+		this.view.update((f.getXPos()),f.getYPos(),(command.getX()),command.getY(), fox.toString());
+		
+		if (!fox.validateMove(newX, newY)) {
 			return invalidCommandMessage(); // Check that the move type is legal for the animal
+		}
 		
 		
-		this.view.update((f.getXPos()*10)+f.getYPos(),(command.getX()*10)+command.getY(), fox.toString());
 		
 		
 		// If fox moves horizontally, check horizontal path on board
@@ -281,7 +282,9 @@ public class Game {
 			System.out.println("Got here");
 			return invalidCommandMessage();
 		}
-
+		
+		this.view.update((r.getXPos()),r.getYPos(),(command.getX()),command.getY(), rabbit.toString());
+		
 		// If destination is already filled
 		if (board.getSquare(newX, newY).hasPiece()) 
 			return invalidCommandMessage();

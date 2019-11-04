@@ -19,6 +19,7 @@ public class Listener implements ActionListener{
 		cm1 = new GameButton(" ",-1,-1);
 		cm2 = new GameButton(" ",-1,-1);
 		this.view = view;
+		model = new Game(this.view);
 	}
 	
 	
@@ -32,10 +33,10 @@ public class Listener implements ActionListener{
 		}else {
 			cm2 = (GameButton) e.getSource();
 			
-			if((cm1.getText().substring(0, 1).equals("F")) || (cm1.getText().substring(0, 1).equals("R")) ){
-				Command command = new Command("move",cm1.getText(),cm1.toString());
+			//if((cm1.getText().substring(0, 1).equals("F")) || (cm1.getText().substring(0, 1).equals("R")) ){
+				Command command = new Command("move",cm1.getText(),cm2.toString());
 				model.handleMove(command);
-			}
+			//}
 			
 			
 			
