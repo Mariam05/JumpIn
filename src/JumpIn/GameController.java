@@ -42,7 +42,6 @@ public class GameController {
 
 	// Pass the source of the button listener call?
 	public void reportButtonPressed(ActionEvent src, ButtonListener b) {
-		System.out.println("Button " + b.getStringXY() + " was pressed.");
 		numOfButtonsPressed++;
 		if (numOfButtonsPressed == 1) {
 			getPieceSelected(b);
@@ -71,6 +70,7 @@ public class GameController {
 			gameView.displayMessage("Invalid move");
 		} else { //otherwise check for winner and update view
 			if (game.hasWon()) {
+				gameView.update();
 				gameView.displayMessage("CONGRATS! You solved the puzzle!");
 				gameView.dispose();
 			}
@@ -154,13 +154,4 @@ public class GameController {
 		}
 	}
 	
-	class ButtonEvent extends EventObject{
-
-		public ButtonEvent(Object arg0) {
-			super(arg0);
-			// TODO Auto-generated constructor stub
-		}
-		
-	}
-
 }

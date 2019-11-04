@@ -166,19 +166,6 @@ public class GameView extends JFrame implements ActionListener {
 		}
 	}
 
-	/**
-	 * Give the animal buttons names so that the names can be passed to a command
-	 */
-	public void setInitialButtonNames() {
-		board[4][1].setName("R1");
-		board[0][3].setName("R2");
-		board[2][4].setName("R3");
-		board[3][3].setName("F1");
-		board[1][1].setName("F2");
-		board[3][4].setName("F1");
-		board[0][1].setName("F2");
-	}
-
 	/*
 	 * All the animals, mushrooms and holes will be added by using this method
 	 */
@@ -206,13 +193,18 @@ public class GameView extends JFrame implements ActionListener {
 	}
 
 	/**
-	 * Update the view
+	 * Remove all current icons and then Update the view
 	 * 
 	 * @param x
 	 * @param y
 	 * @param name
 	 */
 	public void update() {
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				board[i][j].setIcon(null);
+			}
+		}
 		putIconsOnBoard();
 	}
 
