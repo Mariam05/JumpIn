@@ -23,9 +23,10 @@ public class GameView extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
 	private Container container;
-	private JButton board[][];// This will be a board of squares
+	private GameButton board[][];// This will be a board of squares
 	private final int SIZE = 5;// This is the size of the board 5 X 5
 	Image piece,whiteRabbit,yellowRabbit,greyRabbit,mushroom,fox1,fox2,hole;
+	private Listener listener;
 	
 	private Game model;
 	
@@ -43,18 +44,18 @@ public class GameView extends JFrame {
 	}
 	
 	public void createBoard() {
-		board = new JButton[SIZE][SIZE];
+		listener = new Listener(this);
+		board = new GameButton[SIZE][SIZE];
 		for(int i=0; i < SIZE; i++) {
 			for(int j=0; j < SIZE; j++) {
-				board[i][j] = new JButton("Empty");
-				
+				board[i][j] = new GameButton("Empty",i,j);				
 				board[i][j].setPreferredSize(new Dimension(200, 200));
 				//board[i][j].setBorder(BorderFactory.createLineBorder(Color.WHITE, 4));
 				board[i][j].setBackground(new Color(0,204,0));// the backGround of the buttons
 				board[i][j].setForeground(new Color(0,204,0));
 				board[i][j].setOpaque(true);
                 container.add(board[i][j]);
-                board[i][j].addActionListener(new Listener((i*10)+j));
+                board[i][j].addActionListener(listener);
 			}
 		}
 		// We are changing the holes background color to make it darker
@@ -76,13 +77,13 @@ public class GameView extends JFrame {
 		board[2][2].setText("Hole");
 		board[1][3].setText("mushroom");
 		board[4][2].setText("mushroom");
-		board[4][1].setText("R1");
-		board[0][3].setText("R2");
-		board[2][4].setText("R3");
-		board[3][3].setText("F1");
-		board[1][1].setText("F2");
-		board[3][4].setText("F1");
-		board[0][1].setText("F2");
+		board[4][1].setText("rabbit1");
+		board[0][3].setText("rabbit2");
+		board[2][4].setText("rabbit3");
+		board[3][3].setText("fox1");
+		board[1][1].setText("fox2");
+		board[3][4].setText("fox1");
+		board[0][1].setText("fox2");
 	}
 	
 	public void addPiecesOnBoard() {
@@ -126,6 +127,20 @@ public class GameView extends JFrame {
 	    piece = fox1.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
 	    board[3][4].setIcon(new ImageIcon(piece));
 	    board[0][1].setIcon(new ImageIcon(piece));
+	}
+	
+	public void update(int startCoordinate, int endCoordinate, String name) {
+		int currX = startCoordinate / 10;
+		int currY = startCoordinate % 10;
+		int newX = endCoordinate / 10;
+		int newY = endCoordinate % 10;
+		
+		// Adding piece to new button location
+		board[newX][newY].setText(name); // Setting new button name
+		board[newX][newY].setIcon(board[currX][currY].getIcon()); // Setting icon to new location
+		// Removing piece from previous button location
+		board[currX][currY].setText("empty"); // Clearing name
+		board[currX][currY].setIcon(null); // Clearing icon
 	}
 	
 	public static void main(String[] args) {
