@@ -67,9 +67,27 @@ public class Game {
 	public void startNewRound() {
 		board.printBoard();
 		Command command = parser.getCommand();
-		while (processCommand(command)) {
+		while (processCommand(command) && rabbitsInHoles != 3) {
 			board.printBoard();
 			command = parser.getCommand();
+		}
+	}
+	
+	private boolean hasWon() {
+		if(rabbitsInHoles == 3) {
+			System.out.println("Congrats! You solved the puzzle!");
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Play the game.
+	 */
+	public void play() {
+		printGameInstructions();
+		while(!hasWon() & !quitGame) {
+			startNewRound();
 		}
 	}
 
@@ -108,7 +126,9 @@ public class Game {
 
 			return handleMove(command);
 		} else if (commandWord.equals("quit")) {
+			System.out.println("Thanks for playing. Goodbye");
 			quitGame = true;
+			return false;
 		}
 
 		return false;
@@ -209,7 +229,7 @@ public class Game {
 
 			} else { // moving left
 
-				for (int i = currX - 1; i <= newX; i++) { // reprompt if path isn't clear
+				for (int i = currX - 1; i >= newX; i--) { // reprompt if path isn't clear
 					if (board.getSquare(i, currY).hasPiece())
 						return invalidCommandMessage();
 				}
@@ -271,44 +291,44 @@ public class Game {
 		}
 
 		// If destination is already filled
-		if (board.getSquare(newX, newY).hasPiece()) 
+		if (board.getSquare(newX, newY).hasPiece())
 			return invalidCommandMessage();
 
 		// Checking of the paths are filled for each direction
 		if (currX < newX) { // moving right
-			System.out.println("Moving right");
 			for (int k = currX + 1; k < newX; k++) { // check for empty squares
 				if (!(board.getSquare(k, currY).hasPiece()))
-					invalidCommandMessage();
+					return invalidCommandMessage();
 			}
 		} else if (currX > newX) { // moving left
-			System.out.println("Moving left");
 			for (int k = currX - 1; k > newX; k--) { // check for empty squares
 				if (!(board.getSquare(k, currY).hasPiece()))
-					invalidCommandMessage();
+					return invalidCommandMessage();
 			}
 		} else if (currY > newY) { // moving up
-			System.out.println("Moving up");
 			for (int k = currY - 1; k > newY; k--) { // check for empty squares
 				if (!(board.getSquare(currX, k).hasPiece()))
-					invalidCommandMessage();
+					return invalidCommandMessage();
 			}
 		} else if (currY < newY) { // moving down
-			System.out.println("Moving down");
 			for (int k = currY + 1; k < newY; k++) { // check for empty squares
 				if (!(board.getSquare(currX, k).hasPiece()))
-					invalidCommandMessage();
+					return invalidCommandMessage();
 			}
+
 		}
 
 		// Move is validated, complete the action
 		board.removePiece(currX, currY);
 		board.addPiece(rabbit, newX, newY);
 
-		if (board.getSquare(newX, newY).isHole())
-			rabbitsInHoles++; // if rabbit entered a hole
 		if (board.getSquare(currX, currY).isHole())
 			rabbitsInHoles--; // if the rabbit was in a hole and now is not
+
+		if (board.getSquare(newX, newY).isHole()) {
+			rabbitsInHoles++; // if rabbit entered a hole
+			System.out.println("You got a rabbit in a hole!");
+		}
 
 		return true;
 	}
@@ -347,34 +367,12 @@ public class Game {
 	}
 
 	/**
-	 * Game is over if either (a) player quits or (b) player wins
-	 * 
-	 * @return true if game is over
-	 */
-	public boolean gameOver() {
-		if (rabbitsInHoles == 3) { // all rabbits in a hole, player won
-			System.out.println("Congrats! You solved the puzzle!");
-			return true;
-		}
-		if (quitGame) {
-			System.out.println("Thanks for playing. Goodbye");
-			return true;
-		}
-		return false;
-	}
-
-	/**
 	 * The client of the game
 	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		Game game = new Game();
-		game.printGameInstructions();
-
-		while (!game.gameOver()) {
-			game.startNewRound();
-		}
+		game.play();
 	}
-
 }

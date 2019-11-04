@@ -15,6 +15,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 public class GameView extends JFrame implements ActionListener, GameListener{
@@ -139,6 +140,12 @@ public class GameView extends JFrame implements ActionListener, GameListener{
 		board[currX][currY].setIcon(null); // Clearing icon
 	}
 	
+	/**
+	 * Notify player if they try to do something invalid. 
+	 */
+	public void displayErrorMessage() {
+		JOptionPane.showMessageDialog(this, "Invalid play. Please try again.");
+	}
 	public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
