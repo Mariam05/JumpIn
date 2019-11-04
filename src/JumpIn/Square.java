@@ -1,3 +1,4 @@
+package JumpIn;
 /**
  * This class helps the Board class to create it's (5 * 5) board grid formed of
  * squares. In addition, identifies what is on the square and if the square is

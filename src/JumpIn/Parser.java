@@ -1,3 +1,4 @@
+package JumpIn;
 
 import java.util.Scanner;
 
@@ -65,5 +66,5 @@ public class Parser {
             return new Command(null, part2, part3); 
         }
     }
-
+    
 }

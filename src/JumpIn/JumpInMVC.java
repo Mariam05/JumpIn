@@ -1,3 +1,4 @@
+package JumpIn;
 
 public class JumpInMVC {
 

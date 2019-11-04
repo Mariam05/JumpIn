@@ -1,3 +1,4 @@
+package JumpIn;
 /**
  * X is col, Y is row
  * @author tomar

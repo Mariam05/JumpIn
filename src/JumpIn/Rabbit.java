@@ -1,3 +1,4 @@
+package JumpIn;
 /**
  * This class represents a Rabbit piece on the board. 
  * Rabbits can only jump over other objects so they cannot move directly

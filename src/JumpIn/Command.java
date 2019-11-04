@@ -1,3 +1,4 @@
+package JumpIn;
 /**
  * This class holds information about a command that was issued by the user. A
  * command currently consists of three parts: (1) the command word (2) the piece
@@ -37,7 +38,12 @@ public class Command {
 	 * @return String of command word
 	 */
 	public String getCommandWord() {
-		return commandWord;
+		if(isUnknown()) {
+			return "";
+		}
+		else {
+			return commandWord;
+		}
 	}
 
 	/**
