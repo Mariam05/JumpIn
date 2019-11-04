@@ -103,6 +103,26 @@ public class GameView extends JFrame {
 	    board[0][1].setIcon(new ImageIcon(piece));
 	}
 	
+	/**
+	 * Update the view
+	 * @param x
+	 * @param y
+	 * @param name
+	 */
+	public void update(int startCoordinate, int endCoordinate, String name) {
+		int currX = startCoordinate / 10;
+		int currY = startCoordinate % 10;
+		int newX = endCoordinate / 10;
+		int newY = endCoordinate % 10;
+		
+		// Adding piece to new button location
+		board[newX][newY].setText(name); // Setting new button name
+		board[newX][newY].setIcon(board[currX][currY].getIcon()); // Setting icon to new location
+		// Removing piece from previous button location
+		board[currX][currY].setText("empty"); // Clearing name
+		board[currX][currY].setIcon(null); // Clearing icon
+	}
+	
 	public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
