@@ -40,7 +40,6 @@ public class FoxTest {
 	 */
 	@Test
 	public void getFoxTypeTest() {
-		fox1.setPosition(3, 3);
 		assertEquals(fox1.getFoxType(),Fox.FoxType.HORIZONTAL);
 		assertEquals(fox2.getFoxType(),Fox.FoxType.VERTICAL);
 
@@ -50,28 +49,24 @@ public class FoxTest {
 	 */
 	@Test
 	public void setPositionTest() {
-		
-		assertEquals(fox1.getFoxType(),Fox.FoxType.HORIZONTAL);
-		assertEquals(fox2.getFoxType(),Fox.FoxType.VERTICAL);
-		
+		fox1.setPosition(3, 3);
+		assertEquals("33",fox1.getXPos() +""+ fox1.getYPos());
+		fox2.setPosition(1, 1);
+		assertEquals("11",fox2.getXPos() +""+ fox2.getYPos());
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void ValidatemoveTest() {
+		assertEquals(true,fox1.validateMove(fox1.getXPos(),fox1.getYPos()-1));
+		assertEquals(true,fox1.validateMove(fox1.getXPos(),fox1.getYPos()-2));
+		assertEquals(true,fox1.validateMove(fox1.getXPos(),fox1.getYPos()-3));
+		if(fox1.getYPos() <= 2) {
+			assertEquals(true,fox2.validateMove(fox2.getXPos()+1,fox2.getYPos()));
+			assertEquals(true,fox2.validateMove(fox2.getXPos()+2,fox2.getYPos()));
+		}else {
+			assertEquals(true,fox2.validateMove(fox2.getXPos() + 1,fox1.getYPos()));
+		}	
 	}
-
+	
+	
 }
