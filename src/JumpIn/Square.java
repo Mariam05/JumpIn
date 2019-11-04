@@ -53,7 +53,6 @@ public class Square {
 	
 	public void removePiece() {
 		this.hasPiece = false;
-		piece.setPosition(-5, -5); //set position to something off the baord and invalid
 		piece = null;
 		
 	}

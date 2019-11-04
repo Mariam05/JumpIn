@@ -1,5 +1,6 @@
 package JumpIn;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,21 +40,25 @@ public class Game {
 
 		// For the foxes, associated each head with it's tail and each tail with it's
 		// head.
-		fox1 = new Fox("FO1", Fox.FoxType.HORIZONTAL, true);
+		fox1 = new Fox("F1H", Fox.FoxType.HORIZONTAL, true);
 		fox1T = new Fox("F1T", Fox.FoxType.HORIZONTAL, false);
 		((Fox) fox1).addAssociatedPart((Fox) fox1T);
 		((Fox) fox1T).addAssociatedPart((Fox) fox1);
-		fox2 = new Fox("FO2", Fox.FoxType.VERTICAL, true);
+		fox2 = new Fox("F2H", Fox.FoxType.VERTICAL, true);
 		fox2T = new Fox("F2T", Fox.FoxType.VERTICAL, false);
 		((Fox) fox2).addAssociatedPart((Fox) fox2T);
 		((Fox) fox2T).addAssociatedPart((Fox) fox2);
 
 		mushroom1 = new Mushroom("MSH");
 		mushroom2 = new Mushroom("MSH");
-		rabbit1 = new Rabbit("RA1");
+		rabbit1 = new Rabbit("RA1"); //colour is white (default)
+	
 		rabbit2 = new Rabbit("RA2");
+		((Rabbit) rabbit2).setColour(Color.GRAY);
 		rabbit3 = new Rabbit("RA3");
-
+		((Rabbit) rabbit3).setColour(Color.YELLOW);
+		
+		
 		// Add the pieces to the piece hashmap
 		animalPieces.put(fox1.toString(), fox1);
 		animalPieces.put(fox2.toString(), fox2);
@@ -461,8 +466,8 @@ public class Game {
 	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) {
-		Game game = new Game();
-		game.play();
-	}
+//	public static void main(String[] args) {
+//		Game game = new Game();
+//		game.play();
+//	}
 }
