@@ -1,11 +1,4 @@
 package contoller;
-/**
- * This class represents a Rabbit piece on the board. 
- * Rabbits can only jump over other objects so they cannot move directly
- * to the any of the squares beside them. 
- * @author Mariam Almalki
- *
- */
 public class Rabbit extends Piece {
 
 	protected Rabbit(String pieceName) {

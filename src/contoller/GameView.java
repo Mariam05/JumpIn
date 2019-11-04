@@ -7,10 +7,9 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
 
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
+
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
+
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
@@ -28,7 +27,7 @@ public class GameView extends JFrame {
 	Image piece,whiteRabbit,yellowRabbit,greyRabbit,mushroom,fox1,fox2,hole;
 	private Listener listener;
 	
-	private Game model;
+
 	
 	public GameView() {
 		super();
@@ -77,9 +76,9 @@ public class GameView extends JFrame {
 		board[2][2].setText("Hole");
 		board[1][3].setText("MS");
 		board[4][2].setText("MS");
-		board[4][1].setText("R1");
-		board[0][3].setText("R2");
-		board[2][4].setText("R3");
+		board[4][1].setText("R3");
+		board[0][3].setText("R1");
+		board[2][4].setText("R2");
 		board[3][3].setText("F1");
 		board[1][1].setText("F2");
 		board[3][4].setText("F1");
@@ -129,18 +128,36 @@ public class GameView extends JFrame {
 	    board[0][1].setIcon(new ImageIcon(piece));
 	}
 	
-	public void update(int startX,int startY, int endX,int endY, String name) {
+	public void update(int initialrow,int initialcol , int endrow,int  endcol, String name) {
 		
 		
 		// Adding piece to new button location
-		board[endX][endY].setText(name); // Setting new button name
+		board[endrow][endcol].setText(name); // Setting new button name
 		
-		System.out.println(board[startX][startY].getIcon());
-		board[endX][endY].setIcon(board[startX][startY].getIcon()); // Setting icon to new location
+		
+		
+		board[endrow][endcol].setIcon(board[initialrow][initialcol].getIcon()); // Setting icon to new location
+		
+		
 		// Removing piece from previous button location
-		board[startX][startY].setText("empty"); // Clearing name
-		board[startX][startY].setIcon(null); // Clearing icon
+		board[initialrow][initialcol].setText("empty"); // Clearing name
+		board[initialrow][initialcol].setIcon(null); // Clearing icon
+		
+		
 	}
+	
+	public void FoxUpdate() {
+		removeFoxHeadandTail();
+	}
+	
+	public static void removeFoxHeadandTail(int tailX,int tailY,int headX,int headY) {
+		
+	}
+	
+	public static void addFoxHeadandTail(int tailX,int tailY,int headX,int headY) {
+		
+	}
+	
 	
 	public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
