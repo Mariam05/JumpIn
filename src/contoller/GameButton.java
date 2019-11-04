@@ -42,7 +42,7 @@ public class GameButton extends JButton{
     */
     @Override
     public String toString(){
-        return this.getRow() + "" + this.getColumn();
+        return this.getColumn() +""+ this.getRow();
     }
 }
 

@@ -1,7 +1,7 @@
 package contoller;
 import java.util.HashMap;
 
-import javax.swing.SwingUtilities;
+//this.view.update((f.getXPos()),f.getYPos(),(command.getX()),command.getY(), fox.toString());
 
 /**
  * This is the main class for the JumpIn came. Acts as the controller
@@ -72,9 +72,27 @@ public class Game {
 	public void startNewRound() {
 		board.printBoard();
 		Command command = parser.getCommand();
-		while (processCommand(command)) {
+		while (processCommand(command) && rabbitsInHoles != 3) {
 			board.printBoard();
 			command = parser.getCommand();
+		}
+	}
+	
+	private boolean hasWon() {
+		if(rabbitsInHoles == 3) {
+			System.out.println("Congrats! You solved the puzzle!");
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Play the game.
+	 */
+	public void play() {
+		printGameInstructions();
+		while(!hasWon() & !quitGame) {
+			startNewRound();
 		}
 	}
 
@@ -112,8 +130,10 @@ public class Game {
 				return invalidCommandMessage();
 
 			return handleMove(command);
-		} else if (commandWord.equals("quit")) {
+		} else if (commandWord.equalsIgnoreCase("quit")) {
+			System.out.println("Thanks for playing. Goodbye");
 			quitGame = true;
+			return false;
 		}
 
 		return false;
@@ -181,6 +201,9 @@ public class Game {
 		return true;
 	}
 
+
+	
+	
 	/**
 	 * return true if move was handled
 	 * 
@@ -189,7 +212,6 @@ public class Game {
 	 * @return true if fox moved succesfully
 	 */
 	public boolean handleFoxMove(Piece fox, Command command) {
-		
 		Fox f = (Fox) fox;
 		int newX = command.getX();
 		int newY = command.getY();
@@ -197,15 +219,15 @@ public class Game {
 		int currY = f.getYPos();
 		
 		
-		this.view.update((f.getXPos()),f.getYPos(),(command.getX()),command.getY(), fox.toString());
+		//variables for the update method
+		int foxcol = f.getXPos();
+		int foxrow = f.getYPos();
+		int newcol = command.getX();
+		int newrow = command.getY();
 		
-		if (!fox.validateMove(newX, newY)) {
+		if (!fox.validateMove(newX, newY))
 			return invalidCommandMessage(); // Check that the move type is legal for the animal
-		}
-		
-		
-		
-		
+
 		// If fox moves horizontally, check horizontal path on board
 		if (f.getFoxType().compareTo(Fox.FoxType.HORIZONTAL) == 0) {
 			if (currX < newX) { // moving right
@@ -215,37 +237,60 @@ public class Game {
 				}
 
 				board.removePiece(currX, currY); // remove tail of fox
-				board.removePiece(currX + 1, currY); // remove head of fox
-
-				board.addPiece(fox, newX, currY); // add head of fox
 				board.addPiece(fox, newX - 1, currY); // add tail of fox
+				
+				System.out.println("handlefoxtail");
+				this.view.update(foxrow, foxcol, newrow, newcol-1,fox.toString());
+				
+				board.removePiece(currX + 1, currY); // remove head of fox
+				board.addPiece(fox, newX, currY); // add head of fox
+				
+				System.out.println("handlefoxhead");
+				this.view.update(foxrow, foxcol+1, newrow, newcol,fox.toString());
+				this.board.printBoard();
 
 			} else { // moving left
 
-				for (int i = currX - 1; i <= newX; i++) { // reprompt if path isn't clear
+				for (int i = currX - 1; i >= newX; i--) { // reprompt if path isn't clear
 					if (board.getSquare(i, currY).hasPiece())
 						return invalidCommandMessage();
 				}
 
 				board.removePiece(currX, currY); // remove tail of fox
+				board.addPiece(fox, newX, currY);// add tail of fox
+				
+				System.out.println("handlefoxtail");
+				this.view.update(foxrow, foxcol, newrow, newcol,fox.toString());
+				
 				board.removePiece(currX + 1, currY); // remove head of fox
-
 				board.addPiece(fox, newX + 1, currY); // add head of fox
-				board.addPiece(fox, newX, currY);
+				
+				System.out.println("handlefoxhead");
+				this.view.update(foxrow, foxcol+1, newrow, newcol+1,fox.toString());
+				this.board.printBoard();
+
 
 			}
 		} else if (f.getFoxType().compareTo(Fox.FoxType.VERTICAL) == 0) { // this fox moves vertically
 			if (currY > newY) { // moving up
-				for (int i = newY; i < currY; i++) { // reprompt if path isn't clear
-					if (board.getSquare(i, currY).hasPiece())
+				for (int i = currY - 1; i >= newY; i--) { // reprompt if path isn't clear
+					if (board.getSquare(currX, i).hasPiece())
 						return invalidCommandMessage();
 				}
 
 				board.removePiece(currX, currY); // remove fox tail
-				board.removePiece(currX, currY + 1); // remove fox head
-
-				board.addPiece(fox, newX, newY - 1);
 				board.addPiece(fox, newX, newY); // add tail
+				
+				System.out.println("handlefoxtail");
+				this.view.update(foxrow, foxcol, newrow, newcol,fox.toString());
+				
+				board.removePiece(currX, currY + 1); // remove fox head
+				board.addPiece(fox, newX, newY + 1); //add head
+				
+				System.out.println("handlefoxhead");
+				this.view.update(foxrow+1, foxcol, newrow+1, newcol,fox.toString());
+				this.board.printBoard();
+				
 
 			} else { // moving down
 				for (int i = currY + 2; i <= newY; i++) { // reprompt if path isn't clear
@@ -254,10 +299,18 @@ public class Game {
 				}
 
 				board.removePiece(currX, currY); // remove fox tail
-				board.removePiece(currX, currY + 1); // remove fox head
+				board.addPiece(fox, newX, newY - 1); // add tail
+				
+				System.out.println("handlefoxtail");
+				this.view.update(foxrow, foxcol, newrow-1, newcol,fox.toString());
 
 				board.addPiece(fox, newX, newY); // add head
-				board.addPiece(fox, newX, newY - 1); // add tail
+				board.removePiece(currX, currY + 1); // remove fox head
+				
+				System.out.println("handlefoxhead");
+				this.view.update(foxrow+1, foxcol, newrow, newcol,fox.toString());
+				this.board.printBoard();
+				
 			}
 
 		}
@@ -277,54 +330,68 @@ public class Game {
 		int newY = command.getY();
 		int currX = r.getXPos();
 		int currY = r.getYPos();
-
+		
+		int rabbitrow = r.getYPos();
+		int rabbitcol = r.getXPos();
+		int newcol = command.getX();
+		int newrow = command.getY();
+		
+		
 		if (!rabbit.validateMove(newX, newY)) {
 			System.out.println("Got here");
 			return invalidCommandMessage();
+			
 		}
 		
-		this.view.update((r.getXPos()),r.getYPos(),(command.getX()),command.getY(), rabbit.toString());
-		
+
 		// If destination is already filled
-		if (board.getSquare(newX, newY).hasPiece()) 
+		if (board.getSquare(newX, newY).hasPiece())
 			return invalidCommandMessage();
 
 		// Checking of the paths are filled for each direction
 		if (currX < newX) { // moving right
-			System.out.println("Moving right");
 			for (int k = currX + 1; k < newX; k++) { // check for empty squares
 				if (!(board.getSquare(k, currY).hasPiece()))
-					invalidCommandMessage();
+					return invalidCommandMessage();
 			}
 		} else if (currX > newX) { // moving left
-			System.out.println("Moving left");
 			for (int k = currX - 1; k > newX; k--) { // check for empty squares
 				if (!(board.getSquare(k, currY).hasPiece()))
-					invalidCommandMessage();
+					return invalidCommandMessage();
 			}
 		} else if (currY > newY) { // moving up
-			System.out.println("Moving up");
 			for (int k = currY - 1; k > newY; k--) { // check for empty squares
 				if (!(board.getSquare(currX, k).hasPiece()))
-					invalidCommandMessage();
+					return invalidCommandMessage();
 			}
 		} else if (currY < newY) { // moving down
-			System.out.println("Moving down");
 			for (int k = currY + 1; k < newY; k++) { // check for empty squares
 				if (!(board.getSquare(currX, k).hasPiece()))
-					invalidCommandMessage();
+					return invalidCommandMessage();
 			}
-		}
 
+		}
+		
+		
+		
 		// Move is validated, complete the action
 		board.removePiece(currX, currY);
 		board.addPiece(rabbit, newX, newY);
 
-		if (board.getSquare(newX, newY).isHole())
-			rabbitsInHoles++; // if rabbit entered a hole
 		if (board.getSquare(currX, currY).isHole())
 			rabbitsInHoles--; // if the rabbit was in a hole and now is not
 
+		if (board.getSquare(newX, newY).isHole()) {
+			rabbitsInHoles++; // if rabbit entered a hole
+			System.out.println("You got a rabbit in a hole!");
+		}
+		
+		System.out.println("handlerabbit");
+		this.view.update(rabbitrow,rabbitcol,newrow,newcol,rabbit.toString());
+		
+		board.printBoard();
+		
+		
 		return true;
 	}
 
@@ -362,41 +429,12 @@ public class Game {
 	}
 
 	/**
-	 * Game is over if either (a) player quits or (b) player wins
-	 * 
-	 * @return true if game is over
-	 */
-	public boolean gameOver() {
-		if (rabbitsInHoles == 3) { // all rabbits in a hole, player won
-			System.out.println("Congrats! You solved the puzzle!");
-			return true;
-		}
-		if (quitGame) {
-			System.out.println("Thanks for playing. Goodbye");
-			return true;
-		}
-		return false;
-	}
-
-	/**
 	 * The client of the game
 	 * 
 	 * @param args
 	 */
-//	public static void main(String[] args) {
-////		Game game = new Game();
-////		game.printGameInstructions();
-////
-////		while (!game.gameOver()) {
-////			game.startNewRound();
-////		}
-//		SwingUtilities.invokeLater(new Runnable() {
-//            @Override
-//            public void run() {
-//                Game game = new Game(new GameView()); 
-//            }
-//        });
-//	}
-
+	public static void main(String[] args) {
+		Game game = new Game(new GameView());
+		game.play();
+	}
 }
-
