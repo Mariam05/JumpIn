@@ -16,6 +16,10 @@ public class GameController {
 	private Game game;
 	private GameView gameView;
 	private int numOfButtonsPressed;
+	private Command command;
+	private String word2, word3;
+	
+	private static final String COMMAND = "move";
 
 	public GameController(Game game, GameView gameView) {
 		this.game = game;
@@ -43,17 +47,36 @@ public class GameController {
 		if (numOfButtonsPressed == 1) {
 			getPieceSelected(b);
 		} else if (numOfButtonsPressed == 2) {
-			getDestinationPos(src);
+			getDestinationPos(b);
+			processCommand(word2, word3);
 			numOfButtonsPressed = 0; // reset to 0 because at 2 a complete play has been made
 		}
 	}
 
 	private void getPieceSelected(ButtonListener b) {
+		word2 = game.getBoard().getSquare(b.getCol(), b.getRow()).getPieceString();
 		
 	}
 
-	private void getDestinationPos(ActionEvent src) {
-
+	private void getDestinationPos(ButtonListener b) {
+		word3 = b.getStringXY();
+	}
+	
+	
+	private void processCommand(String word2, String word3) {
+		command = new Command(COMMAND, word2, word3);
+		boolean validMove = game.processCommand(command);
+		
+		if(!validMove) { //if the move is invalid notify the player and let them know
+			gameView.displayMessage("Invalid move");
+		} else { //otherwise check for winner and update view
+			if (game.hasWon()) {
+				gameView.displayMessage("CONGRATS! You solved the puzzle!");
+				gameView.dispose();
+			}
+			gameView.update();
+		}
+		
 	}
 
 	/**

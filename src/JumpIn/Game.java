@@ -21,9 +21,6 @@ public class Game {
 	private HashMap<String, Piece> animalPieces;
 	private int rabbitsInHoles;
 	private boolean quitGame;
-	private List<ButtonListener> listenerButtons;
-	private GameView view;
-
 	/**
 	 * Instantiate the parser and commandWords objects. Set up the board with the
 	 * pieces
@@ -34,7 +31,6 @@ public class Game {
 		animalPieces = new HashMap<>();
 		board = new Board();
 		quitGame = false;
-		listenerButtons = new ArrayList<>();
 
 		// Instantiate the pieces on the board
 
@@ -105,7 +101,7 @@ public class Game {
 		}
 	}
 
-	private boolean hasWon() {
+	public boolean hasWon() {
 		if (rabbitsInHoles == 3) {
 			System.out.println("Congrats! You solved the puzzle!");
 			return true;
