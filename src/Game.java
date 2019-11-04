@@ -333,7 +333,7 @@ public class Game {
 		return true;
 	}
 
-	public void printGameInstructions() {
+	public String printGameInstructions() {
 		String title = "JumpIN Instructions: \n\n";
 		String obstacles = "\tThe obstacles are: Mushroom, Fox, Rabbit, Hole.\n\n"
 				+ "\tFoxes take up two spaces, head and tail. " + "All other obstacles occupy one square.\n\n";
@@ -362,7 +362,8 @@ public class Game {
 				+ "\n"
 				+ "For move, the format is: move [name of piece to move] [position to move it to in the format of ColRow]\n";
 
-		System.out.println(title + obstacles + movements + objective + abbreviations + commands);
+		//System.out.println(title + obstacles + movements + objective + abbreviations + commands);
+		return title + obstacles + movements + objective + abbreviations + commands;
 
 	}
 

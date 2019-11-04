@@ -18,3 +18,5 @@
 /GameEvent.class
 /GameView$2.class
 /GameView$3.class
+/HelpListener.class
+/GameController$HelpListener.class

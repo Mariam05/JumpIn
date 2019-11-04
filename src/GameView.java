@@ -24,7 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-public class GameView extends JFrame implements ActionListener, GameListener{
+public class GameView extends JFrame{
 	
 	Game gameModel = new Game();
 	private static final long serialVersionUID = 1L;
@@ -36,11 +36,11 @@ public class GameView extends JFrame implements ActionListener, GameListener{
 	// to change the background of buttons
 	private Game game;
 	private JMenuBar menuBar;
-	private JMenu menu, submenu;
-	private JMenuItem menuItem;
+	private JMenu menu;
+	private JMenuItem menuItemHelp;
+	private JMenuItem menuItemQuit;
 	private Command command;
 	
-	private JPanel gridPanel;
 	
 	
 	public GameView(Game model) {
@@ -70,22 +70,22 @@ public class GameView extends JFrame implements ActionListener, GameListener{
 		menu.setMnemonic(KeyEvent.VK_A);
 		menuBar.add(menu);
 		
-		menuItem = new JMenuItem("Help");
-		menu.add(menuItem);
+		menuItemHelp = new JMenuItem("Help");
+		menu.add(menuItemHelp);
 		//This can also be implemented by adding an action listener on the list that will remove the one that is selected
-		menuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				command = new Command("help", null, null);
-				game.processCommand(command);
-			}
-			
-		});
+//		menuItem.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				command = new Command("help", null, null);
+//				game.processCommand(command);
+//			}
+//			
+//		});
 		
-		menuItem = new JMenuItem("Quit");
-		menu.add(menuItem);
+		menuItemQuit = new JMenuItem("Quit");
+		menu.add(menuItemQuit);
 		//This can also be implemented by adding an action listener on the list that will remove the one that is selected
-		menuItem.addActionListener(new ActionListener() {
+		menuItemQuit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				command = new Command("quit", null, null);
@@ -121,17 +121,7 @@ public class GameView extends JFrame implements ActionListener, GameListener{
 	    }
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
 	
-	@Override
-	public void handleGameMoveEvent(GameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
 	/*
 	 * All the animals, mushrooms and holes will be added by using this method
 	 */
@@ -195,12 +185,25 @@ public class GameView extends JFrame implements ActionListener, GameListener{
 		board[currX][currY].setIcon(null); // Clearing icon
 	}
 	
+	
 	/**
-	 * Notify player if they try to do something invalid. 
+	 * Will display a message to the user. 
+	 * Expect message to be on of the following: 
+	 * (a) invalid move
+	 * (b) quit goodbye message
+	 * (c) help instructions message
+	 * @param message
 	 */
-	public void displayErrorMessage() {
-		JOptionPane.showMessageDialog(this, "Invalid play. Please try again.");
+	public void displayMessage(String message) {
+		JOptionPane.showMessageDialog(this, message);
 	}
+	
+	
+	public void addHelpListener(ActionListener a) {
+		System.out.println("Added listener");
+		menuItemHelp.addActionListener(a);
+	}
+	
 	public static void main(String[] args) {
 		Game game = new Game();
         SwingUtilities.invokeLater(new Runnable() {
