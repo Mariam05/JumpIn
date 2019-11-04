@@ -16,9 +16,12 @@ public class ParserTest {
 
 	@Test
 	public void testGetCommand() {
-		Command cmd1 = p.getCommand();
-		System.out.println(cmd1.toString());
-		assert(cmd1.equals(cmd));
+		// TODO figure out to implement this test
+		// difficult because it depends on user input and is therefore hard to control the test
+		/*Command cmd1 = p.getCommand();
+		System.out.println(cmd1.getCommandWord());
+		assert(cmd1.equals(cmd));*/
+		fail("Not yet implemented");
 	}
 
 }
