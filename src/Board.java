@@ -22,10 +22,10 @@ public class Board {
 	 */
 	public Board() {		
 		
-		board = new Square[LENGTH][SIZE];
+		board = new Square[SIZE][SIZE];
 		
 		// Initialize the board, which is a grid of squares
-		for (int i = 0; i< LENGTH; i++) { //row
+		for (int i = 0; i< SIZE; i++) { //row
 			for (int j = 0; j < SIZE; j++) { //column
 				board[i][j] = new Square();
 			}
@@ -80,6 +80,7 @@ public class Board {
 	}
 	
 	
+	
 	/**
 	 * Checks if a spot on the board is occupied by a piece
 	 * @param x
@@ -97,7 +98,7 @@ public class Board {
 	 * @return true if destination is out of range
 	 */
 	public boolean isOutOfRange(int x, int y) {
-		if (x > SIZE || x < 0 || y > LENGTH || y < 0) return true;
+		if (x >= SIZE || x < 0 || y >= SIZE || y < 0) return true;
 		return false;
 	}
 	
@@ -106,9 +107,9 @@ public class Board {
 	 */
 	public void printBoard() {
 		
-		System.out.println("        0      1      2      3      4   \n");
+		System.out.println("         0       1       2       3       4   \n");
 		
-		for (int i = 0; i < LENGTH; i++) {
+		for (int i = 0; i < SIZE; i++) {
 			System.out.print(i+ "    ");
 			for (int j = 0; j < SIZE; j++) {
 				System.out.print(board[i][j].toString());

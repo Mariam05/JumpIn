@@ -11,6 +11,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -42,12 +43,16 @@ public class GameView extends JFrame implements ActionListener{
 	private JMenuItem menuItemHelp,menuItemQuit,menuItemReset ;
 	private Command command;
 	
+	private HashMap<String, Image> images;
+	
+	
 	
 	
 	public GameView(Game model) {
 		super();
 		
 		this.game = model;
+		images = new HashMap<>();
 		
 		size = model.getBoard().SIZE;
 		
@@ -111,7 +116,7 @@ public class GameView extends JFrame implements ActionListener{
 				button.setBackground(new Color(0,204,0));// the backGround of the buttons
 				button.setOpaque(true);
                 container.add(button);
-                button.addActionListener(new ButtonListener(i,j));
+                //button.addActionListener(new ButtonListener(i,j));
 			}
 		}
 		
@@ -176,8 +181,6 @@ public class GameView extends JFrame implements ActionListener{
 	    piece = fox1.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
 	    board[3][4].setIcon(new ImageIcon(piece));
 	    board[0][1].setIcon(new ImageIcon(piece));
-	    
-	    
 	}
 	
 	/**
@@ -220,16 +223,6 @@ public class GameView extends JFrame implements ActionListener{
 	
 	public void addQuitListener(ActionListener a) {
 		menuItemQuit.addActionListener(a);
-	}
-	
-	public static void main(String[] args) {
-		Game game = new Game();
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                 new GameView(game);
-            }
-        });
 	}
 
 

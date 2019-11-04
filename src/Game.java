@@ -14,12 +14,13 @@ public class Game {
 	private Parser parser;
 	private CommandWord commandWords;
 	private Board board;
-	private Piece fox1, fox2, mushroom1, mushroom2, rabbit1, rabbit2, rabbit3;
+	private Piece fox1, fox2, fox1T, fox2T, mushroom1, mushroom2, rabbit1, rabbit2, rabbit3;
 	private HashMap<String, Piece> animalPieces;
 	private int rabbitsInHoles;
 	private boolean quitGame;
 	private List<ButtonListener> listenerButtons;
 	private GameView view;
+	
 
 	/**
 	 * Instantiate the parser and commandWords objects. Set up the board with the
@@ -34,17 +35,28 @@ public class Game {
 		listenerButtons = new ArrayList<>();
 
 		// Instantiate the pieces on the board
-		fox1 = new Fox("F1", Fox.FoxType.HORIZONTAL);
-		fox2 = new Fox("F2", Fox.FoxType.VERTICAL);
-		mushroom1 = new Mushroom("MS");
-		mushroom2 = new Mushroom("MS");
-		rabbit1 = new Rabbit("R1");
-		rabbit2 = new Rabbit("R2");
-		rabbit3 = new Rabbit("R3");
+		
+		//For the foxes, associated each head with it's tail and each tail with it's head. 
+		fox1 = new Fox("FO1", Fox.FoxType.HORIZONTAL, true);
+		fox1T = new Fox("F1T", Fox.FoxType.HORIZONTAL, false);
+		((Fox) fox1).addAssociatedPart((Fox)fox1T);
+		((Fox) fox1T).addAssociatedPart((Fox)fox1);
+		fox2 = new Fox("FO2", Fox.FoxType.VERTICAL, true);
+		fox2T = new Fox("F2T", Fox.FoxType.VERTICAL, false);
+		((Fox) fox2).addAssociatedPart((Fox)fox2T);
+		((Fox) fox2T).addAssociatedPart((Fox)fox2);
+		
+		mushroom1 = new Mushroom("MSH");
+		mushroom2 = new Mushroom("MSH");
+		rabbit1 = new Rabbit("RA1");
+		rabbit2 = new Rabbit("RA2");
+		rabbit3 = new Rabbit("RA3");
 
 		// Add the pieces to the piece hashmap
 		animalPieces.put(fox1.toString(), fox1);
 		animalPieces.put(fox2.toString(), fox2);
+		animalPieces.put(fox1T.toString(), fox1T);
+		animalPieces.put(fox2T.toString(), fox2T);
 		animalPieces.put(rabbit1.toString(), rabbit1);
 		animalPieces.put(rabbit2.toString(), rabbit2);
 		animalPieces.put(rabbit3.toString(), rabbit3);
@@ -52,10 +64,10 @@ public class Game {
 		// Add the pieces to the board. Coordinates are row col
 		// Note: Foxs will now be referred to by their tails
 		board.addPiece(fox1, 4, 3);
-		board.addPiece(fox1, fox1.getXPos() - 1, fox1.getYPos()); // add fox1 tail
+		board.addPiece(fox1T, fox1.getXPos() - 1, fox1.getYPos()); // add fox1 tail
 
 		board.addPiece(fox2, 1, 1);
-		board.addPiece(fox2, fox2.getXPos(), fox2.getYPos() - 1); // add fox2 tail
+		board.addPiece(fox2T, fox2.getXPos(), fox2.getYPos() - 1); // add fox2 tail
 
 		board.addPiece(rabbit1, 3, 0);
 		board.addPiece(rabbit2, 4, 2);
@@ -65,11 +77,15 @@ public class Game {
 		board.addPiece(mushroom2, 3, 1);
 
 	}
-	
+
 	public Board getBoard() {
 		return this.board;
 	}
-	
+
+	public HashMap<String, Piece> getAnimalsOnBoard() {
+		return animalPieces;
+	}
+
 	/**
 	 * Main play routine. Loops until end of play.
 	 */
@@ -81,9 +97,9 @@ public class Game {
 			command = parser.getCommand();
 		}
 	}
-	
+
 	private boolean hasWon() {
-		if(rabbitsInHoles == 3) {
+		if (rabbitsInHoles == 3) {
 			System.out.println("Congrats! You solved the puzzle!");
 			return true;
 		}
@@ -95,7 +111,7 @@ public class Game {
 	 */
 	public void play() {
 		printGameInstructions();
-		while(!hasWon() & !quitGame) {
+		while (!hasWon() & !quitGame) {
 			startNewRound();
 		}
 	}
@@ -142,9 +158,10 @@ public class Game {
 
 		return false;
 	}
-	
+
 	/**
 	 * Return a message to the user if they want to quit.
+	 * 
 	 * @return String message
 	 */
 	public String quitMessage() {
@@ -174,7 +191,19 @@ public class Game {
 	 * @return true if the destination is valid
 	 */
 	private boolean validateDestinationSelected(Command command) {
+//		Piece p = getPieceFromCommand(command);
+//		if (p instanceof Fox) {
+//			Fox f = (Fox)p;
+//			if (f.isHead() && f.isHorizontal()) {
+//				return 
+//			}
+//		}
 		return !board.isOutOfRange(command.getX(), command.getY());
+	}
+	
+	
+	private boolean validateDestination(int newX, int newY) {
+		return !board.isOutOfRange(newX, newY);
 	}
 
 	/**
@@ -188,6 +217,7 @@ public class Game {
 	 */
 	private Piece getPieceFromCommand(Command command) {
 		String pieceString = command.getPiece();
+
 		for (String s : animalPieces.keySet()) {
 			if (pieceString.equalsIgnoreCase(s))
 				return animalPieces.get(s);
@@ -226,36 +256,77 @@ public class Game {
 		int newY = command.getY();
 		int currX = f.getXPos();
 		int currY = f.getYPos();
+		boolean isTail = !f.isHead();
+		
+		
 
+		int start, end;
 		if (!fox.validateMove(newX, newY))
 			return invalidCommandMessage(); // Check that the move type is legal for the animal
 
 		// If fox moves horizontally, check horizontal path on board
 		if (f.getFoxType().compareTo(Fox.FoxType.HORIZONTAL) == 0) {
+			
 			if (currX < newX) { // moving right
-				for (int i = currX + 2; i <= newX; i++) { // add 2 because tail is on the left of head
+				if (!isTail) { //if head, start at square to right and continue to destination
+					start = currX + 1;
+					end = newX;
+				} else { //if tail, start 2 squares to right and end at new+1 (which is where head will be)
+					start = currX + 2;
+					end = newX + 1;
+				}
+				
+				if(!validateDestination(end, currY)) return invalidCommandMessage(); 
+
+				for (int i = start; i <= end; i++) {  //ensure path is clear
 					if (board.getSquare(i, currY).hasPiece())
 						return invalidCommandMessage();
 				}
 
-				board.removePiece(currX, currY); // remove tail of fox
-				board.removePiece(currX + 1, currY); // remove head of fox
+				if (isTail) {
+					board.removePiece(currX, currY); // remove tail of fox
+					board.removePiece(currX + 1, currY); // remove head of fox
 
-				board.addPiece(fox, newX, currY); // add head of fox
-				board.addPiece(fox, newX - 1, currY); // add tail of fox
+					board.addPiece(fox, newX, currY); // add tail of fox
+					board.addPiece(f.getAssociatedPart(), newX + 1, currY); // add head of fox
+				} else {
+					board.removePiece(currX, currY); // remove head of fox
+					board.removePiece(currX - 1, currY); // remove tail of fox
+
+					board.addPiece(fox, newX, currY); // add head of fox
+					board.addPiece(f.getAssociatedPart(), newX - 1, currY); // add tail of fox
+				}
 
 			} else { // moving left
+				if (!isTail) { //if head, start at square left to tail and check to where the tail would reach
+					start = currX - 2;
+					end = newX - 1;
+				} else { //if tail, start at square left to tail and check to where the tail will go
+					start = currX - 1;
+					end = newX;
+				}
+				
+				if(!validateDestination(end, currY)) return invalidCommandMessage(); 
 
-				for (int i = currX - 1; i >= newX; i--) { // reprompt if path isn't clear
+				for (int i = start; i >= end; i--) { // reprompt if path isn't clear
 					if (board.getSquare(i, currY).hasPiece())
 						return invalidCommandMessage();
 				}
 
-				board.removePiece(currX, currY); // remove tail of fox
-				board.removePiece(currX + 1, currY); // remove head of fox
+				if(isTail) { //fox is the tail
+					board.removePiece(currX, currY); // remove tail of fox
+					board.removePiece(currX + 1, currY); // remove head of fox
 
-				board.addPiece(fox, newX + 1, currY); // add head of fox
-				board.addPiece(fox, newX, currY);
+					board.addPiece(fox, newX, currY); // add tail of fox
+					board.addPiece(f.getAssociatedPart(), newX + 1, currY);
+				} else { // this is the fox's head
+					board.removePiece(currX, currY); // remove head of fox
+					board.removePiece(currX - 1, currY); // remove head of fox
+
+					board.addPiece(fox, newX, currY); // add head of fox
+					board.addPiece(f.getAssociatedPart(), newX - 1, currY); //add tail of fox
+				}
+				
 
 			}
 		} else if (f.getFoxType().compareTo(Fox.FoxType.VERTICAL) == 0) { // this fox moves vertically
@@ -374,7 +445,8 @@ public class Game {
 				+ "around the obstacles untill all the rabbits are safely in their hole.\n";
 		String howTo = "\n HOW TO PLAY: First, select the piece you'd like to move. Next, select the square you want to move it to.";
 
-		//System.out.println(title + obstacles + movements + objective + abbreviations + commands);
+		// System.out.println(title + obstacles + movements + objective + abbreviations
+		// + commands);
 		return title + obstacles + movements + objective + howTo;
 
 	}

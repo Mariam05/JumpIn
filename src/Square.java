@@ -27,6 +27,16 @@ public class Square {
 		this.piece = piece;
 		hasPiece = true;
 	}
+	
+	public Piece getPiece() {
+		if (hasPiece) return piece;
+		return null;
+	}
+	
+	public String getPieceString() {
+		if (hasPiece) return piece.toString();
+		return null;
+	}
 
 	public boolean hasPiece() {
 		return hasPiece;
@@ -42,7 +52,9 @@ public class Square {
 	
 	public void removePiece() {
 		this.hasPiece = false;
+		piece.setPosition(-5, -5); //set position to something off the baord and invalid
 		piece = null;
+		
 	}
 
 	/**
@@ -57,12 +69,12 @@ public class Square {
 			return "|  " + piece.toString() + "* ";
 		}
 		if (isHole()) {
-			return "|  HO  ";
+			return "|  HOL  ";
 		}
 		if (hasPiece) {
 			return "|  " + piece.toString() + "  ";
 		}
-		return "|      ";
+		return "|       ";
 	}
 
 

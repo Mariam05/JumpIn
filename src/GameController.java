@@ -1,5 +1,6 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.EventObject;
 
 import javax.swing.JButton;
 
@@ -22,18 +23,21 @@ public class GameController {
 		gameView.addQuitListener(new QuitListener());
 
 		numOfButtonsPressed = 0;
+		addActionListeners();
+		
 	}
 
 	private void addActionListeners() {
 		for (int i = 0; i < gameView.getBoardSize(); i++) {
-			for (int j =0; j < gameView.getBoardSize(); j++) {
+			for (int j = 0; j < gameView.getBoardSize(); j++) {
 				gameView.board[i][j].addActionListener(new ButtonListener(i,j));
 			}
 		}
 	}
 
 	// Pass the source of the button listener call?
-	public void reportButtonPressed(Object src) {
+	public void reportButtonPressed(ActionEvent src, ButtonListener b) {
+		System.out.println("Button " + b.getStringXY() + " was pressed.");
 		numOfButtonsPressed++;
 		if (numOfButtonsPressed == 1) {
 			getPieceSelected(src);
@@ -43,11 +47,11 @@ public class GameController {
 		}
 	}
 
-	private void getPieceSelected(Object src) {
-
+	private void getPieceSelected(ActionEvent src) {
+		
 	}
 
-	private void getDestinationPos(Object src) {
+	private void getDestinationPos(ActionEvent src) {
 
 	}
 
@@ -83,29 +87,56 @@ public class GameController {
 		}
 	}
 
-	class  ButtonListener implements ActionListener {
+	class ButtonListener implements ActionListener {
 		
-		private int x,y;
+		private int i,j;
 		
-		public ButtonListener(int x, int y) {
+		public ButtonListener(int i, int j) {
 			super();
-			this.x = x;
-			this.y = y;
+			this.i = i;
+			this.j = j;
 		}
 
-		public int getX() {
-			return x;
+		public int getRow() {
+			return i;
 		}
 		
-		public int getY() {
-			return y;
+		public int getCol() {
+			return j;
 		}
+		
+		
+		/**
+		 * The board's[i][j] correspond to rowCol, but in the text based version the user inputs 
+		 * the position as XY (i.e. ColRow), so here they are flipped. 
+		 * @return
+		 */
+		public String getStringXY() {
+			return this.getCol() + "" + this.getRow();
+		}
+		
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
+			System.out.println("Got here");
+			reportButtonPressed(e, this);
 			
 		}
+		
+		
+
+		{
+			
+		}
+	}
+	
+	class ButtonEvent extends EventObject{
+
+		public ButtonEvent(Object arg0) {
+			super(arg0);
+			// TODO Auto-generated constructor stub
+		}
+		
 	}
 
 }

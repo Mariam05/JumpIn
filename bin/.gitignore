@@ -12,3 +12,9 @@
 /Square.class
 /ButtonListener.class
 /GameController$ButtonListener.class
+/GameController$HelpListener.class
+/GameController$QuitListener.class
+/GameController.class
+/GameController$ButtonListener$ButtonEvent.class
+/GameController$ButtonEvent.class
+/Fox$FoxPart.class
