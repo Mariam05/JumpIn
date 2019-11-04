@@ -124,7 +124,7 @@ public class GameView extends JFrame implements ActionListener {
 
 	public void addMenuItems() {
 		menuBar = new JMenuBar();
-		menu = new JMenu("JumpIN");
+		menu = new JMenu("JumpIn Menu");
 		menuBar.add(menu);
 
 		menuItemHelp = new JMenuItem("Help");

@@ -41,14 +41,14 @@ public class GameController {
 		System.out.println("Button " + b.getStringXY() + " was pressed.");
 		numOfButtonsPressed++;
 		if (numOfButtonsPressed == 1) {
-			getPieceSelected(src);
+			getPieceSelected(b);
 		} else if (numOfButtonsPressed == 2) {
 			getDestinationPos(src);
 			numOfButtonsPressed = 0; // reset to 0 because at 2 a complete play has been made
 		}
 	}
 
-	private void getPieceSelected(ActionEvent src) {
+	private void getPieceSelected(ButtonListener b) {
 		
 	}
 
