@@ -1,3 +1,4 @@
+
 /**
  * The main program for the MVC Gui that initializes the three classes
  * and ties everything together. 
@@ -5,6 +6,8 @@
  * @version JumpIn 2.0
  *
  */
+package JumpIn;
+
 public class JumpInMVC {
 
 	
