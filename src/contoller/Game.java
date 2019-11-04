@@ -1,4 +1,7 @@
+package contoller;
 import java.util.HashMap;
+
+import javax.swing.SwingUtilities;
 
 /**
  * This is the main class for the JumpIn came. Acts as the controller
@@ -16,12 +19,14 @@ public class Game {
 	private HashMap<String, Piece> animalPieces;
 	private int rabbitsInHoles;
 	private boolean quitGame;
+	private GameView view;
 
 	/**
 	 * Instantiate the parser and commandWords objects. Set up the board with the
 	 * pieces
 	 */
-	public Game() {
+	public Game(GameView view) {
+		this.view = view;
 		parser = new Parser();
 		commandWords = new CommandWord();
 		animalPieces = new HashMap<>();
@@ -184,15 +189,23 @@ public class Game {
 	 * @return true if fox moved succesfully
 	 */
 	public boolean handleFoxMove(Piece fox, Command command) {
+		
 		Fox f = (Fox) fox;
 		int newX = command.getX();
 		int newY = command.getY();
 		int currX = f.getXPos();
 		int currY = f.getYPos();
-
-		if (!fox.validateMove(newX, newY))
+		
+		
+		this.view.update((f.getXPos()),f.getYPos(),(command.getX()),command.getY(), fox.toString());
+		
+		if (!fox.validateMove(newX, newY)) {
 			return invalidCommandMessage(); // Check that the move type is legal for the animal
-
+		}
+		
+		
+		
+		
 		// If fox moves horizontally, check horizontal path on board
 		if (f.getFoxType().compareTo(Fox.FoxType.HORIZONTAL) == 0) {
 			if (currX < newX) { // moving right
@@ -269,7 +282,9 @@ public class Game {
 			System.out.println("Got here");
 			return invalidCommandMessage();
 		}
-
+		
+		this.view.update((r.getXPos()),r.getYPos(),(command.getX()),command.getY(), rabbit.toString());
+		
 		// If destination is already filled
 		if (board.getSquare(newX, newY).hasPiece()) 
 			return invalidCommandMessage();
@@ -368,13 +383,20 @@ public class Game {
 	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) {
-		Game game = new Game();
-		game.printGameInstructions();
-
-		while (!game.gameOver()) {
-			game.startNewRound();
-		}
-	}
+//	public static void main(String[] args) {
+////		Game game = new Game();
+////		game.printGameInstructions();
+////
+////		while (!game.gameOver()) {
+////			game.startNewRound();
+////		}
+//		SwingUtilities.invokeLater(new Runnable() {
+//            @Override
+//            public void run() {
+//                Game game = new Game(new GameView()); 
+//            }
+//        });
+//	}
 
 }
+

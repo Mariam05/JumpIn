@@ -1,3 +1,4 @@
+package contoller;
 /**
  * This class holds information about a command that was issued by the user. A
  * command currently consists of three parts: (1) the command word (2) the piece

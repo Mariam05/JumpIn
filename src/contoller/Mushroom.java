@@ -1,3 +1,4 @@
+package contoller;
 /**
  * Class for mushroom objects, which are stationary. 
  * @author tomar

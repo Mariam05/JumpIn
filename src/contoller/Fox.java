@@ -1,3 +1,4 @@
+package contoller;
 /**
  * X is col, Y is row
  * @author tomar
