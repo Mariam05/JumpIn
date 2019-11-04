@@ -1,4 +1,5 @@
 package JumpIn;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.EventObject;
@@ -18,7 +19,7 @@ public class GameController {
 	private int numOfButtonsPressed;
 	private Command command;
 	private String word2, word3;
-	
+
 	private static final String COMMAND = "move";
 
 	public GameController(Game game, GameView gameView) {
@@ -29,13 +30,13 @@ public class GameController {
 
 		numOfButtonsPressed = 0;
 		addActionListeners();
-		
+
 	}
 
 	private void addActionListeners() {
 		for (int i = 0; i < gameView.getBoardSize(); i++) {
 			for (int j = 0; j < gameView.getBoardSize(); j++) {
-				gameView.board[i][j].addActionListener(new ButtonListener(i,j));
+				gameView.board[i][j].addActionListener(new ButtonListener(i, j));
 			}
 		}
 	}
@@ -54,21 +55,20 @@ public class GameController {
 
 	private void getPieceSelected(ButtonListener b) {
 		word2 = game.getBoard().getSquare(b.getCol(), b.getRow()).getPieceString();
-		
+
 	}
 
 	private void getDestinationPos(ButtonListener b) {
 		word3 = b.getStringXY();
 	}
-	
-	
+
 	private void processCommand(String word2, String word3) {
 		command = new Command(COMMAND, word2, word3);
 		boolean validMove = game.processCommand(command);
-		
-		if(!validMove) { //if the move is invalid notify the player and let them know
+
+		if (!validMove) { // if the move is invalid notify the player and let them know
 			gameView.displayMessage("Invalid move");
-		} else { //otherwise check for winner and update view
+		} else { // otherwise check for winner and update view
 			if (game.hasWon()) {
 				gameView.update();
 				gameView.displayMessage("CONGRATS! You solved the puzzle!");
@@ -76,7 +76,7 @@ public class GameController {
 			}
 			gameView.update();
 		}
-		
+
 	}
 
 	/**
@@ -112,9 +112,9 @@ public class GameController {
 	}
 
 	class ButtonListener implements ActionListener {
-		
-		private int i,j;
-		
+
+		private int i, j;
+
 		public ButtonListener(int i, int j) {
 			super();
 			this.i = i;
@@ -124,34 +124,27 @@ public class GameController {
 		public int getRow() {
 			return i;
 		}
-		
+
 		public int getCol() {
 			return j;
 		}
-		
-		
+
 		/**
-		 * The board's[i][j] correspond to rowCol, but in the text based version the user inputs 
-		 * the position as XY (i.e. ColRow), so here they are flipped. 
+		 * The board's[i][j] correspond to rowCol, but in the text based version the
+		 * user inputs the position as XY (i.e. ColRow), so here they are flipped.
+		 * 
 		 * @return
 		 */
 		public String getStringXY() {
 			return this.getCol() + "" + this.getRow();
 		}
-		
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("Got here");
 			reportButtonPressed(e, this);
-			
-		}
-		
-		
 
-		{
-			
 		}
+
 	}
-	
+
 }

@@ -119,13 +119,7 @@ public class Game {
 		}
 	}
 
-	/**
-	 * Re - prompts user for correct input if their move is invalid
-	 */
-	private boolean invalidCommandMessage() {
-		System.out.println("Invalid command. Please try again.");
-		return false;
-	}
+
 
 	/**
 	 * Given a command, process (that is: execute) the command.
@@ -136,7 +130,6 @@ public class Game {
 	public boolean processCommand(Command command) {
 
 		if (command.isUnknown()) {
-			invalidCommandMessage();
 			return false;
 		}
 
@@ -148,9 +141,9 @@ public class Game {
 		} else if (commandWord.equalsIgnoreCase("move")) {
 
 			if (!validatePieceSelected(command))
-				return invalidCommandMessage();
+				return false;
 			if (!validateDestination(command.getX(), command.getY()))
-				return invalidCommandMessage();
+				return false;
 
 			return handleMove(command);
 		} else if (commandWord.equals("quit")) {
@@ -229,7 +222,7 @@ public class Game {
 		if (piece instanceof Fox) {
 			return handleFoxMove(piece, command);
 		} else if (piece instanceof Rabbit) {
-			handleRabbitMove(piece, command);
+			return handleRabbitMove(piece, command);
 		}
 
 		return true;
@@ -253,7 +246,7 @@ public class Game {
 
 		int start, end;
 		if (!fox.validateMove(newX, newY))
-			return invalidCommandMessage(); // Check that the move type is legal for the animal
+			return false; // Check that the move type is legal for the animal
 
 		// If fox moves horizontally, check horizontal path on board
 		if (f.isHorizontal()) {
@@ -269,11 +262,11 @@ public class Game {
 				}
 
 				if (!validateDestination(end, currY))
-					return invalidCommandMessage();
+					return false;
 
 				for (int i = start; i <= end; i++) { // ensure path is clear
 					if (board.getSquare(i, currY).hasPiece())
-						return invalidCommandMessage();
+						return false;
 				}
 
 			} else { // moving left
@@ -286,11 +279,11 @@ public class Game {
 				}
 
 				if (!validateDestination(end, currY))
-					return invalidCommandMessage();
+					return false;
 
 				for (int i = start; i >= end; i--) { // reprompt if path isn't clear
 					if (board.getSquare(i, currY).hasPiece())
-						return invalidCommandMessage();
+						return false;
 				}
 
 			}
@@ -321,11 +314,11 @@ public class Game {
 				}
 
 				if (!validateDestination(end, currY))
-					return invalidCommandMessage();
+					return false;
 
 				for (int i = start; i < end; i++) { // reprompt if path isn't clear
 					if (board.getSquare(i, currY).hasPiece())
-						return invalidCommandMessage();
+						return false;
 				}
 
 			} else { // moving down
@@ -339,11 +332,11 @@ public class Game {
 				}
 
 				if (!validateDestination(end, currY))
-					return invalidCommandMessage();
+					return false;
 
 				for (int i = start; i <= end; i++) { // reprompt if path isn't clear
 					if (board.getSquare(currX, i).hasPiece())
-						return invalidCommandMessage();
+						return false;
 				}
 
 			}
@@ -366,6 +359,15 @@ public class Game {
 	}
 
 	/**
+	 * Check if the square at coordinates x, y has a piece or a hole
+	 * @param x
+	 * @param y
+	 * @return true if it has a square or a hole
+	 */
+	private boolean hasPieceOrHole(int x, int y) {
+		return board.getSquare(x, y).hasPiece() || board.getSquare(x, y).isHole() ;
+	}
+	/**
 	 * Handle a move of a rabbit
 	 * 
 	 * @param rabbit
@@ -380,34 +382,33 @@ public class Game {
 		int currY = r.getYPos();
 
 		if (!rabbit.validateMove(newX, newY)) {
-			System.out.println("Got here");
-			return invalidCommandMessage();
+			return false;
 		}
 
 		// If destination is already filled
 		if (board.getSquare(newX, newY).hasPiece())
-			return invalidCommandMessage();
+			return false;
 
 		// Checking of the paths are filled for each direction
 		if (currX < newX) { // moving right
 			for (int k = currX + 1; k < newX; k++) { // check for empty squares
-				if (!(board.getSquare(k, currY).hasPiece()))
-					return invalidCommandMessage();
+				if (!(hasPieceOrHole(k, currY)))
+					return false;
 			}
 		} else if (currX > newX) { // moving left
 			for (int k = currX - 1; k > newX; k--) { // check for empty squares
-				if (!(board.getSquare(k, currY).hasPiece()))
-					return invalidCommandMessage();
+				if (!(hasPieceOrHole(k, currY)))
+					return false;
 			}
 		} else if (currY > newY) { // moving up
 			for (int k = currY - 1; k > newY; k--) { // check for empty squares
-				if (!(board.getSquare(currX, k).hasPiece()))
-					return invalidCommandMessage();
+				if (!(hasPieceOrHole(currX, k)))
+					return false;
 			}
 		} else if (currY < newY) { // moving down
 			for (int k = currY + 1; k < newY; k++) { // check for empty squares
-				if (!(board.getSquare(currX, k).hasPiece()))
-					return invalidCommandMessage();
+				if (!(hasPieceOrHole(currX, k)))
+					return false;
 			}
 
 		}
@@ -421,7 +422,6 @@ public class Game {
 
 		if (board.getSquare(newX, newY).isHole()) {
 			rabbitsInHoles++; // if rabbit entered a hole
-			System.out.println("You got a rabbit in a hole!");
 		}
 
 		return true;

@@ -26,7 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-public class GameView extends JFrame implements ActionListener {
+public class GameView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private Container container;
@@ -88,7 +88,7 @@ public class GameView extends JFrame implements ActionListener {
 		piece = hole.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
 		for (int i = 1; i < dimensions.length; i = i + 2) {
 			board[dimensions[i - 1]][dimensions[i]].setIcon(new ImageIcon(piece));
-			board[dimensions[i - 1]][dimensions[i]].setBackground(new Color(0, 102, 0));
+			board[dimensions[i - 1]][dimensions[i]].setBackground(new Color(153, 0, 0));
 		}
 
 		// Add the mushrooms
@@ -226,9 +226,4 @@ public class GameView extends JFrame implements ActionListener {
 		menuItemQuit.addActionListener(a);
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-
-	}
 }
