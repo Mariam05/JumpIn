@@ -16,11 +16,12 @@ import org.junit.Test;
 public class FoxTest {
 	
 	private Fox fox1,fox2;
+	Fox associatePart;
 	
 	@Before
 	public void setUp() throws Exception {
-		fox1 = new Fox("F1", Fox.FoxType.HORIZONTAL);
-		fox2 = new Fox("F2", Fox.FoxType.VERTICAL);
+		fox1 = new Fox("F1", Fox.FoxType.HORIZONTAL, true);
+		fox2 = new Fox("F2", Fox.FoxType.VERTICAL, true);
 	}
 	/*
 	 * testing the constructor by passing the fox type
@@ -35,6 +36,26 @@ public class FoxTest {
 		assertEquals(fox2.toString(),"F2");
 
 	}
+	/*
+	 * check if the foxes are head or tail because the fox occupies two squares
+	 */
+	@Test
+	public void isHeadTest() {
+		assertEquals(true,fox1.isHead());
+		assertEquals(true,fox2.isHead());
+
+	}
+	
+	/*
+	 * We are checking if we added the associated part or not for the fox
+	 */
+	@Test
+	public void addAssociatedPartTest() {
+		assertEquals(true,fox1.addAssociatedPart(this.associatePart));
+		assertEquals(true,fox2.addAssociatedPart(this.associatePart));
+
+	}
+	
 	/*
 	 * testing the type of each fox
 	 */
@@ -54,7 +75,7 @@ public class FoxTest {
 		fox2.setPosition(1, 1);
 		assertEquals("11",fox2.getXPos() +""+ fox2.getYPos());
 	}
-	
+	/*
 	@Test
 	public void ValidatemoveTest() {
 		assertEquals(true,fox1.validateMove(fox1.getXPos(),fox1.getYPos()-1));
@@ -67,6 +88,6 @@ public class FoxTest {
 			assertEquals(true,fox2.validateMove(fox2.getXPos() + 1,fox1.getYPos()));
 		}	
 	}
-	
+	*/
 	
 }
