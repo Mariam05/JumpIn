@@ -15,19 +15,40 @@ public class GameController {
 		this.game = game;
 		this.gameView = gameView;
 		gameView.addHelpListener(new HelpListener());
+		gameView.addQuitListener(new QuitListener());
 	}
 
 
-	
+	/**
+	 * This listener is for the help option / command
+	 * @author tomar
+	 *
+	 */
 	class HelpListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			System.out.println("Getting here");
 			String helpMessage = game.printGameInstructions();
 			gameView.displayMessage(helpMessage);
 		}
 
+	}
+	
+	/**
+	 * This listener is for the quit option/command
+	 * @author tomar
+	 *
+	 */
+	class QuitListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String quitMessage = game.quitMessage();
+			gameView.displayMessage(quitMessage);
+			gameView.dispose();
+			
+		}
+		
 	}
 
 }

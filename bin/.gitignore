@@ -18,3 +18,15 @@
 /Piece.class
 /Rabbit.class
 /Square.class
+<<<<<<< HEAD
+=======
+/ButtonListener.class
+/GameListener.class
+/GameEvent.class
+/GameView$2.class
+/GameView$3.class
+/HelpListener.class
+/GameController$HelpListener.class
+/JumpInMVC.class
+/GameController$QuitListener.class
+>>>>>>> branch 'master' of https://github.com/Mariam05/SYSC3110Project
