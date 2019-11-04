@@ -237,17 +237,14 @@ public class Game {
 				}
 
 				board.removePiece(currX, currY); // remove tail of fox
+				board.removePiece(currX + 1, currY); // remove head of fox
+				
+				this.view.removeFoxHeadandTail(currX,currY,currX+1,currY);
+				
+				board.addPiece(fox, newX, currY); // add head of fox
 				board.addPiece(fox, newX - 1, currY); // add tail of fox
 				
-				System.out.println("handlefoxtail");
-				this.view.update(foxrow, foxcol, newrow, newcol-1,fox.toString());
-				
-				board.removePiece(currX + 1, currY); // remove head of fox
-				board.addPiece(fox, newX, currY); // add head of fox
-				
-				System.out.println("handlefoxhead");
-				this.view.update(foxrow, foxcol+1, newrow, newcol,fox.toString());
-				this.board.printBoard();
+				this.view.addFoxHeadandTail(newX-1,currY,newX,currY);
 
 			} else { // moving left
 
@@ -257,18 +254,10 @@ public class Game {
 				}
 
 				board.removePiece(currX, currY); // remove tail of fox
-				board.addPiece(fox, newX, currY);// add tail of fox
-				
-				System.out.println("handlefoxtail");
-				this.view.update(foxrow, foxcol, newrow, newcol,fox.toString());
-				
 				board.removePiece(currX + 1, currY); // remove head of fox
-				board.addPiece(fox, newX + 1, currY); // add head of fox
-				
-				System.out.println("handlefoxhead");
-				this.view.update(foxrow, foxcol+1, newrow, newcol+1,fox.toString());
-				this.board.printBoard();
 
+				board.addPiece(fox, newX + 1, currY); // add head of fox
+				board.addPiece(fox, newX, currY);
 
 			}
 		} else if (f.getFoxType().compareTo(Fox.FoxType.VERTICAL) == 0) { // this fox moves vertically
@@ -279,18 +268,10 @@ public class Game {
 				}
 
 				board.removePiece(currX, currY); // remove fox tail
-				board.addPiece(fox, newX, newY); // add tail
-				
-				System.out.println("handlefoxtail");
-				this.view.update(foxrow, foxcol, newrow, newcol,fox.toString());
-				
 				board.removePiece(currX, currY + 1); // remove fox head
+
 				board.addPiece(fox, newX, newY + 1); //add head
-				
-				System.out.println("handlefoxhead");
-				this.view.update(foxrow+1, foxcol, newrow+1, newcol,fox.toString());
-				this.board.printBoard();
-				
+				board.addPiece(fox, newX, newY); // add tail
 
 			} else { // moving down
 				for (int i = currY + 2; i <= newY; i++) { // reprompt if path isn't clear
@@ -299,18 +280,10 @@ public class Game {
 				}
 
 				board.removePiece(currX, currY); // remove fox tail
-				board.addPiece(fox, newX, newY - 1); // add tail
-				
-				System.out.println("handlefoxtail");
-				this.view.update(foxrow, foxcol, newrow-1, newcol,fox.toString());
+				board.removePiece(currX, currY + 1); // remove fox head
 
 				board.addPiece(fox, newX, newY); // add head
-				board.removePiece(currX, currY + 1); // remove fox head
-				
-				System.out.println("handlefoxhead");
-				this.view.update(foxrow+1, foxcol, newrow, newcol,fox.toString());
-				this.board.printBoard();
-				
+				board.addPiece(fox, newX, newY - 1); // add tail
 			}
 
 		}

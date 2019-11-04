@@ -146,6 +146,17 @@ public class GameView extends JFrame {
 		
 	}
 	
+	public void FoxUpdate() {
+		removeFoxHeadandTail();
+	}
+	
+	public static void removeFoxHeadandTail(int tailX,int tailY,int headX,int headY) {
+		
+	}
+	
+	public static void addFoxHeadandTail(int tailX,int tailY,int headX,int headY) {
+		
+	}
 	
 	
 	public static void main(String[] args) {
