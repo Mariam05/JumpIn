@@ -126,12 +126,20 @@ public class Game {
 
 			return handleMove(command);
 		} else if (commandWord.equals("quit")) {
-			System.out.println("Thanks for playing. Goodbye");
+			System.out.println(quitMessage());
 			quitGame = true;
 			return false;
 		}
 
 		return false;
+	}
+	
+	/**
+	 * Return a message to the user if they want to quit.
+	 * @return String message
+	 */
+	public String quitMessage() {
+		return "Thanks for playing. Goodbye";
 	}
 
 	/**
@@ -335,10 +343,10 @@ public class Game {
 
 	public String printGameInstructions() {
 		String title = "JumpIN Instructions: \n\n";
-		String obstacles = "\tThe obstacles are: Mushroom, Fox, Rabbit, Hole.\n\n"
+		String obstacles = "\tThe pieces are: Mushroom, Fox, Rabbit, Hole.\n\n"
 				+ "\tFoxes take up two spaces, head and tail. " + "All other obstacles occupy one square.\n\n";
 
-		String movements = "The following explains how the obstacles move around the board:\n\n"
+		String movements = "MOVEMENT RULES: The following explains how the obstacles move around the board:\n\n"
 
 				+ "\tRabbit:\n"
 
@@ -353,17 +361,12 @@ public class Game {
 
 				+ "\tMushrooms and holes are stationary.\n\n";
 
-		String objective = "The objective of the game is to move the rabbits and foxes, through a series of movements\n"
+		String objective = "GAME OBJECTIVE: The objective of the game is to move the rabbits and foxes, through a series of movements\n"
 				+ "around the obstacles untill all the rabbits are safely in their hole.\n";
-		String abbreviations = "In this game, the following abbreviations are used to represent each object on the board: "
-				+ "\n\tR1 - Rabbit 1\n\tR2 - Rabbit 2\n\tR3 - Rabbit 3\n\tF1 - Fox 1\n\tF2 - Fox 2\n\tMS - Mushroom\n\t O - hole \n\t"
-				+ "When a rabbit has an asterisk beside it means that it is in a hole \n";
-		String commands = "The following are the list of command words you can use: \n" + commandWords.getCommandWords()
-				+ "\n"
-				+ "For move, the format is: move [name of piece to move] [position to move it to in the format of ColRow]\n";
+		String howTo = "\n HOW TO PLAY: First, select the piece you'd like to move. Next, select the square you want to move it to.";
 
 		//System.out.println(title + obstacles + movements + objective + abbreviations + commands);
-		return title + obstacles + movements + objective + abbreviations + commands;
+		return title + obstacles + movements + objective + howTo;
 
 	}
 

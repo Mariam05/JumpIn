@@ -200,8 +200,11 @@ public class GameView extends JFrame{
 	
 	
 	public void addHelpListener(ActionListener a) {
-		System.out.println("Added listener");
 		menuItemHelp.addActionListener(a);
+	}
+	
+	public void addQuitListener(ActionListener a) {
+		menuItemQuit.addActionListener(a);
 	}
 	
 	public static void main(String[] args) {

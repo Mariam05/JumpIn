@@ -20,3 +20,5 @@
 /GameView$3.class
 /HelpListener.class
 /GameController$HelpListener.class
+/JumpInMVC.class
+/GameController$QuitListener.class
