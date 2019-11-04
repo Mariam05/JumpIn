@@ -1,11 +1,16 @@
 /Board.class
+/ButtonListener.class
 /Command.class
 /CommandWord.class
 /Fox$FoxType.class
 /Fox.class
 /Game.class
+/GameController$HelpListener.class
 /GameController.class
+/GameEvent.class
+/GameListener.class
 /GameView$1.class
+/GameView$2.class
 /GameView.class
 /Mushroom.class
 /Parser.class
@@ -13,10 +18,3 @@
 /Piece.class
 /Rabbit.class
 /Square.class
-/ButtonListener.class
-/GameListener.class
-/GameEvent.class
-/GameView$2.class
-/GameView$3.class
-/HelpListener.class
-/GameController$HelpListener.class
