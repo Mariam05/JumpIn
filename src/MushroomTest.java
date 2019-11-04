@@ -48,6 +48,6 @@ public class MushroomTest {
 	@Test
 	public void PositionTest() {
 		mushroom.setPosition(2,3);
-		assertEquals("23",mushroom.getXPos() +""+ mushroom.getYPos()+"");
+		assertEquals("23",mushroom.getXPos() +""+ mushroom.getYPos());
 	}
 }

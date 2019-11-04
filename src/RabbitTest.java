@@ -37,11 +37,11 @@ public class RabbitTest {
 	@Test
 	public void PositionTest() {
 		rabbit1.setPosition(2,3);
-		assertEquals("23",rabbit1.getXPos() +""+ rabbit1.getYPos()+"");
+		assertEquals("23",rabbit1.getXPos() +""+ rabbit1.getYPos());
 		rabbit2.setPosition(4,1);
-		assertEquals("41",rabbit2.getXPos() +""+ rabbit2.getYPos()+"");
+		assertEquals("41",rabbit2.getXPos() +""+ rabbit2.getYPos());
 		rabbit3.setPosition(2,4);
-		assertEquals("24",rabbit3.getXPos() +""+ rabbit3.getYPos()+"");
+		assertEquals("24",rabbit3.getXPos() +""+ rabbit3.getYPos());
 	}
 	
 	
