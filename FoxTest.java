@@ -2,8 +2,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
-
-
 /*
  * @author TS
  * 
@@ -22,6 +20,7 @@ public class FoxTest {
 		fox1 = new Fox("F1", Fox.FoxType.HORIZONTAL);
 		fox2 = new Fox("F2", Fox.FoxType.VERTICAL);
 	}
+	
 	/*
 	 * testing the constructor by passing the fox type
 	 * and also checking if it has the correct name or not
@@ -33,7 +32,6 @@ public class FoxTest {
 		assertEquals(fox1.toString(),"F1");
 		assertEquals(fox2.getPieceType(),Piece.Type.FOX);
 		assertEquals(fox2.toString(),"F2");
-
 	}
 	/*
 	 * testing the type of each fox
@@ -42,7 +40,6 @@ public class FoxTest {
 	public void getFoxTypeTest() {
 		assertEquals(fox1.getFoxType(),Fox.FoxType.HORIZONTAL);
 		assertEquals(fox2.getFoxType(),Fox.FoxType.VERTICAL);
-
 	}
 	/*
 	 * testing the position of the two foxes
@@ -55,18 +52,18 @@ public class FoxTest {
 		assertEquals("11",fox2.getXPos() +""+ fox2.getYPos());
 	}
 	/*
+	 * We are testing the only valid positions for the horizontal fox
+	 * and vertical fox
+	 */
 	@Test
 	public void ValidatemoveTest() {
-		assertEquals(true,fox1.validateMove(fox1.getXPos(),fox1.getYPos()-1));
-		assertEquals(true,fox1.validateMove(fox1.getXPos(),fox1.getYPos()-2));
-		assertEquals(true,fox1.validateMove(fox1.getXPos(),fox1.getYPos()-3));
-		if(fox1.getYPos() <= 2) {
-			assertEquals(true,fox2.validateMove(fox2.getXPos()+1,fox2.getYPos()));
-			assertEquals(true,fox2.validateMove(fox2.getXPos()+2,fox2.getYPos()));
-		}else {
-			assertEquals(true,fox2.validateMove(fox2.getXPos() + 1,fox1.getYPos()));
+		assertEquals(true,fox1.validateMove(fox1.getXPos()-1,fox1.getYPos()));
+		assertEquals(true,fox1.validateMove(fox1.getXPos()-2,fox1.getYPos()));
+		assertEquals(true,fox1.validateMove(fox1.getXPos()-3,fox1.getYPos()));
+		
+		assertEquals(true,fox2.validateMove(fox2.getXPos(),fox2.getYPos()+1));
+		assertEquals(true,fox2.validateMove(fox2.getXPos(),fox2.getYPos()+2));
+		assertEquals(true,fox2.validateMove(fox2.getXPos(),fox2.getYPos()+3));
+
 		}	
-	}
-	*/
-	
-}
+	}	
