@@ -4,8 +4,9 @@ import java.awt.event.ActionListener;
 public class ButtonListener implements ActionListener {
 	
 	private int x,y;
+	
 	public ButtonListener(int x, int y) {
-		
+
 		this.x = x;
 		this.y = y;
 	}

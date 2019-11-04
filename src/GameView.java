@@ -2,6 +2,7 @@
 
 //package viewformilestone2;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -9,16 +10,22 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 public class GameView extends JFrame implements ActionListener, GameListener{
+	
 	Game gameModel = new Game();
 	private static final long serialVersionUID = 1L;
 	private Container container;
@@ -27,19 +34,67 @@ public class GameView extends JFrame implements ActionListener, GameListener{
 	Image piece,whiteRabbit,yellowRabbit,greyRabbit,mushroom,fox1,fox2,hole;
 	private int dimensions[] = {0,0,0,4,4,0,4,4,2,2};// this will be used twice firstly to add holes and secondly
 	// to change the background of buttons
-	Game game = new Game();
+	private Game game;
+	private JMenuBar menuBar;
+	private JMenu menu, submenu;
+	private JMenuItem menuItem;
+	private Command command;
 	
-	public GameView() {
+	private JPanel gridPanel;
+	
+	
+	public GameView(Game model) {
 		super();
-		container = getContentPane();
+		
+		this.game = model;
+		
+		container = new Container();
 		container.setLayout(new GridLayout(SIZE,SIZE));
+		
+		add(container);
+		
 		setTitle("JumpIn Game");
 		setSize(700,700);
 		setResizable(false);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setVisible(true);
+		addMenuItems();
 	    createBoard();
 	    addPiecesOnBoard();
+	}
+	
+	
+	public void addMenuItems() {
+		menuBar = new JMenuBar();
+		menu = new JMenu("JumpIN");
+		menu.setMnemonic(KeyEvent.VK_A);
+		menuBar.add(menu);
+		
+		menuItem = new JMenuItem("Help");
+		menu.add(menuItem);
+		//This can also be implemented by adding an action listener on the list that will remove the one that is selected
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				command = new Command("help", null, null);
+				game.processCommand(command);
+			}
+			
+		});
+		
+		menuItem = new JMenuItem("Quit");
+		menu.add(menuItem);
+		//This can also be implemented by adding an action listener on the list that will remove the one that is selected
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				command = new Command("quit", null, null);
+				game.processCommand(command);
+			}
+			
+		});
+		
+		add(menuBar, BorderLayout.NORTH);
 	}
 	/*
 	 * The board will be created then we are adding the buttons in side it and
@@ -147,10 +202,11 @@ public class GameView extends JFrame implements ActionListener, GameListener{
 		JOptionPane.showMessageDialog(this, "Invalid play. Please try again.");
 	}
 	public static void main(String[] args) {
+		Game game = new Game();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                 new GameView();
+                 new GameView(game);
             }
         });
 	}
