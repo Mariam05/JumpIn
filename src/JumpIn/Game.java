@@ -109,7 +109,6 @@ public class Game {
 	 */
 	public boolean hasWon() {
 		if (rabbitsInHoles == 3) {
-			System.out.println("Congrats! You solved the puzzle!");
 			return true;
 		}
 		return false;
