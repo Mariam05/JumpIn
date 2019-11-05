@@ -14,7 +14,7 @@ public class Board {
 	/**
 	 * The width of the board (i.e. num of columns)
 	 */
-	static final int SIZE = 5;
+	public final int SIZE = 5;
 	
 	
 	/**
@@ -104,7 +104,7 @@ public class Board {
 	}
 	
 	/**
-	 * Print the current state of the board
+	 * Print the current state of the board (for text based purposes only)
 	 */
 	public void printBoard() {
 		

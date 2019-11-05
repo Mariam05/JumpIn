@@ -45,22 +45,22 @@ public class GameView extends JFrame {
 	private JMenuBar menuBar;
 	private JMenu menu;
 	private JMenuItem menuItemHelp, menuItemQuit, menuItemReset;
-	private Command command;
 
-	private HashMap<String, Image> images;
-
+	/**
+	 * Create a new view
+	 * @param model pass the model to the view
+	 */
 	public GameView(Game model) {
 		super();
 
 		this.game = model;
-		images = new HashMap<>();
 
 		size = model.getBoard().SIZE;
 
 		container = new Container();
 		container.setLayout(new GridLayout(size, size));
 
-		add(container);
+		add(container); //add the container to the jframe
 
 		setTitle("JumpIn Game");
 		setSize(700, 700);
@@ -73,6 +73,10 @@ public class GameView extends JFrame {
 		putIconsOnBoard();
 	}
 
+	/**
+	 * Get the size of the view's board
+	 * @return int of size (in one way bc it's a square)
+	 */
 	public int getBoardSize() {
 		return this.size;
 
@@ -95,12 +99,13 @@ public class GameView extends JFrame {
 		board[1][3].setIcon(new ImageIcon(piece));
 		board[4][2].setIcon(new ImageIcon(piece));
 
-		HashMap<String, Piece> animals = game.getAnimalsOnBoard();
-		for (String s : animals.keySet()) {
+		//Add the animals
+		HashMap<String, Piece> animals = game.getAnimalsOnBoard(); //get the animals from the model
+		for (String s : animals.keySet()) { //for each animal
 			Piece animal = animals.get(s);
 			int animalRow = animal.getYPos();
 			int animalCol = animal.getXPos();
-			if (animal instanceof Rabbit) {
+			if (animal instanceof Rabbit) { //if it's a rabbit, associate it with the appropriate rabbit image
 				Rabbit r = (Rabbit) animal;
 				if (r.getColour() == Color.WHITE)
 					piece = whiteRabbit.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
@@ -108,7 +113,7 @@ public class GameView extends JFrame {
 					piece = greyRabbit.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
 				if (r.getColour() == Color.YELLOW)
 					piece = yellowRabbit.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
-			} else if (animal instanceof Fox) {
+			} else if (animal instanceof Fox) { //if it's a fox, associate it with the appropriate fox image depending on whether it's a head/tail
 				Fox f = (Fox) animal;
 				if (f.isHead()) {
 					piece = foxface.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
@@ -117,10 +122,13 @@ public class GameView extends JFrame {
 				}
 			}
 
-			board[animalRow][animalCol].setIcon(new ImageIcon(piece));
+			board[animalRow][animalCol].setIcon(new ImageIcon(piece)); //add the image to the animal's location
 		}
 	}
 
+	/**
+	 * Create a menu that will allow the user to choose if they want help or quit.
+	 */
 	public void addMenuItems() {
 		menuBar = new JMenuBar();
 		menu = new JMenu("JumpIn Menu");
@@ -194,9 +202,6 @@ public class GameView extends JFrame {
 	/**
 	 * Remove all current icons and then Update the view
 	 * 
-	 * @param x
-	 * @param y
-	 * @param name
 	 */
 	public void update() {
 		for (int i = 0; i < size; i++) {
@@ -217,10 +222,18 @@ public class GameView extends JFrame {
 		JOptionPane.showMessageDialog(this, message);
 	}
 
+	/**
+	 * If help button is pressed
+	 * @param a
+	 */
 	public void addHelpListener(ActionListener a) {
 		menuItemHelp.addActionListener(a);
 	}
 
+	/**
+	 * If quit button is pressed
+	 * @param a
+	 */
 	public void addQuitListener(ActionListener a) {
 		menuItemQuit.addActionListener(a);
 	}

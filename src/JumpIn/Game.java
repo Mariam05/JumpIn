@@ -1,12 +1,11 @@
 package JumpIn;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
- * This is the main class for the JumpIn came. Acts as the controller
+ * This is the main class for the JumpIn came. 
+ * It acts as the model in the MVC pattern
  * 
  * @author Mariam Almalki, Nazifa Tanzim
  * @version 2.0 of JumpIn
@@ -15,7 +14,6 @@ import java.util.List;
 public class Game {
 
 	private Parser parser;
-	private CommandWord commandWords;
 	private Board board;
 	private Piece fox1, fox2, fox1T, fox2T, mushroom1, mushroom2, rabbit1, rabbit2, rabbit3;
 	private HashMap<String, Piece> animalPieces;
@@ -27,7 +25,6 @@ public class Game {
 	 */
 	public Game() {
 		parser = new Parser();
-		commandWords = new CommandWord();
 		animalPieces = new HashMap<>();
 		board = new Board();
 		quitGame = false;
@@ -47,12 +44,10 @@ public class Game {
 
 		mushroom1 = new Mushroom("MSH");
 		mushroom2 = new Mushroom("MSH");
-		rabbit1 = new Rabbit("RA1"); //colour is white (default)
-	
-		rabbit2 = new Rabbit("RA2");
-		((Rabbit) rabbit2).setColour(Color.GRAY);
-		rabbit3 = new Rabbit("RA3");
-		((Rabbit) rabbit3).setColour(Color.YELLOW);
+		
+		rabbit1 = new Rabbit("RA1", Color.WHITE); 
+		rabbit2 = new Rabbit("RA2", Color.GRAY);
+		rabbit3 = new Rabbit("RA3", Color.YELLOW);
 		
 		
 		// Add the pieces to the piece hashmap
@@ -65,7 +60,6 @@ public class Game {
 		animalPieces.put(rabbit3.toString(), rabbit3);
 
 		// Add the pieces to the board. Coordinates are row col
-		// Note: Foxs will now be referred to by their tails
 		board.addPiece(fox1, 4, 3);
 		board.addPiece(fox1T, fox1.getXPos() - 1, fox1.getYPos()); // add fox1 tail
 
@@ -81,10 +75,18 @@ public class Game {
 
 	}
 
+	/**
+	 * Returns the board used in the gme
+	 * @return
+	 */
 	public Board getBoard() {
 		return this.board;
 	}
 
+	/**
+	 * Returns the list of animals on the board and their identification string
+	 * @return hashmap of animals on board
+	 */
 	public HashMap<String, Piece> getAnimalsOnBoard() {
 		return animalPieces;
 	}
@@ -101,6 +103,10 @@ public class Game {
 		}
 	}
 
+	/**
+	 * Checks if player has won
+	 * @return true if they have won
+	 */
 	public boolean hasWon() {
 		if (rabbitsInHoles == 3) {
 			System.out.println("Congrats! You solved the puzzle!");
@@ -118,7 +124,6 @@ public class Game {
 			startNewRound();
 		}
 	}
-
 
 
 	/**
@@ -457,13 +462,4 @@ public class Game {
 
 	}
 
-	/**
-	 * The client of the game
-	 * 
-	 * @param args
-	 */
-//	public static void main(String[] args) {
-//		Game game = new Game();
-//		game.play();
-//	}
 }

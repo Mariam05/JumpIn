@@ -24,58 +24,63 @@ public class Square {
 		hasPiece = false;
 	}
 
+	/**
+	 * Add a piece to the square
+	 * @param piece
+	 */
 	public void addPiece(Piece piece) {
 		this.piece = piece;
 		hasPiece = true;
 	}
 	
+	/**
+	 * Retrieve the piece
+	 * @return Piece the piece on the square or null if none exists
+	 */
 	public Piece getPiece() {
 		if (hasPiece) return piece;
 		return null;
 	}
 	
+	/**
+	 * Return the string representation of the piece on the square, or null if there is no piece
+	 * @return String of piece
+	 */
 	public String getPieceString() {
 		if (hasPiece) return piece.toString();
 		return null;
 	}
 
+	/**
+	 * If square has piece
+	 * @return true if it has a piece 
+	 */
 	public boolean hasPiece() {
 		return hasPiece;
 	}
 	
+	/**
+	 * Make this square a hole
+	 */
 	public void addHole() {
 		isHole = true;
 	}
 	
+	/**
+	 * Check if this square is a hole
+	 * @return true if it is a hole
+	 */
 	public boolean isHole() {
 		return isHole;
 	}
 	
+	/**
+	 * Remove the piece from the square
+	 */
 	public void removePiece() {
 		this.hasPiece = false;
 		piece = null;
 		
 	}
-
-	/**
-	 * This method will print what is on the square.
-	 * 
-	 * @return the string representation of the square
-	 */
-	@Override
-	public String toString() {
-		
-		if(isHole() && hasPiece()) {
-			return "|  " + piece.toString() + "* ";
-		}
-		if (isHole()) {
-			return "|  HOL  ";
-		}
-		if (hasPiece) {
-			return "|  " + piece.toString() + "  ";
-		}
-		return "|       ";
-	}
-
 
 }

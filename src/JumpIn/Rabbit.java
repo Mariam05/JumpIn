@@ -11,17 +11,42 @@ import java.awt.Color;
  */
 public class Rabbit extends Piece {
 
+	/**
+	 * The colour of the rabbit
+	 */
 	private Color colour;
 	
+	/**
+	 * Create a new rabbit object. 
+	 * The default colour is white
+	 * @param pieceName
+	 */
 	public Rabbit(String pieceName) {
+		this(pieceName, Color.WHITE); //Default colour is white
+	}
+	
+	/**
+	 * Create a rabbit object but specify colour
+	 * @param pieceName
+	 * @param colour
+	 */
+	public Rabbit(String pieceName, Color colour) {
 		super(pieceName, Type.RABBIT);
-		colour = Color.WHITE; //Default is white rabbit
+		this.colour = colour; 
 	}
 
+	/**
+	 * Set the colour of the rabbit
+	 * @param colour Color object
+	 */
 	public void setColour(Color colour) {
 		this.colour = colour;
 	}
 	
+	/**
+	 * Get the colour of the rabbit
+	 * @return Color colour of rabbit
+	 */
 	public Color getColour() {
 		return colour;
 	}
@@ -41,6 +66,4 @@ public class Rabbit extends Piece {
 		
 		return true;
 	}
-	
-	
 }
