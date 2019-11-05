@@ -1,7 +1,4 @@
 package JumpIn;
-
-import java.awt.Color;
-
 /**
  * This class represents a Rabbit piece on the board. 
  * Rabbits can only jump over other objects so they cannot move directly
@@ -11,21 +8,10 @@ import java.awt.Color;
  */
 public class Rabbit extends Piece {
 
-	private Color colour;
-	
-	protected Rabbit(String pieceName) {
+	public Rabbit(String pieceName) {
 		super(pieceName, Type.RABBIT);
-		colour = Color.WHITE; //Default is white rabbit
 	}
 
-	public void setColour(Color colour) {
-		this.colour = colour;
-	}
-	
-	public Color getColour() {
-		return colour;
-	}
-	
 	/**
 	 * Check if a rabbit's move is valid. 
 	 * An invalid move is if it is simply moving to one of the squares beside it
@@ -41,6 +27,4 @@ public class Rabbit extends Piece {
 		
 		return true;
 	}
-	
-	
 }
