@@ -58,7 +58,9 @@ We decided to change the implementation of Fox such that a fox object can repres
 Similarly, we added a colour attribute to Rabbits, so that the right image can be used for each. 
 
 ### Known Issues:
-None, although potentially: images disappearing from bin folder. The images used in the GUI are located in the project bin folder and often need to be re-added to that folder after pulling the project. 
+The reset button does not work yet. 
+Othewise none, although potentially: images disappearing from bin folder. The images used in the GUI are located in the project bin folder and often need to be re-added to that folder after pulling the project. 
+
 
 ### Team member roles:
 Mariam Almalki: Added command classes and functionality to the code, reimplemented the model to work with MVC, worked on connecting the model, view and controller. Created sequence diagram for Milestone 2 and helped compose design decisions.
