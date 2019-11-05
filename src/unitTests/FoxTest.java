@@ -1,7 +1,11 @@
+package unitTests;
+
 import static org.junit.Assert.*;
+import JumpIn.*;
 
 import org.junit.Before;
 import org.junit.Test;
+
 
 
 /*
@@ -19,8 +23,8 @@ public class FoxTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		fox1 = new Fox("F1", Fox.FoxType.HORIZONTAL);
-		fox2 = new Fox("F2", Fox.FoxType.VERTICAL);
+		fox1 = new Fox("F1", Fox.FoxType.HORIZONTAL, true);
+		fox2 = new Fox("F2", Fox.FoxType.VERTICAL, true);
 	}
 	/*
 	 * testing the constructor by passing the fox type
@@ -40,8 +44,8 @@ public class FoxTest {
 	 */
 	@Test
 	public void getFoxTypeTest() {
-		assertEquals(fox1.getFoxType(),Fox.FoxType.HORIZONTAL);
-		assertEquals(fox2.getFoxType(),Fox.FoxType.VERTICAL);
+		assertEquals(fox1.isHorizontal(),Fox.FoxType.HORIZONTAL);
+		assertEquals(!fox2.isHorizontal(),Fox.FoxType.VERTICAL);
 
 	}
 	/*

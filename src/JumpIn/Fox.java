@@ -1,55 +1,70 @@
 package JumpIn;
 /**
+ * This class represents a Fox object. 
+ * A fox can either have horizontal or vertical functionality.
+ * A fox is split into two parts: either a head or a tail and is associated 
+ * with it's counterpart. 
+ * 
  * X is col, Y is row
  * 
- * @author tomar
+ * @author Mariam
  *
  */
 public class Fox extends Piece {
 
+	/**
+	 * The type of fox, whether it's horizontal or vertical
+	 * Specifies how it moves.
+	 */
 	public static enum FoxType {
 		HORIZONTAL, VERTICAL
 	};
 
+	/**
+	 * Used to determine whether this fox is a head or a tail
+	 */
 	private boolean isHead;
 
+	/**
+	 * The type of fox
+	 */
 	private FoxType foxType;
+	
+	/**
+	 * The counterpart to this fox 
+	 * (i.e. if it's a head its associated part will be the tail)
+	 */
 	Fox associatedPart;
 
-	protected Fox(String pieceName, FoxType foxType, boolean isHead) {
+	/**
+	 * Create a new fox object. Must specify the name, type, and part.
+	 * @param pieceName String name of fox
+	 * @param foxType FoxType for whether it moves horizontally or vertically
+	 * @param isHead bool representing whether its a head or tail
+	 */
+	public Fox(String pieceName, FoxType foxType, boolean isHead) {
 		super(pieceName, Type.FOX);
 		this.foxType = foxType;
 		this.isHead = isHead;
 
 	}
 
+	/**
+	 * Determine if it's a head or tail
+	 * @return true if this fox object represents the head
+	 */
 	public boolean isHead() {
 		return isHead;
 	}
 
-//	@Override
-//	public void setPosition(int x, int y) {
-//		super.setPosition(x, y);
-//		if (isHead) {
-//			if (foxType.compareTo(FoxType.HORIZONTAL) == 0) {
-//				associatedPart.setPosition(x - 1, y); // also change the tail location
-//			} else if (foxType.compareTo(FoxType.VERTICAL) == 0) {
-//				associatedPart.setPosition(x, y - 1); // also change the tail location
-//			}
-//		} else { //if tail
-//			if (foxType.compareTo(FoxType.HORIZONTAL) == 0) {
-//				associatedPart.setPosition(x + 1, y); // also change the tail location
-//			} else if (foxType.compareTo(FoxType.VERTICAL) == 0) {
-//				associatedPart.setPosition(x, y + 1); // also change the tail location
-//			}
-//		}
-//	}
 
 	/**
 	 * Return true if added part succesfully.
+	 * It is unsuccessful if the user attempts to add the same type of Fox (ex. head/tail)
+	 * as the associatedPart. 
 	 * 
-	 * @param associatedPart
-	 * @return
+	 * @param associatedPart the other part of the fox
+	 * @return true if they added the correct part. 
 	 */
 	public boolean addAssociatedPart(Fox associatedPart) {
 		if (associatedPart.isHead == this.isHead)
@@ -58,18 +73,19 @@ public class Fox extends Piece {
 		return true;
 	}
 	
+	/**
+	 * Get the other part of the fox
+	 * @return Fox type of associated part
+	 */
 	public Fox getAssociatedPart() {
 		return associatedPart;
 	}
 
+
 	/**
-	 * 
-	 * @return the type of the fox
+	 * Get whether fox moves horizontally or vertically
+	 * @return true if moves horizontally
 	 */
-	public FoxType getFoxType() {
-		return this.foxType;
-	}
-	
 	public boolean isHorizontal() {
 		return foxType.compareTo(FoxType.HORIZONTAL) == 0;
 	}

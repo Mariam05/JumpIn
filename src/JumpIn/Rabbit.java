@@ -13,7 +13,7 @@ public class Rabbit extends Piece {
 
 	private Color colour;
 	
-	protected Rabbit(String pieceName) {
+	public Rabbit(String pieceName) {
 		super(pieceName, Type.RABBIT);
 		colour = Color.WHITE; //Default is white rabbit
 	}

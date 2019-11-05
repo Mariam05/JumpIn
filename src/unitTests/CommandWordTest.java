@@ -1,8 +1,9 @@
-import static org.junit.Assert.*;
+package unitTests;
 
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-
+import JumpIn.*;
 /*
  * @author Taher Shabaan
  * 
@@ -36,5 +37,6 @@ public class CommandWordTest {
 		assertEquals(true,commandWord.isCommand("quit"));
 		assertEquals(true,commandWord.isCommand("help"));
 		assertEquals(false,commandWord.isCommand("play"));
+
 	}
 }

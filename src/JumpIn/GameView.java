@@ -1,7 +1,4 @@
 package JumpIn;
-//package viewformilestone2;
-
-//package viewformilestone2;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -11,11 +8,9 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,9 +18,13 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
+/**
+ * This is the view class for the GUI. 
+ * It has a model (Game object) and updates whenever the model updates
+ * @author Taher Shabaan, Hassan Hassan, Mariam Almalki
+ *
+ */
 public class GameView extends JFrame {
 
 	private static final long serialVersionUID = 1L;

@@ -6,7 +6,7 @@ package JumpIn;
  */
 public class Mushroom extends Piece {
 
-	protected Mushroom(String pieceName) {
+	public Mushroom(String pieceName) {
 		super(pieceName, Type.MUSHROOM);
 	}
 
