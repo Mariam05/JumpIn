@@ -18,9 +18,6 @@
   * How to Play
 * Design Decisions
 * Known Issues
-* Updated UML Diagram
-* Updated Sequence Diagram
-* CRC cards
 * Team Member Roles
 * Things to Note (//here we would put things like.. pls look at the other branches for commits by x person)
 * Roadmap Ahead
