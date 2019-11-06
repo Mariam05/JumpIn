@@ -7,6 +7,7 @@
   * Nazifa Tanzim
   * Taher Shabaan
   * Hassan Hassan
+  
   Note: Abdulla Al-wazzan was part of our team but has now switched to another team.
   
 ### CONTENTS OF THIS README
