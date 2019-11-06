@@ -7,7 +7,7 @@
   * Nazifa Tanzim
   * Taher Shabaan
   * Hassan Hassan
-  * Abdulla Al-wazzan
+  Note: Abdulla Al-wazzan was part of our team but has now switched to another team.
   
 ### CONTENTS OF THIS README
 * Description of Current Version
@@ -85,7 +85,7 @@ Otherwise none, although potentially: images disappearing from bin folder. The i
 
 **Hassan Hassan**: Worked on connecting the model, view and controller, Worked on JUnit testing. Composed all other documentation elements for milestone 2. 
 
-**Abdulla Al-wazzan**: Unfortunately did not help the team with Milestone 2, although he did create the originally missing sequence diagram for milestone 1. 
+**Abdulla Al-wazzan**: Unfortunately did not help the team with Milestone 2 (he left the team), although he did create the originally missing sequence diagram for milestone 1. 
 
 ### Things to Note:
 1.The design not used for connecting the MVC together was worked on in the HassanController branch.
