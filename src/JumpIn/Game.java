@@ -1,7 +1,7 @@
 package JumpIn;
 
 import java.awt.Color;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * This is the main class for the JumpIn came. 
@@ -19,6 +19,11 @@ public class Game {
 	private HashMap<String, Piece> animalPieces;
 	private int rabbitsInHoles;
 	private boolean quitGame;
+	
+	// Will hold a list of Game objects that will contain the previous state of the game after each move
+	private static Stack<Game> undoGameStates;
+	private static Stack<Game> redoGameStates;
+	
 	/**
 	 * Instantiate the parser and commandWords objects. Set up the board with the
 	 * pieces
@@ -72,11 +77,14 @@ public class Game {
 
 		board.addPiece(mushroom1, 2, 4);
 		board.addPiece(mushroom2, 3, 1);
-
+		
+		redoGameStates = new Stack();
+		undoGameStates = new Stack();
+		undoGameStates.add(this); // Adding current (beginning) state to stack
 	}
 
 	/**
-	 * Returns the board used in the gme
+	 * Returns the board used in the game
 	 * @return
 	 */
 	public Board getBoard() {
@@ -234,11 +242,11 @@ public class Game {
 
 	/**
 	 * return true if move was handled TODO: Move common code outside of the
-	 * specific if statment
+	 * specific if statement
 	 * 
 	 * @param fox
 	 * @param command
-	 * @return true if fox moved succesfully
+	 * @return true if fox moved successfully
 	 */
 	public boolean handleFoxMove(Piece fox, Command command) {
 		Fox f = (Fox) fox;
@@ -460,5 +468,33 @@ public class Game {
 		return title + obstacles + movements + objective + howTo;
 
 	}
+	
+	/**
+	 * Allows the user to undo a move
+	 * 
+	 * @return the previous game state 
+	 */
+	public Game undo() {
+		redoGameStates.add(this); // Stores current state in redo stack in case user wants to return to this state
+		return undoGameStates.pop(); // Removes previous state from undo stack and returns it
+	}
+	
+	/**
+	 * Allows the user to re-do a move/revert an undo
+	 * 
+	 * @return the game state that was undone
+	 */
+	public Game redo() {
+		undoGameStates.add(this); // Stores current state in undo stack in case user wants to return to this state
+		return redoGameStates.pop(); // Removes previous state from redo stack and returns it
+	}
 
+	/**
+	 * Resets the game
+	 * 
+	 * @return initial state of game
+	 */
+	public Game reset() {
+		return new Game();
+	}
 }

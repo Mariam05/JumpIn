@@ -34,6 +34,9 @@ public class GameController {
 		this.gameView = gameView;
 		gameView.addHelpListener(new HelpListener());
 		gameView.addQuitListener(new QuitListener());
+		gameView.addUndoListener(new UndoListener());
+		gameView.addRedoListener(new RedoListener());
+		gameView.addResetListener(new ResetListener());
 
 		numOfButtonsPressed = 0;
 		addActionListeners();
@@ -136,7 +139,48 @@ public class GameController {
 
 		}
 	}
+	
+	/**
+	 * Listens for undo option/command
+	 * 
+	 * @author Nazifa Tanzim
+	 *
+	 */
+	class UndoListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			gameView.displayMessage("UNDO FUNCTIONALITY TBC");
 
+		}
+	}
+	
+	/**
+	 * Listens for redo option/command
+	 * 
+	 * @author Nazifa Tanzim
+	 *
+	 */
+	class RedoListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			gameView.displayMessage("REDO FUNCTIONALITY TBC");
+
+		}
+	}
+
+	/**
+	 * Listens for reset option/command
+	 * 
+	 * @author Nazifa Tanzim
+	 *
+	 */
+	class ResetListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			gameView.resetView(game.reset());
+		}
+	}
+	
 	/**
 	 * Listener for button events. Holds information on the button it is associated with.
 	 * @author Mariam
