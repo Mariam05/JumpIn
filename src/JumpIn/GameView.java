@@ -43,7 +43,7 @@ public class GameView extends JFrame {
 
 	private Game game;
 	private JMenuBar menuBar;
-	private JMenu menu;
+	//private JMenu menu;
 	private JMenuItem menuItemHelp, menuItemQuit, menuItemReset, menuItemUndo, menuItemRedo;
 
 	/**
@@ -132,28 +132,31 @@ public class GameView extends JFrame {
 	public void addMenuItems() {
 		// Create menu bar
 		menuBar = new JMenuBar();
-		menu = new JMenu("JumpIn Menu");
-		menuBar.add(menu);
 		
 		// Add undo button
 		menuItemUndo = new JMenuItem("Undo");
-		menu.add(menuItemUndo);
+		menuItemUndo.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		menuBar.add(menuItemUndo);
 		
 		// Add redo button
 		menuItemRedo = new JMenuItem("Redo");
-		menu.add(menuItemRedo);
+		menuItemRedo.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		menuBar.add(menuItemRedo);
 
 		// Add help button
 		menuItemHelp = new JMenuItem("Help");
-		menu.add(menuItemHelp);
-
-		// Add quit button
-		menuItemQuit = new JMenuItem("Quit");
-		menu.add(menuItemQuit);
+		menuItemHelp.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		menuBar.add(menuItemHelp);
 
 		// Add reset button
 		menuItemReset = new JMenuItem("Reset");
-		menu.add(menuItemReset);
+		menuItemReset.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		menuBar.add(menuItemReset);
+		
+		// Add quit button
+		menuItemQuit = new JMenuItem("Quit");
+		menuItemQuit.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		menuBar.add(menuItemQuit);
 
 		add(menuBar, BorderLayout.NORTH);
 	}
