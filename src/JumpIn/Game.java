@@ -212,7 +212,7 @@ public class Game {
 	 * 
 	 * @param command
 	 */
-	private Piece getPieceFromCommand(Command command) {
+	public Piece getPieceFromCommand(Command command) {
 		String pieceString = command.getPiece();
 
 		for (String s : animalPieces.keySet()) {

@@ -111,4 +111,17 @@ public class Command {
 	public boolean hasDestination() {
 		return destinationPos != null;
 	}
+	
+	@Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null) return false;
+        if (!(o instanceof Command)) return false;
+        Command c = (Command) o;
+        return ((c.getCommandWord().equals(this.commandWord)) && 
+        (c.getDestination().equals(this.destinationPos)) &&
+        (c.getPiece().equals(this.piece)) &&
+        (c.getX() == this.xPos) &&
+        (c.getY() == this.yPos));
+    }
 }
