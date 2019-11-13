@@ -111,4 +111,5 @@ public class Command {
 	public boolean hasDestination() {
 		return destinationPos != null;
 	}
+	
 }
