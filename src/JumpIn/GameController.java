@@ -213,7 +213,6 @@ public class GameController {
 	class UndoListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//gameView.displayMessage("UNDO FUNCTIONALITY TBC");
 			undo();
 		}
 	}
@@ -227,7 +226,6 @@ public class GameController {
 	class RedoListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//gameView.displayMessage("REDO FUNCTIONALITY TBC");
 			redo();
 		}
 	}
