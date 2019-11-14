@@ -22,7 +22,7 @@ import javax.swing.JOptionPane;
 /**
  * This is the view class for the GUI. 
  * It has a model (Game object) and updates whenever the model updates
- * @author Taher Shabaan, Hassan Hassan, Mariam Almalki
+ * @author Taher Shabaan, Hassan Hassan, Mariam Almalki, Nazifa Tanzim
  *
  */
 public class GameView extends JFrame {
@@ -30,7 +30,7 @@ public class GameView extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private Container container;
 	JButton board[][];// This will be a board of squares
-
+	
 	private int size; // The size of the board
 
 	private Image piece, whiteRabbit, yellowRabbit, greyRabbit, mushroom, foxface, foxtail, hole;
@@ -43,8 +43,8 @@ public class GameView extends JFrame {
 
 	private Game game;
 	private JMenuBar menuBar;
-	private JMenu menu;
-	private JMenuItem menuItemHelp, menuItemQuit, menuItemReset;
+	//private JMenu menu;
+	private JMenuItem menuItemHelp, menuItemQuit, menuItemReset, menuItemUndo, menuItemRedo;
 
 	/**
 	 * Create a new view
@@ -130,26 +130,33 @@ public class GameView extends JFrame {
 	 * Create a menu that will allow the user to choose if they want help or quit.
 	 */
 	public void addMenuItems() {
+		// Create menu bar
 		menuBar = new JMenuBar();
-		menu = new JMenu("JumpIn Menu");
-		menuBar.add(menu);
+		
+		// Add undo button
+		menuItemUndo = new JMenuItem("Undo");
+		menuItemUndo.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		menuBar.add(menuItemUndo);
+		
+		// Add redo button
+		menuItemRedo = new JMenuItem("Redo");
+		menuItemRedo.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		menuBar.add(menuItemRedo);
 
+		// Add help button
 		menuItemHelp = new JMenuItem("Help");
-		menu.add(menuItemHelp);
+		menuItemHelp.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		menuBar.add(menuItemHelp);
 
-		menuItemQuit = new JMenuItem("Quit");
-		menu.add(menuItemQuit);
-
-		// TODO: MAKE SURE THIS WORKS. THIS FUNCTIONALITY IS UNTESTED!!
+		// Add reset button
 		menuItemReset = new JMenuItem("Reset");
-		menu.add(menuItemReset);
-		menuItemReset.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				createBoard();
-			}
-
-		});
+		menuItemReset.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		menuBar.add(menuItemReset);
+		
+		// Add quit button
+		menuItemQuit = new JMenuItem("Quit");
+		menuItemQuit.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		menuBar.add(menuItemQuit);
 
 		add(menuBar, BorderLayout.NORTH);
 	}
@@ -212,6 +219,11 @@ public class GameView extends JFrame {
 		}
 		putIconsOnBoard();
 	}
+	
+	public void resetView(Game game) {
+		this.game = game;
+		update();
+	}
 
 	/**
 	 * Will display a message to the user. Expect message to be on of the following:
@@ -238,5 +250,31 @@ public class GameView extends JFrame {
 	public void addQuitListener(ActionListener a) {
 		menuItemQuit.addActionListener(a);
 	}
-
+	
+	/**
+	 * If undo button is pressed
+	 * @param a
+	 * @author Nazifa Tanzim
+	 */
+	public void addUndoListener(ActionListener a) {
+		menuItemUndo.addActionListener(a);
+	}
+	
+	/**
+	 * if redo button is pressed
+	 * @param a
+	 * @author Nazifa Tanzim
+	 */
+	public void addRedoListener(ActionListener a) {
+		menuItemRedo.addActionListener(a);
+	}
+	
+	/**
+	 * if reset button is pressed
+	 * @param a
+	 * @author Nazifa Tanzim
+	 */
+	public void addResetListener(ActionListener a) {
+		menuItemReset.addActionListener(a);
+	}
 }

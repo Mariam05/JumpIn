@@ -3,6 +3,7 @@ package JumpIn;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.EventObject;
+import java.util.*;
 
 import javax.swing.JButton;
 
@@ -21,7 +22,8 @@ public class GameController {
 	private int numOfButtonsPressed; //the number of buttons pressed by the user in a round
 	private Command command; //The commnd to form
 	private String word2, word3; //The words that will make up the command
-
+	private Stack<Command> undo, redo; // Stores commands to revert moves either way
+	
 	private static final String COMMAND = "move"; //The default command (other commands are represented by buttons in view)
 
 	/**
@@ -32,9 +34,10 @@ public class GameController {
 	public GameController(Game game, GameView gameView) {
 		this.game = game;
 		this.gameView = gameView;
-		gameView.addHelpListener(new HelpListener());
-		gameView.addQuitListener(new QuitListener());
-
+		
+		undo = new Stack<Command>();
+		redo = new Stack<Command>();
+		
 		numOfButtonsPressed = 0;
 		addActionListeners();
 
@@ -42,6 +45,7 @@ public class GameController {
 
 	/**
 	 * Add a button action listener to each button in the view
+	 * Add action listeners to menu buttons
 	 */
 	private void addActionListeners() {
 		for (int i = 0; i < gameView.getBoardSize(); i++) {
@@ -49,6 +53,12 @@ public class GameController {
 				gameView.board[i][j].addActionListener(new ButtonListener(i, j));
 			}
 		}
+		
+		gameView.addHelpListener(new HelpListener());
+		gameView.addQuitListener(new QuitListener());
+		gameView.addUndoListener(new UndoListener());
+		gameView.addRedoListener(new RedoListener());
+		gameView.addResetListener(new ResetListener());
 	}
 
 	/**
@@ -90,11 +100,13 @@ public class GameController {
 	 */
 	private void processCommand(String word2, String word3) {
 		command = new Command(COMMAND, word2, word3); //create a command object
+		Command revert = getRevertCommand(command); // Storing revert command
 		boolean validMove = game.processCommand(command); //send it to the model
 
-		if (!validMove) { // if the move is invalid notify the player and let them know
+		if (!validMove) { // if the move is invalid notify the player
 			gameView.displayMessage("Invalid move");
 		} else { // otherwise check for winner and update view
+			undo.add(revert); // Only adding revert command if the move is valid
 			if (game.hasWon()) {
 				gameView.update();
 				gameView.displayMessage("CONGRATS! You solved the puzzle!");
@@ -102,7 +114,23 @@ public class GameController {
 			}
 			gameView.update();
 		}
-
+	}
+	
+	/**
+	 * 
+	 * @param cmd
+	 * @return
+	 */
+	private Command getRevertCommand(Command cmd) {
+		
+		Piece p = game.getPieceFromCommand(cmd);
+		if(p instanceof Rabbit || p instanceof Fox) {
+			String originalLocation = p.getXPos() + "" + p.getYPos();
+			return new Command(COMMAND, p.toString(), originalLocation);
+		} else {
+			return null;
+		}
+		
 	}
 
 	/**
@@ -136,7 +164,64 @@ public class GameController {
 
 		}
 	}
+	
+	/**
+	 * Listens for undo option/command
+	 * 
+	 * @author Nazifa Tanzim
+	 *
+	 */
+	class UndoListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			//gameView.displayMessage("UNDO FUNCTIONALITY TBC");
+			undo();
+		}
+	}
+	
+	/**
+	 * Undoes current move and stores command to revert it in redo
+	 */
+	private void undo() {
+		if(undo.isEmpty()) {
+			gameView.displayMessage("No more undo's left");
+		} else {
+			redo.add(getRevertCommand(undo.peek()));
+			Command c = undo.pop();
+			processCommand(c.getPiece(), c.getDestination());
+			undo.pop();
+			gameView.update();
+		}
+		
+	}
+	
+	/**
+	 * Listens for redo option/command
+	 * 
+	 * @author Nazifa Tanzim
+	 *
+	 */
+	class RedoListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			gameView.displayMessage("REDO FUNCTIONALITY TBC");
 
+		}
+	}
+
+	/**
+	 * Listens for reset option/command
+	 * 
+	 * @author Nazifa Tanzim
+	 *
+	 */
+	class ResetListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			gameView.resetView(game.reset());
+		}
+	}
+	
 	/**
 	 * Listener for button events. Holds information on the button it is associated with.
 	 * @author Mariam
