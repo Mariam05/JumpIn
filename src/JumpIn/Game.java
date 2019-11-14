@@ -233,9 +233,11 @@ public class Game {
 	 */
 	public boolean handleMove(Command command) {
 		Piece piece = getPieceFromCommand(command);
-		return piece.handleMove(board, command.getX(), command.getY());
-
-		
+		if(!piece.validateMove(board, command.getX(), command.getY())){
+			return false;
+		}
+		piece.handleMove(board, command.getX(), command.getY());
+		return true;
 	}
 
 

@@ -58,16 +58,36 @@ public class Rabbit extends Piece {
 	 * @param command
 	 * @return
 	 */
-	public boolean handleMove(Board board, int newX, int newY) {
+	public void handleMove(Board board, int newX, int newY) {
 		int currX = getXPos();
 		int currY = getYPos();
 
-		if (!validateMove(newX, newY)) {
-			return false;
-		}
+		// Move is validated, complete the action
+		board.removePiece(currX, currY);
+		board.addPiece(this, newX, newY);
 
+		if (board.isHole(currX, currY)) {
+			board.decreaseNumRabbitsInHoles(); // if the rabbit was in a hole and now is not
+		}
+		if (board.isHole(newX, newY)) {
+			board.increaseNumRabbitsInHoles(); // if rabbit entered a hole
+		}
+	}
+	
+	/**
+	 * Check if a rabbit's move is valid. 
+	 * An invalid move is if it is simply moving to one of the squares beside it
+	 */
+	public boolean validateMove(Board board, int newX, int newY) {
+		int currX = getXPos();
+		int currY = getYPos();
+		
+		if ((Math.abs(currX - newX) < 2) && currY == newY) return false; //moving one square horizontally
+		if ((Math.abs(currY - newY) < 2) && currX == newX) return false; //moving one square vertically
+		if (!((currX != newX && currY == newY) || (currX == newX && currY != newY))) return false; //moving vertically
+		
 		// If destination is already filled
-		if (board.getSquare(newX, newY).hasPiece())
+		if (board.hasPiece(newX, newY))
 			return false;
 
 		// Checking of the paths are filled for each direction
@@ -93,32 +113,6 @@ public class Rabbit extends Piece {
 			}
 
 		}
-
-		// Move is validated, complete the action
-		board.removePiece(currX, currY);
-		board.addPiece(this, newX, newY);
-
-		if (board.isHole(currX, currY)) {
-			board.decreaseNumRabbitsInHoles(); // if the rabbit was in a hole and now is not
-		}
-		if (board.isHole(newX, newY)) {
-			board.increaseNumRabbitsInHoles(); // if rabbit entered a hole
-		}
-
-		return true;
-	}
-	
-	/**
-	 * Check if a rabbit's move is valid. 
-	 * An invalid move is if it is simply moving to one of the squares beside it
-	 */
-	public boolean validateMove(int x, int y) {
-		int currX = getXPos();
-		int currY = getYPos();
-		
-		if ((Math.abs(currX - x) < 2) && currY == y) return false; //moving one square horizontally
-		if ((Math.abs(currY - y) < 2) && currX == x) return false; //moving one square vertically
-		if (!((currX != x && currY == y) || (currX == x && currY != y))) return false; //moving vertically
 		
 		return true;
 	}

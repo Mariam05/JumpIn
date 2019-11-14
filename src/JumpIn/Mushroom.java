@@ -15,7 +15,13 @@ public class Mushroom extends Piece {
 	 * Currently not moving the mushrooms. May need to implement this for the levels part
 	 */
 	@Override
-	public boolean handleMove(Board board, int newX, int newY) {
+	public void handleMove(Board board, int newX, int newY) {
+		// TODO Auto-generated method stub
+	}
+
+
+	@Override
+	public boolean validateMove(Board board, int newX, int newY) {
 		// TODO Auto-generated method stub
 		return false;
 	}

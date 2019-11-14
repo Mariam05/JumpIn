@@ -44,13 +44,16 @@ public abstract class Piece {
 	
 	/**
 	 * This method will actually change the location of the piece to the 
-	 * new location. It will probably use validateMove to achieve this. 
+	 * new location.  
 	 * @param board
 	 * @param newX
 	 * @param newY
 	 * @return
 	 */
-	public abstract boolean handleMove(Board board, int newX, int newY);
+	public abstract void handleMove(Board board, int newX, int newY);
+	
+	
+	public abstract boolean validateMove(Board board, int newX, int newY);
 	
 	
 	/**

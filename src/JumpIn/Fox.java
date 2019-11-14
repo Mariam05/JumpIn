@@ -98,34 +98,22 @@ public class Fox extends Piece {
 	 * 
 	 * @param destinationPos the position that the player wants the fox to move.
 	 */
-	public boolean validateMove(int x, int y) {
+	public boolean validateMove(Board board, int newX, int newY) {
 
-		if (foxType.compareTo(FoxType.HORIZONTAL) == 0) {
-			if (getYPos() == y)
-				return true;
-		} else if (foxType.compareTo(FoxType.VERTICAL) == 0) {
-			if (getXPos() == x)
-				return true;
-		}
-		return false;
-	}
-
-	/**
-	 * return true if move was handled TODO: Move common code outside of the
-	 * specific if statment
-	 * 
-	 * @param fox
-	 * @param command
-	 * @return true if fox moved succesfully
-	 */
-	public boolean handleMove(Board board, int newX, int newY) {
 		int currX = getXPos();
 		int currY = getYPos();
 		boolean isTail = !isHead();
 
 		int start, end;
-		if (!validateMove(newX, newY))
-			return false; // Check that the move type is legal for the animal
+
+		// check that we're not trying to move diagonally
+		if (foxType.compareTo(FoxType.HORIZONTAL) == 0) {
+			if (currY == newY)
+				return true;
+		} else if (foxType.compareTo(FoxType.VERTICAL) == 0) {
+			if (currX == newX)
+				return true;
+		}
 
 		// If fox moves horizontally, check horizontal path on board
 		if (isHorizontal()) {
@@ -166,21 +154,9 @@ public class Fox extends Piece {
 				}
 
 			}
+			
 
-			if (isTail) {
-				board.removePiece(currX, currY); // remove tail of fox
-				board.removePiece(currX + 1, currY); // remove head of fox
-
-				board.addPiece(this, newX, currY); // add tail of fox
-				board.addPiece(getAssociatedPart(), newX + 1, currY); // add head of fox
-			} else {
-				board.removePiece(currX, currY); // remove head of fox
-				board.removePiece(currX - 1, currY); // remove tail of fox
-
-				board.addPiece(this, newX, currY); // add head of fox
-				board.addPiece(getAssociatedPart(), newX - 1, currY); // add tail of fox
-			}
-
+			
 		} else if (!isHorizontal()) { // this fox moves vertically
 			if (currY > newY) { // moving up
 
@@ -219,13 +195,34 @@ public class Fox extends Piece {
 				}
 
 			}
-			if (isHead()) {
-				board.removePiece(currX, currY); // remove fox head
+
+		}
+		return true;
+
+	}
+
+	/**
+	 * return true if move was handled TODO: Move common code outside of the
+	 * specific if statment
+	 * 
+	 * @param fox
+	 * @param command
+	 * @return true if fox moved succesfully
+	 */
+	public void handleMove(Board board, int newX, int newY) {
+
+		int currX = getXPos();
+		int currY = getYPos();
+		
+		board.removePiece(currX, currY);
+		
+		if(!isHorizontal()) {
+			if (isHead()) { 
 				board.removePiece(currX, currY - 1); // remove fox tail
 
 				board.addPiece(this, newX, newY); // add head
 				board.addPiece(getAssociatedPart(), newX, newY - 1); // add tail
-				
+
 			} else { // dealing with the tail
 				board.removePiece(currX, currY); // remove fox tail
 				board.removePiece(currX, currY + 1); // remove fox head
@@ -234,8 +231,20 @@ public class Fox extends Piece {
 				board.addPiece(getAssociatedPart(), newX, newY + 1); // add head
 			}
 
+		} else {
+			if (!isHead()) {
+				board.removePiece(currX + 1, currY); // remove head of fox
+
+				board.addPiece(this, newX, currY); // add tail of fox
+				board.addPiece(getAssociatedPart(), newX + 1, currY); // add head of fox
+			} else {
+				board.removePiece(currX, currY); // remove head of fox
+				board.removePiece(currX - 1, currY); // remove tail of fox
+
+				board.addPiece(this, newX, currY); // add head of fox
+				board.addPiece(getAssociatedPart(), newX - 1, currY); // add tail of fox
+			}
 		}
-		return true;
 	}
 
 }
