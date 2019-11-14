@@ -186,25 +186,25 @@ public class GameView extends JFrame {
 	 */
 	public void instantiateIcons() {
 		// we are adding the holes on the board
-		hole = new ImageIcon(this.getClass().getResource("/black-hole.png")).getImage();
+		hole = new ImageIcon(this.getClass().getResource("/JumpIn/black-hole.png")).getImage();
 
 		// instantiate the mushroom image
-		mushroom = new ImageIcon(this.getClass().getResource("/mushroom.png")).getImage();
+		mushroom = new ImageIcon(this.getClass().getResource("/JumpIn/mushroom.png")).getImage();
 
 		// instantiate the white rabbit image
-		whiteRabbit = new ImageIcon(this.getClass().getResource("/whiteRabbit.png")).getImage();
+		whiteRabbit = new ImageIcon(this.getClass().getResource("/JumpIn/whiteRabbit.png")).getImage();
 
 		// instantiate the grey rabbit image
-		greyRabbit = new ImageIcon(this.getClass().getResource("/rabbit.png")).getImage();
+		greyRabbit = new ImageIcon(this.getClass().getResource("/JumpIn/rabbit.png")).getImage();
 
 		// instantiate the yellow rabbit image
-		yellowRabbit = new ImageIcon(this.getClass().getResource("/yellowandBlack.png")).getImage();
+		yellowRabbit = new ImageIcon(this.getClass().getResource("/JumpIn/yellowandBlack.png")).getImage();
 
 		// instantiate the fox face image
-		foxface = new ImageIcon(this.getClass().getResource("/foxface.png")).getImage();
+		foxface = new ImageIcon(this.getClass().getResource("/JumpIn/foxface.png")).getImage();
 
 		// instantiate the fox tail image
-		foxtail = new ImageIcon(this.getClass().getResource("/foxtail.png")).getImage();
+		foxtail = new ImageIcon(this.getClass().getResource("/JumpIn/foxtail.png")).getImage();
 	}
 
 	/**

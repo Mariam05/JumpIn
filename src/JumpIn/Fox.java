@@ -1,5 +1,7 @@
 package JumpIn;
 
+import java.util.ArrayList;
+
 /**
  * This class represents a Fox object. A fox can either have horizontal or
  * vertical functionality. A fox is split into two parts: either a head or a
@@ -249,6 +251,22 @@ public class Fox extends Piece {
 				board.addPiece(getAssociatedPart(), newX - 1, currY); // add tail of fox
 			}
 		}
+	}
+	
+	
+	public ArrayList<int[]> getAllValidMoves(Board board){
+		ArrayList<int[]> allValidMoves = new ArrayList<>();
+		
+		for (int i = 0; i < board.SIZE; i++) {
+			for (int j = 0; j < board.SIZE; j++) {
+				if (validateMove(board, i, j)) {
+					int[] coordinates = {i, j};
+				}
+			}
+		}
+		
+		
+		return allValidMoves;
 	}
 
 }
