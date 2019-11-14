@@ -17,11 +17,16 @@ public class Board {
 	public final int SIZE = 5;
 	
 	
+	private int numOfRabbitsInHoles;
+	
+	
 	/**
 	 * Instantiates the array of squares and sets the hole positions
 	 * Holes are set here because they are part of the board (i.e. cannot be moved/ are not pieces)
 	 */
-	public Board() {		
+	public Board() {	
+		
+		numOfRabbitsInHoles = 0;
 		
 		board = new Square[SIZE][SIZE];
 		
@@ -61,6 +66,20 @@ public class Board {
 		board[y][x].removePiece();
 	}
 	
+	
+	public void increaseNumRabbitsInHoles() {
+		numOfRabbitsInHoles++;
+	}
+	
+	public void decreaseNumRabbitsInHoles() {
+		numOfRabbitsInHoles--;
+	}
+	
+	public int getNumRabbitsInHoles() {
+		return numOfRabbitsInHoles;
+	}
+	
+	
 	/**
 	 * Put a hole on the board
 	 * @param x
@@ -68,6 +87,27 @@ public class Board {
 	 */
 	public void addHole(int x, int y) {
 		board[y][x].addHole();
+	}
+	
+	
+	/**
+	 * Method to reduce chaining
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public boolean hasPiece(int x, int y) {
+		return board[y][x].hasPiece();
+	}
+	
+	/**
+	 * Method to reduce chaining
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public boolean isHole(int x, int y) {
+		return board[y][x].isHole();
 	}
 	
 	/**

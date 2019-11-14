@@ -10,11 +10,13 @@ public class Mushroom extends Piece {
 		super(pieceName, Type.MUSHROOM);
 	}
 
+
 	/**
-	 * Also return false because you can't move a mushroom. 
+	 * Currently not moving the mushrooms. May need to implement this for the levels part
 	 */
 	@Override
-	public boolean validateMove(int x, int y) {
+	public boolean handleMove(Board board, int newX, int newY) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 

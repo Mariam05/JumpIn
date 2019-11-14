@@ -40,13 +40,17 @@ public abstract class Piece {
 		this.pieceType = pieceType;
 	}
 	
+	
+	
 	/**
-	 * Each piece is responsible for validating its own move.
-	 * @param currPos
-	 * @param destinationPos
+	 * This method will actually change the location of the piece to the 
+	 * new location. It will probably use validateMove to achieve this. 
+	 * @param board
+	 * @param newX
+	 * @param newY
 	 * @return
 	 */
-	public abstract boolean validateMove(int x, int y);
+	public abstract boolean handleMove(Board board, int newX, int newY);
 	
 	
 	/**

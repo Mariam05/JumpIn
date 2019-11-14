@@ -48,7 +48,7 @@ public class Square {
 	 */
 	public String getPieceString() {
 		if (hasPiece) return piece.toString();
-		return null;
+		return "";
 	}
 
 	/**

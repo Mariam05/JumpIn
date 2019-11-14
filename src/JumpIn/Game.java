@@ -17,8 +17,10 @@ public class Game {
 	private Board board;
 	private Piece fox1, fox2, fox1T, fox2T, mushroom1, mushroom2, rabbit1, rabbit2, rabbit3;
 	private HashMap<String, Piece> animalPieces;
-	private int rabbitsInHoles;
+	private int numOfRabbits;
 	private boolean quitGame;
+	
+	
 	/**
 	 * Instantiate the parser and commandWords objects. Set up the board with the
 	 * pieces
@@ -48,6 +50,7 @@ public class Game {
 		rabbit1 = new Rabbit("RA1", Color.WHITE); 
 		rabbit2 = new Rabbit("RA2", Color.GRAY);
 		rabbit3 = new Rabbit("RA3", Color.YELLOW);
+		numOfRabbits = 3;
 		
 		
 		// Add the pieces to the piece hashmap
@@ -76,7 +79,7 @@ public class Game {
 	}
 
 	/**
-	 * Returns the board used in the gme
+	 * Returns the board used in the game
 	 * @return
 	 */
 	public Board getBoard() {
@@ -97,7 +100,7 @@ public class Game {
 	public void startNewRound() {
 		board.printBoard();
 		Command command = parser.getCommand();
-		while (processCommand(command) && rabbitsInHoles != 3) {
+		while (processCommand(command) && !hasWon()) {
 			board.printBoard();
 			command = parser.getCommand();
 		}
@@ -108,10 +111,7 @@ public class Game {
 	 * @return true if they have won
 	 */
 	public boolean hasWon() {
-		if (rabbitsInHoles == 3) {
-			return true;
-		}
-		return false;
+		return board.getNumRabbitsInHoles() == numOfRabbits;
 	}
 
 	/**
@@ -223,213 +223,11 @@ public class Game {
 	 */
 	public boolean handleMove(Command command) {
 		Piece piece = getPieceFromCommand(command);
-		if (piece instanceof Fox) {
-			return handleFoxMove(piece, command);
-		} else if (piece instanceof Rabbit) {
-			return handleRabbitMove(piece, command);
-		}
+		return piece.handleMove(board, command.getX(), command.getY());
 
-		return true;
+		
 	}
 
-	/**
-	 * return true if move was handled TODO: Move common code outside of the
-	 * specific if statment
-	 * 
-	 * @param fox
-	 * @param command
-	 * @return true if fox moved succesfully
-	 */
-	public boolean handleFoxMove(Piece fox, Command command) {
-		Fox f = (Fox) fox;
-		int newX = command.getX();
-		int newY = command.getY();
-		int currX = f.getXPos();
-		int currY = f.getYPos();
-		boolean isTail = !f.isHead();
-
-		int start, end;
-		if (!fox.validateMove(newX, newY))
-			return false; // Check that the move type is legal for the animal
-
-		// If fox moves horizontally, check horizontal path on board
-		if (f.isHorizontal()) {
-
-			if (currX < newX) { // moving right
-				if (!isTail) { // if head, start at square to right and continue to destination
-					start = currX + 1;
-					end = newX;
-				} else { // if tail, start 2 squares to right and end at new+1 (which is where head will
-							// be)
-					start = currX + 2;
-					end = newX + 1;
-				}
-
-				if (!validateDestination(end, currY))
-					return false;
-
-				for (int i = start; i <= end; i++) { // ensure path is clear
-					if (board.getSquare(i, currY).hasPiece())
-						return false;
-				}
-
-			} else { // moving left
-				if (!isTail) { // if head, start at square left to tail and check to where the tail would reach
-					start = currX - 2;
-					end = newX - 1;
-				} else { // if tail, start at square left to tail and check to where the tail will go
-					start = currX - 1;
-					end = newX;
-				}
-
-				if (!validateDestination(end, currY))
-					return false;
-
-				for (int i = start; i >= end; i--) { // reprompt if path isn't clear
-					if (board.getSquare(i, currY).hasPiece())
-						return false;
-				}
-
-			}
-
-			if (isTail) {
-				board.removePiece(currX, currY); // remove tail of fox
-				board.removePiece(currX + 1, currY); // remove head of fox
-
-				board.addPiece(fox, newX, currY); // add tail of fox
-				board.addPiece(f.getAssociatedPart(), newX + 1, currY); // add head of fox
-			} else {
-				board.removePiece(currX, currY); // remove head of fox
-				board.removePiece(currX - 1, currY); // remove tail of fox
-
-				board.addPiece(fox, newX, currY); // add head of fox
-				board.addPiece(f.getAssociatedPart(), newX - 1, currY); // add tail of fox
-			}
-			
-		} else if (!f.isHorizontal()) { // this fox moves vertically
-			if (currY > newY) { // moving up
-
-				if (f.isHead()) { // if head (head is below tail for vertical fox)
-					start = currY - 2; // start at square above the tail
-					end = newY - 1; // end at square above final head destination
-				} else {
-					start = currY - 1;
-					end = newY;
-				}
-
-				if (!validateDestination(end, currY))
-					return false;
-
-				for (int i = start; i < end; i++) { // reprompt if path isn't clear
-					if (board.getSquare(i, currY).hasPiece())
-						return false;
-				}
-
-			} else { // moving down
-
-				if (!isTail) { // if head, start at square below head
-					start = currY + 1;
-					end = newY;
-				} else { // if tail, start at 2 squares below curr location (to override head)
-					start = currY + 2;
-					end = newY + 1;
-				}
-
-				if (!validateDestination(end, currY))
-					return false;
-
-				for (int i = start; i <= end; i++) { // reprompt if path isn't clear
-					if (board.getSquare(currX, i).hasPiece())
-						return false;
-				}
-
-			}
-			if (f.isHead()) {
-				board.removePiece(currX, currY); // remove fox head
-				board.removePiece(currX, currY - 1); // remove fox tail
-
-				board.addPiece(fox, newX, newY); // add head
-				board.addPiece(f.getAssociatedPart(), newX, newY - 1); // add tail
-			} else { // dealing with the tail
-				board.removePiece(currX, currY); // remove fox tail
-				board.removePiece(currX, currY + 1); // remove fox head
-
-				board.addPiece(fox, newX, newY); // add tail
-				board.addPiece(f.getAssociatedPart(), newX, newY + 1); // add head
-			}
-
-		}
-		return true;
-	}
-
-	/**
-	 * Check if the square at coordinates x, y has a piece or a hole
-	 * @param x
-	 * @param y
-	 * @return true if it has a square or a hole
-	 */
-	private boolean hasPieceOrHole(int x, int y) {
-		return board.getSquare(x, y).hasPiece() || board.getSquare(x, y).isHole() ;
-	}
-	/**
-	 * Handle a move of a rabbit
-	 * 
-	 * @param rabbit
-	 * @param command
-	 * @return
-	 */
-	public boolean handleRabbitMove(Piece rabbit, Command command) {
-		Rabbit r = (Rabbit) rabbit;
-		int newX = command.getX();
-		int newY = command.getY();
-		int currX = r.getXPos();
-		int currY = r.getYPos();
-
-		if (!rabbit.validateMove(newX, newY)) {
-			return false;
-		}
-
-		// If destination is already filled
-		if (board.getSquare(newX, newY).hasPiece())
-			return false;
-
-		// Checking of the paths are filled for each direction
-		if (currX < newX) { // moving right
-			for (int k = currX + 1; k < newX; k++) { // check for empty squares
-				if (!(hasPieceOrHole(k, currY)))
-					return false;
-			}
-		} else if (currX > newX) { // moving left
-			for (int k = currX - 1; k > newX; k--) { // check for empty squares
-				if (!(hasPieceOrHole(k, currY)))
-					return false;
-			}
-		} else if (currY > newY) { // moving up
-			for (int k = currY - 1; k > newY; k--) { // check for empty squares
-				if (!(hasPieceOrHole(currX, k)))
-					return false;
-			}
-		} else if (currY < newY) { // moving down
-			for (int k = currY + 1; k < newY; k++) { // check for empty squares
-				if (!(hasPieceOrHole(currX, k)))
-					return false;
-			}
-
-		}
-
-		// Move is validated, complete the action
-		board.removePiece(currX, currY);
-		board.addPiece(rabbit, newX, newY);
-
-		if (board.getSquare(currX, currY).isHole())
-			rabbitsInHoles--; // if the rabbit was in a hole and now is not
-
-		if (board.getSquare(newX, newY).isHole()) {
-			rabbitsInHoles++; // if rabbit entered a hole
-		}
-
-		return true;
-	}
 
 	public String printGameInstructions() {
 		String title = "JumpIN Instructions: \n\n";

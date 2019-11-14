@@ -33,7 +33,7 @@ public class GameView extends JFrame {
 
 	private int size; // The size of the board
 
-	Image piece, whiteRabbit, yellowRabbit, greyRabbit, mushroom, foxface, foxtail, hole;
+	private Image piece, whiteRabbit, yellowRabbit, greyRabbit, mushroom, foxface, foxtail, hole;
 
 	/**
 	 * this will be used twice firstly to add holes and secondly to change the
@@ -164,6 +164,7 @@ public class GameView extends JFrame {
 			for (int j = 0; j < size; j++) {
 				JButton button = new JButton();
 				board[i][j] = button;
+				button.setIcon(null);
 				button.setPreferredSize(new Dimension(200, 200));
 				button.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
 				button.setBackground(new Color(0, 204, 0));// the backGround of the buttons

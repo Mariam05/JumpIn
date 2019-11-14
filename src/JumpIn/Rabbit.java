@@ -52,10 +52,66 @@ public class Rabbit extends Piece {
 	}
 	
 	/**
+	 * Handle a move of a rabbit
+	 * 
+	 * @param rabbit
+	 * @param command
+	 * @return
+	 */
+	public boolean handleMove(Board board, int newX, int newY) {
+		int currX = getXPos();
+		int currY = getYPos();
+
+		if (!validateMove(newX, newY)) {
+			return false;
+		}
+
+		// If destination is already filled
+		if (board.getSquare(newX, newY).hasPiece())
+			return false;
+
+		// Checking of the paths are filled for each direction
+		if (currX < newX) { // moving right
+			for (int k = currX + 1; k < newX; k++) { // check for empty squares
+				if (!(board.hasPiece(k, currY)))
+					return false;
+			}
+		} else if (currX > newX) { // moving left
+			for (int k = currX - 1; k > newX; k--) { // check for empty squares
+				if (!(board.hasPiece(k, currY)))
+					return false;
+			}
+		} else if (currY > newY) { // moving up
+			for (int k = currY - 1; k > newY; k--) { // check for empty squares
+				if (!(board.hasPiece(currX, k)))
+					return false;
+			}
+		} else if (currY < newY) { // moving down
+			for (int k = currY + 1; k < newY; k++) { // check for empty squares
+				if (!(board.hasPiece(currX, k)))
+					return false;
+			}
+
+		}
+
+		// Move is validated, complete the action
+		board.removePiece(currX, currY);
+		board.addPiece(this, newX, newY);
+
+		if (board.isHole(currX, currY)) {
+			board.decreaseNumRabbitsInHoles(); // if the rabbit was in a hole and now is not
+		}
+		if (board.isHole(newX, newY)) {
+			board.increaseNumRabbitsInHoles(); // if rabbit entered a hole
+		}
+
+		return true;
+	}
+	
+	/**
 	 * Check if a rabbit's move is valid. 
 	 * An invalid move is if it is simply moving to one of the squares beside it
 	 */
-	@Override
 	public boolean validateMove(int x, int y) {
 		int currX = getXPos();
 		int currY = getYPos();
