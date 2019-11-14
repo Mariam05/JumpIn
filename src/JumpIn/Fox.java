@@ -105,14 +105,18 @@ public class Fox extends Piece {
 		boolean isTail = !isHead();
 
 		int start, end;
+		
+		// If destination is already filled
+		if (board.hasPiece(newX, newY))
+			return false;
 
 		// check that we're not trying to move diagonally
 		if (foxType.compareTo(FoxType.HORIZONTAL) == 0) {
-			if (currY == newY)
-				return true;
+			if (currY != newY)
+				return false;
 		} else if (foxType.compareTo(FoxType.VERTICAL) == 0) {
-			if (currX == newX)
-				return true;
+			if (currX != newX)
+				return false;
 		}
 
 		// If fox moves horizontally, check horizontal path on board
@@ -128,7 +132,7 @@ public class Fox extends Piece {
 					end = newX + 1;
 				}
 
-				if (!board.isOutOfRange(end, currY))
+				if (board.isOutOfRange(end, currY))
 					return false;
 
 				for (int i = start; i <= end; i++) { // ensure path is clear
@@ -145,7 +149,7 @@ public class Fox extends Piece {
 					end = newX;
 				}
 
-				if (!board.isOutOfRange(end, currY))
+				if (board.isOutOfRange(end, currY))
 					return false;
 
 				for (int i = start; i >= end; i--) { // reprompt if path isn't clear
@@ -168,7 +172,7 @@ public class Fox extends Piece {
 					end = newY;
 				}
 
-				if (!board.isOutOfRange(end, currY))
+				if (board.isOutOfRange(end, currY))
 					return false;
 
 				for (int i = start; i < end; i++) { // reprompt if path isn't clear
@@ -186,7 +190,7 @@ public class Fox extends Piece {
 					end = newY + 1;
 				}
 
-				if (!board.isOutOfRange(end, currY))
+				if (board.isOutOfRange(end, currY))
 					return false;
 
 				for (int i = start; i <= end; i++) { // reprompt if path isn't clear
