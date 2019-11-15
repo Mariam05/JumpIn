@@ -1,6 +1,7 @@
 package JumpIn;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * This class represents a Fox object. A fox can either have horizontal or
@@ -49,6 +50,37 @@ public class Fox extends Piece {
 		this.foxType = foxType;
 		this.isHead = isHead;
 
+	}
+	
+	/**
+	 * Get the string representation of the fox in the format
+	 * name,type,ishead,xPos,yPos
+	 * @return
+	 */
+	public String getStringRepresentation() {
+		return toString() + "," + foxType.toString() + "," + isHead + "," + getXPos() + "," + getYPos();
+	}
+	
+	/**
+	 * This is a factory method used to manufacture a new fox based on string input. 
+	 * @param str
+	 * @return the new Fox
+	 */
+	public Fox manufactureFox(String str) {
+		Scanner dscanner = new Scanner(str).useDelimiter("\\s*,\\s*");
+		
+		String name = dscanner.next();
+		FoxType type = FoxType.valueOf(dscanner.next());
+		boolean isHead = dscanner.nextBoolean();
+		Fox newFox = new Fox(name, type, isHead);
+		
+		int xPos = dscanner.nextInt();
+		int yPos = dscanner.nextInt();
+		
+		newFox.setPosition(xPos, yPos);
+		
+		return newFox;
+		
 	}
 
 	/**
@@ -104,13 +136,8 @@ public class Fox extends Piece {
 
 		int currX = getXPos();
 		int currY = getYPos();
-		boolean isTail = !isHead();
 
 		int start, end;
-		
-		// If destination is already filled
-		if (board.hasPiece(newX, newY))
-			return false;
 
 		// check that we're not trying to move diagonally
 		if (foxType.compareTo(FoxType.HORIZONTAL) == 0) {
@@ -125,7 +152,7 @@ public class Fox extends Piece {
 		if (isHorizontal()) {
 
 			if (currX < newX) { // moving right
-				if (!isTail) { // if head, start at square to right and continue to destination
+				if (isHead()) { // if head, start at square to right and continue to destination
 					start = currX + 1;
 					end = newX;
 				} else { // if tail, start 2 squares to right and end at new+1 (which is where head will
@@ -143,7 +170,7 @@ public class Fox extends Piece {
 				}
 
 			} else { // moving left
-				if (!isTail) { // if head, start at square left to tail and check to where the tail would reach
+				if (isHead()) { // if head, start at square left to tail and check to where the tail would reach
 					start = currX - 2;
 					end = newX - 1;
 				} else { // if tail, start at square left to tail and check to where the tail will go
@@ -154,15 +181,13 @@ public class Fox extends Piece {
 				if (board.isOutOfRange(end, currY))
 					return false;
 
-				for (int i = start; i >= end; i--) { // reprompt if path isn't clear
-					if (board.getSquare(i, currY).hasPiece())
+				for (int i = end; i <= start; i++) { // check if path is clear
+					if (board.hasPiece(i, currY))
 						return false;
 				}
 
 			}
-			
 
-			
 		} else if (!isHorizontal()) { // this fox moves vertically
 			if (currY > newY) { // moving up
 
@@ -184,7 +209,7 @@ public class Fox extends Piece {
 
 			} else { // moving down
 
-				if (!isTail) { // if head, start at square below head
+				if (isHead()) { // if head, start at square below head
 					start = currY + 1;
 					end = newY;
 				} else { // if tail, start at 2 squares below curr location (to override head)
@@ -204,7 +229,6 @@ public class Fox extends Piece {
 
 		}
 		return true;
-
 	}
 
 	/**
@@ -219,11 +243,11 @@ public class Fox extends Piece {
 
 		int currX = getXPos();
 		int currY = getYPos();
-		
+
 		board.removePiece(currX, currY);
-		
-		if(!isHorizontal()) {
-			if (isHead()) { 
+
+		if (!isHorizontal()) {
+			if (isHead()) {
 				board.removePiece(currX, currY - 1); // remove fox tail
 
 				board.addPiece(this, newX, newY); // add head
@@ -252,21 +276,35 @@ public class Fox extends Piece {
 			}
 		}
 	}
-	
-	
-	public ArrayList<int[]> getAllValidMoves(Board board){
+
+	/**
+	 * Get all the positions that the fox can move to the positions are stored in an
+	 * array of 2 elements (first is x and second is y)
+	 * 
+	 * @param board
+	 * @return the arraylist holding the positions of all the valid moves.
+	 */
+	public ArrayList<int[]> getAllValidMoves(Board board) {
 		ArrayList<int[]> allValidMoves = new ArrayList<>();
-		
+
 		for (int i = 0; i < board.SIZE; i++) {
 			for (int j = 0; j < board.SIZE; j++) {
 				if (validateMove(board, i, j)) {
-					int[] coordinates = {i, j};
+					int[] coordinates = { i, j };
+					allValidMoves.add(coordinates);
 				}
 			}
 		}
-		
-		
+
 		return allValidMoves;
 	}
+
+	public void printAllValidMoves(Board board) {
+		for (int[] i : getAllValidMoves(board)) {
+			System.out.println(i[0] + " " + i[1]);
+		}
+	}
+	
+
 
 }

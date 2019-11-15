@@ -82,8 +82,8 @@ public class Game {
 		board.addPiece(mushroom1, 2, 4);
 		board.addPiece(mushroom2, 3, 1);
 		
-		redoGameStates = new Stack();
-		undoGameStates = new Stack();
+		redoGameStates = new Stack<>();
+		undoGameStates = new Stack<>();
 		undoGameStates.add(this); // Adding current (beginning) state to stack
 
 	}
@@ -160,6 +160,7 @@ public class Game {
 				return false;
 
 			return handleMove(command);
+			
 		} else if (commandWord.equals("quit")) {
 			System.out.println(quitMessage());
 			quitGame = true;
