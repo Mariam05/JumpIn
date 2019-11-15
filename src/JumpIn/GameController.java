@@ -23,7 +23,6 @@ public class GameController {
 	private Command command; //The commnd to form
 	private String word2, word3; //The words that will make up the command
 	private Stack<Command> undo, redo; // Stores commands to revert moves either way
-	
 	private static final String COMMAND = "move"; //The default command (other commands are represented by buttons in view)
 
 	/**
@@ -48,12 +47,14 @@ public class GameController {
 	 * Add action listeners to menu buttons
 	 */
 	private void addActionListeners() {
+		// Iterating through board and adding button listeners to every square
 		for (int i = 0; i < gameView.getBoardSize(); i++) {
 			for (int j = 0; j < gameView.getBoardSize(); j++) {
 				gameView.board[i][j].addActionListener(new ButtonListener(i, j));
 			}
 		}
 		
+		// Adding listeners to menu items
 		gameView.addHelpListener(new HelpListener());
 		gameView.addQuitListener(new QuitListener());
 		gameView.addUndoListener(new UndoListener());
@@ -117,18 +118,56 @@ public class GameController {
 	}
 	
 	/**
+	 * Gets the command to reverse another
 	 * 
 	 * @param cmd
-	 * @return
+	 * @return command to revert command passed as an argument
+	 * @author Nazifa Tanzim
 	 */
 	private Command getRevertCommand(Command cmd) {
-		
+		// Getting the piece that is being moved
 		Piece p = game.getPieceFromCommand(cmd);
 		if(p instanceof Rabbit || p instanceof Fox) {
-			String originalLocation = p.getXPos() + "" + p.getYPos();
+			String originalLocation = p.getXPos() + "" + p.getYPos(); // Getting current position of piece (before it's moved)
 			return new Command(COMMAND, p.toString(), originalLocation);
 		} else {
-			return null;
+			return null; // Return null if the piece is not an animal
+		}
+		
+	}
+	
+	/**
+	 * Undoes current move and stores command to revert it in redo
+	 * 
+	 * @author Nazifa Tanzim
+	 */
+	private void undo() {
+		// Check if the stack is empty
+		if(undo.isEmpty()) {
+			gameView.displayMessage("No more undo's left");
+		} else {
+			Command c = undo.pop(); // Get the most recent undo command
+			redo.add(getRevertCommand(c)); // Add command to reverse undo
+			processCommand(c.getPiece(), c.getDestination()); // Process undo move
+			undo.pop(); // Remove extra command that gets added during processing
+			gameView.update(); // Update the view
+		}
+		
+	}
+
+	/**
+	 * Allows user to redo a move
+	 * 
+	 * @author Nazifa Tanzim
+	 */
+	private void redo() {
+		// Check if stack is empty
+		if(redo.isEmpty()) {
+			gameView.displayMessage("No more redo's left");
+		} else{
+			Command c = redo.pop(); // Get the most recent redo command
+			processCommand(c.getPiece(), c.getDestination()); // Process undo move
+			gameView.update(); // Update the view
 		}
 		
 	}
@@ -174,25 +213,8 @@ public class GameController {
 	class UndoListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//gameView.displayMessage("UNDO FUNCTIONALITY TBC");
 			undo();
 		}
-	}
-	
-	/**
-	 * Undoes current move and stores command to revert it in redo
-	 */
-	private void undo() {
-		if(undo.isEmpty()) {
-			gameView.displayMessage("No more undo's left");
-		} else {
-			redo.add(getRevertCommand(undo.peek()));
-			Command c = undo.pop();
-			processCommand(c.getPiece(), c.getDestination());
-			undo.pop();
-			gameView.update();
-		}
-		
 	}
 	
 	/**
@@ -204,8 +226,7 @@ public class GameController {
 	class RedoListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			gameView.displayMessage("REDO FUNCTIONALITY TBC");
-
+			redo();
 		}
 	}
 
