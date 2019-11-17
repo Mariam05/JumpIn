@@ -107,7 +107,6 @@ public abstract class Piece {
 	 */
 	public abstract void handleMove(Board board, int newX, int newY);
 	
-	
 	public abstract boolean validateMove(Board board, int newX, int newY);
 	
 	public abstract Piece manufacturePiece(String str);

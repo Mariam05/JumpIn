@@ -14,10 +14,8 @@ package JumpIn;
 public class Command {
 	private String commandWord;
 	private String piece;
-	private String word2;
 	private String destinationPos;
 	private int xPos, yPos;
-	private int currX, currY;
 
 	/**
 	 * Create a command object. The fields must be supplied but can be null.
@@ -30,14 +28,13 @@ public class Command {
 	public Command(String firstWord, String piece, String destinationPos) {
 		commandWord = firstWord;
 		this.piece = piece;
-	//	word2 = piece;
 		this.destinationPos = destinationPos;
 		splitDestination();
-	//	splitCurrent();
 	}
 
 	/**
-	 * Get the command word
+	 * Return the command word (the first word) of this command. If the command was
+	 * not understood, the result is null.
 	 * 
 	 * @return String of command word
 	 */
@@ -51,10 +48,9 @@ public class Command {
 	}
 
 	/**
-	 * Return the command word (the first word) of this command. If the command was
-	 * not understood, the result is null.
+	 * Name of piece to be moved
 	 * 
-	 * @return The command word.
+	 * @return piece name
 	 */
 	public String getPiece() {
 		return piece;
@@ -85,14 +81,6 @@ public class Command {
 	public int getY() {
 		return yPos;
 	}
-	
-	public int getCurrX() {
-		return currX;
-	}
-	
-	public int getCurrY() {
-		return currY;
-	}
 
 	/**
 	 * Split the destination, which is in the form of Col Row, into x and y
@@ -106,19 +94,6 @@ public class Command {
 		}
 	}
 	
-	/**
-	 * Split the destination, which is in the form of Col Row, into x and y
-	 * positions
-	 */
-	private void splitCurrent() {
-		if (hasPiece()) {
-			System.out.println(piece);
-			int pieceLoc = Integer.parseInt(piece);
-			currX = pieceLoc / 10; // the column
-			currY = pieceLoc % 10;
-		}
-	}
-
 	/**
 	 * @return true if this command was not understood.
 	 */
