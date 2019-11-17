@@ -178,7 +178,7 @@ public class GameController {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			new Solver(game);	
+			(new Solver(game)).getHint();	
 		}
 		
 	}

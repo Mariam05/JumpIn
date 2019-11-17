@@ -30,15 +30,19 @@ public class Solver {
 
 		source = new Node(null, sourceAnimals, null);
 
+	}
+
+	public Command getHint() {
 		Node n = BFS();
 		
-		do {
+		while (n.getParentNode() != source) { //print moves to solution, for testing
 			System.out.println(n.getCommand());
-			n.getBoard().printBoard();
 			n = n.getParentNode();
-		} while(n != null);
+			
+		}
 
-		System.out.println("Done");
+		System.out.println("Done. Hint is: " + n.getCommand()); //for testing
+		return n.getCommand();
 	}
 
 	public Node BFS() {
@@ -62,10 +66,12 @@ public class Solver {
 				}
 
 				for (Piece p : currNode.getPieces()) { // for each animal in the game
-					ArrayList<Command> commands = p.getAllValidCommands(currNode.getBoard());// get all the possible commands for that piece
-					//System.out.println("Animal: " + p.toString());
+					ArrayList<Command> commands = p.getAllValidCommands(currNode.getBoard());// get all the possible
+																								// commands for that
+																								// piece
+					// System.out.println("Animal: " + p.toString());
 					for (Command c : commands) { // for each command, create a new node based on what state it leads to
-						
+
 						Node newNode = new Node(currNode, currNode.getPieces(), c);
 
 						queue.add(newNode); // add the new node to the queue so that we can explore it
@@ -77,7 +83,7 @@ public class Solver {
 
 		}
 
-		return null; //solution not found, or there was an error
+		return null; // solution not found, or there was an error
 	}
 
 }
