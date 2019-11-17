@@ -18,7 +18,6 @@ public class Rabbit extends Piece {
 	 */
 	private Color colour;
 
-	private String stringRep;
 
 	/**
 	 * Create a new rabbit object. The default colour is white
@@ -38,7 +37,6 @@ public class Rabbit extends Piece {
 	public Rabbit(String pieceName, Color colour) {
 		super(pieceName, Type.RABBIT);
 		this.colour = colour;
-		stringRep = getStringRepresentation();
 	}
 
 	/**
@@ -87,6 +85,7 @@ public class Rabbit extends Piece {
 	 * to one of the squares beside it
 	 */
 	public boolean validateMove(Board board, int newX, int newY) {
+
 		int currX = getXPos();
 		int currY = getYPos();
 
@@ -164,14 +163,14 @@ public class Rabbit extends Piece {
 
 		Rabbit other = (Rabbit) obj;
 
-		return stringRep.equals(other.stringRep);
+		return getStringRepresentation().equals(other.getStringRepresentation());
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((stringRep == null) ? 0 : stringRep.hashCode());
+		result = prime * result + ((getStringRepresentation() == null) ? 0 : getStringRepresentation().hashCode());
 		return result;
 	}
 }

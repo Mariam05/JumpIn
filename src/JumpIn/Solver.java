@@ -1,19 +1,91 @@
 package JumpIn;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+
 /**
- * What we'll end up with is a tree, not a graph. 
+ * What we'll end up with is a tree, not a graph.
+ * 
  * @author tomar
  *
  */
 public class Solver {
 
-	
 	private Node source;
-	
-	public Solver(Node source) {
-		this.source = source;
-	}
-	
-	public void BFS() {
+	private List<Piece> sourceAnimals;
+	Node winningNode = null;
+	Map<Node, Node> parentNodes;
+
+	public Solver(Game game) {
+		System.out.println("Getting help...");
+		// Get all the animals that are on the board currently
+		sourceAnimals = new ArrayList<>();
+		for (String p : game.getAnimalsOnBoard().keySet()) {
+			Piece pi = game.getAnimalsOnBoard().get(p);
+			sourceAnimals.add(pi);
+		}
+
+		source = new Node(null, sourceAnimals, null);
 		
+		Node n = BFS();
+		while (n != null) {
+			System.out.println(n.getCommand());
+			n = n.getParentNode();
+		}
+
+		System.out.println("Done");
 	}
+
+	public Node BFS() {
+
+		Queue<Node> queue = new ArrayDeque<>(); // A queue to store the nodes that we want to explore
+		queue.add(source);
+
+		Set<Integer> visited = new HashSet<>(); // A set of visited nodes so that we don't loop infinitely
+
+	//	parentNodes = new HashMap<>(); // To store the parents of all nodes
+
+		while (!queue.isEmpty()) {
+
+			Node currNode = queue.remove(); // get and remove the first element in the queue
+			
+			if (!visited.contains(currNode.hashCode())) { // check that the state of the node has not yet been visited
+															// before proceeding
+				visited.add(currNode.hashCode()); // add it to the visited list
+
+				System.out.println("Visiting: ");
+				currNode.getBoard().printBoard();
+
+
+				if (currNode.isWinningState()) {
+					System.out.println("Found solution" + currNode.getCommand());
+					return currNode;
+				}
+
+				for (Piece p : sourceAnimals) { // for each animal in the game
+					ArrayList<Command> commands = p.getAllValidCommands(currNode.getBoard());// get all the possible
+																								// commands for that
+																								// piece
+					for (Command c : commands) { // for each command, create a new node based on what state it leads to
+
+						Node newNode = new Node(currNode, currNode.getPieces(), c);
+
+						queue.add(newNode); // add the new node to the queue so that we can explore it
+
+					}
+
+				}
+			}
+				
+		}
+
+		return null;
+	}
+
 }

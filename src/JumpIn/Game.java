@@ -50,8 +50,7 @@ public class Game {
 		((Fox) fox2).addAssociatedPart((Fox) fox2T);
 		((Fox) fox2T).addAssociatedPart((Fox) fox2);
 
-		mushroom1 = new Mushroom("MSH");
-		mushroom2 = new Mushroom("MSH");
+	
 		
 		rabbit1 = new Rabbit("RA1", Color.WHITE); 
 		rabbit2 = new Rabbit("RA2", Color.GRAY);
@@ -77,9 +76,6 @@ public class Game {
 		board.addPiece(rabbit1, 3, 0);
 		board.addPiece(rabbit2, 4, 2);
 		board.addPiece(rabbit3, 1, 4);
-
-		board.addPiece(mushroom1, 2, 4);
-		board.addPiece(mushroom2, 3, 1);
 		
 		redoGameStates = new Stack<>();
 		undoGameStates = new Stack<>();

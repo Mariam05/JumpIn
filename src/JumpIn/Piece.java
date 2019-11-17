@@ -76,13 +76,12 @@ public abstract class Piece {
 	 * @return the arraylist holding the positions of all the valid moves.
 	 */
 	public ArrayList<Command> getAllValidCommands(Board board) {
-		Command command;
 		ArrayList<Command> validCommands = new ArrayList<>();
 
-		for (int i = 0; i < board.SIZE; i++) {
-			for (int j = 0; j < board.SIZE; j++) {
-				if (validateMove(board, i, j)) {
-					validCommands.add(new Command("move", toString(), i + "" + j));
+		for (int i = 0; i < board.SIZE; i++) { //row
+			for (int j = 0; j < board.SIZE; j++) { //column
+				if (validateMove(board, j, i)) {
+					validCommands.add(new Command("move", toString(), j + "" + i));
 				}
 			}
 		}

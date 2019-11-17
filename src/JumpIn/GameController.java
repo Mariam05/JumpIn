@@ -60,6 +60,7 @@ public class GameController {
 		gameView.addUndoListener(new UndoListener());
 		gameView.addRedoListener(new RedoListener());
 		gameView.addResetListener(new ResetListener());
+		gameView.addHintListener(new HintListener());
 	}
 
 	/**
@@ -172,6 +173,15 @@ public class GameController {
 		
 	}
 
+	
+	class HintListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			new Solver(game);	
+		}
+		
+	}
 	/**
 	 * This listener is for the help option / command
 	 * 

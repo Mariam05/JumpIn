@@ -28,6 +28,7 @@ public class Board {
 	 * Holes are set here because they are part of the board (i.e. cannot be moved/ are not pieces)
 	 */
 	public Board() {	
+			
 		
 		numOfRabbitsInHoles = 0;
 		rabbits = new HashMap<>();
@@ -47,6 +48,12 @@ public class Board {
 		board[4][0].addHole();
 		board[4][4].addHole();
 		board[2][2].addHole();
+		
+		Mushroom mushroom1 = new Mushroom("MSH");
+		Mushroom mushroom2 = new Mushroom("MSH");
+		addPiece(mushroom1, 2, 4);
+		addPiece(mushroom2, 3, 1);
+		
 
 	}
 	

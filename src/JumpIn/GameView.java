@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
@@ -44,7 +45,7 @@ public class GameView extends JFrame {
 	private Game game;
 	private JMenuBar menuBar;
 	//private JMenu menu;
-	private JMenuItem menuItemHelp, menuItemQuit, menuItemReset, menuItemUndo, menuItemRedo;
+	private JMenuItem menuItemHelp, menuItemQuit, menuItemReset, menuItemUndo, menuItemRedo, menuItemHint;
 
 	/**
 	 * Create a new view
@@ -157,6 +158,10 @@ public class GameView extends JFrame {
 		menuItemQuit = new JMenuItem("Quit");
 		menuItemQuit.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 		menuBar.add(menuItemQuit);
+		
+		menuItemHint = new JMenuItem("Hint",KeyEvent.VK_H);
+		menuItemHint.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		menuBar.add(menuItemHint); 
 
 		add(menuBar, BorderLayout.NORTH);
 	}
@@ -269,6 +274,10 @@ public class GameView extends JFrame {
 		menuItemRedo.addActionListener(a);
 	}
 	
+	
+	public void addHintListener(ActionListener a) {
+		menuItemHint.addActionListener(a);
+	}
 	/**
 	 * if reset button is pressed
 	 * @param a

@@ -38,7 +38,6 @@ public class Fox extends Piece {
 	 */
 	Fox associatedPart;
 
-	private String stringRep;
 	/**
 	 * Create a new fox object. Must specify the name, type, and part.
 	 * 
@@ -50,7 +49,6 @@ public class Fox extends Piece {
 		super(pieceName, Type.FOX);
 		this.foxType = foxType;
 		this.isHead = isHead;
-		stringRep = getStringRepresentation();
 
 	}
 	
@@ -133,7 +131,7 @@ public class Fox extends Piece {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((stringRep == null) ? 0 : stringRep.hashCode());
+		result = prime * result + ((getStringRepresentation() == null) ? 0 : getStringRepresentation().hashCode());
 		return result;
 	}
 	
@@ -148,7 +146,7 @@ public class Fox extends Piece {
 		
 		Fox other = (Fox) obj;
 		
-		return stringRep.equals(other.stringRep);
+		return getStringRepresentation().equals(other.getStringRepresentation());
 			
 	}
 
@@ -166,6 +164,8 @@ public class Fox extends Piece {
 		int currY = getYPos();
 
 		int start, end;
+		
+		if(currX==newX && currY == newY) return false; //to eliminate unnecessary moves
 
 		// check that we're not trying to move diagonally
 		if (foxType.compareTo(FoxType.HORIZONTAL) == 0) {
