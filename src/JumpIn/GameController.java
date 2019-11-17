@@ -108,7 +108,7 @@ public class GameController {
 			gameView.displayMessage("Invalid move");
 		} else { // otherwise check for winner and update view
 			undo.add(revert); // Only adding revert command if the move is valid
-			if (game.hasWon()) {
+			if (game.getBoard().hasWon()) {
 				gameView.update();
 				gameView.displayMessage("CONGRATS! You solved the puzzle!");
 				gameView.dispose();

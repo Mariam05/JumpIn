@@ -56,7 +56,6 @@ public class Game {
 		rabbit1 = new Rabbit("RA1", Color.WHITE); 
 		rabbit2 = new Rabbit("RA2", Color.GRAY);
 		rabbit3 = new Rabbit("RA3", Color.YELLOW);
-		numOfRabbits = 3;
 		
 		
 		// Add the pieces to the piece hashmap
@@ -110,18 +109,10 @@ public class Game {
 	public void startNewRound() {
 		board.printBoard();
 		Command command = parser.getCommand();
-		while (processCommand(command) && !hasWon()) {
+		while (processCommand(command) && !board.hasWon()) {
 			board.printBoard();
 			command = parser.getCommand();
 		}
-	}
-
-	/**
-	 * Checks if player has won
-	 * @return true if they have won
-	 */
-	public boolean hasWon() {
-		return board.getNumRabbitsInHoles() == numOfRabbits;
 	}
 
 	/**
@@ -129,7 +120,7 @@ public class Game {
 	 */
 	public void play() {
 		printGameInstructions();
-		while (!hasWon() & !quitGame) {
+		while (!board.hasWon() & !quitGame) {
 			startNewRound();
 		}
 	}

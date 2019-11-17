@@ -1,4 +1,7 @@
 package JumpIn;
+
+import java.util.ArrayList;
+
 /**
  * This class contains information regarding the pieces on the board
  * @author Mariam Almalki
@@ -40,7 +43,63 @@ public abstract class Piece {
 		this.pieceType = pieceType;
 	}
 	
+	/**
+	 * Get all the positions that a piece can move to.
+	 * The positions are stored in an array of 2 elements (first is x and second is y)
+	 * 
+	 * @param board
+	 * @return the arraylist holding the positions of all the valid moves.
+	 */
+	public ArrayList<int[]> getAllValidMoves(Board board) {
+		ArrayList<int[]> allValidMoves = new ArrayList<>();
+		Command command;
+		ArrayList<Command> validCommands = new ArrayList<>();
+
+		for (int i = 0; i < board.SIZE; i++) {
+			for (int j = 0; j < board.SIZE; j++) {
+				if (validateMove(board, i, j)) {
+					int[] coordinates = { i, j };
+					allValidMoves.add(coordinates);
+					validCommands.add(new Command("move", toString(), i + "" + j));
+				}
+			}
+		}
+
+		return allValidMoves;
+	}
 	
+	/**
+	 * Get all the positions that a piece can move to.
+	 * The positions are stored in an array of 2 elements (first is x and second is y)
+	 * 
+	 * @param board
+	 * @return the arraylist holding the positions of all the valid moves.
+	 */
+	public ArrayList<Command> getAllValidCommands(Board board) {
+		Command command;
+		ArrayList<Command> validCommands = new ArrayList<>();
+
+		for (int i = 0; i < board.SIZE; i++) {
+			for (int j = 0; j < board.SIZE; j++) {
+				if (validateMove(board, i, j)) {
+					validCommands.add(new Command("move", toString(), i + "" + j));
+				}
+			}
+		}
+
+		return validCommands;
+	}
+	
+	
+	/**
+	 * print all the valid moves, for testing/debugging purposes. 
+	 * @param board
+	 */
+	public void printAllValidMoves(Board board) {
+		for (int[] i : getAllValidMoves(board)) {
+			System.out.print(i[0] + " " + i[1] + "    ");
+		}
+	}
 	
 	/**
 	 * This method will actually change the location of the piece to the 
@@ -55,6 +114,9 @@ public abstract class Piece {
 	
 	public abstract boolean validateMove(Board board, int newX, int newY);
 	
+	public abstract Piece manufacturePiece(String str);
+	
+	public abstract String getStringRepresentation();
 	
 	/**
 	 * Get the type of piece
@@ -99,5 +161,8 @@ public abstract class Piece {
 	public String toString() {
 		return this.pieceName;
 	}
+	
+	@Override
+	public abstract boolean equals(Object obj);
 	
 }

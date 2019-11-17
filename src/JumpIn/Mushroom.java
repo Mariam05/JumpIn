@@ -6,8 +6,11 @@ package JumpIn;
  */
 public class Mushroom extends Piece {
 
+	private String stringRep;
+	
 	public Mushroom(String pieceName) {
 		super(pieceName, Type.MUSHROOM);
+		stringRep = getStringRepresentation();
 	}
 
 
@@ -25,5 +28,34 @@ public class Mushroom extends Piece {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+
+	@Override
+	public Piece manufacturePiece(String str) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public String getStringRepresentation() {
+		return toString() + getXPos() + "" + getYPos() ;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		
+		Mushroom other = (Mushroom) obj;
+		return stringRep.equals(other.stringRep);
+	}
+	
+	
 
 }

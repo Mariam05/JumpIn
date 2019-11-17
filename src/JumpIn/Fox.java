@@ -38,6 +38,7 @@ public class Fox extends Piece {
 	 */
 	Fox associatedPart;
 
+	private String stringRep;
 	/**
 	 * Create a new fox object. Must specify the name, type, and part.
 	 * 
@@ -49,12 +50,14 @@ public class Fox extends Piece {
 		super(pieceName, Type.FOX);
 		this.foxType = foxType;
 		this.isHead = isHead;
+		stringRep = getStringRepresentation();
 
 	}
 	
 	/**
 	 * Get the string representation of the fox in the format
-	 * name,type,ishead,xPos,yPos
+	 * name,type,ishead,xPos,yPos.
+	 * Likely will be renamed to toString()... but for now we want to keep toString() as returning just the piecename. 
 	 * @return
 	 */
 	public String getStringRepresentation() {
@@ -63,15 +66,17 @@ public class Fox extends Piece {
 	
 	/**
 	 * This is a factory method used to manufacture a new fox based on string input. 
+	 * Would like to make this method static but can't with abstract stuff. 
 	 * @param str
 	 * @return the new Fox
 	 */
-	public Fox manufactureFox(String str) {
+	public Fox manufacturePiece(String str) {
 		Scanner dscanner = new Scanner(str).useDelimiter("\\s*,\\s*");
 		
 		String name = dscanner.next();
 		FoxType type = FoxType.valueOf(dscanner.next());
 		boolean isHead = dscanner.nextBoolean();
+		
 		Fox newFox = new Fox(name, type, isHead);
 		
 		int xPos = dscanner.nextInt();
@@ -122,6 +127,29 @@ public class Fox extends Piece {
 	 */
 	public boolean isHorizontal() {
 		return foxType.compareTo(FoxType.HORIZONTAL) == 0;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((stringRep == null) ? 0 : stringRep.hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		
+		Fox other = (Fox) obj;
+		
+		return stringRep.equals(other.stringRep);
+			
 	}
 
 	/**
@@ -276,35 +304,4 @@ public class Fox extends Piece {
 			}
 		}
 	}
-
-	/**
-	 * Get all the positions that the fox can move to the positions are stored in an
-	 * array of 2 elements (first is x and second is y)
-	 * 
-	 * @param board
-	 * @return the arraylist holding the positions of all the valid moves.
-	 */
-	public ArrayList<int[]> getAllValidMoves(Board board) {
-		ArrayList<int[]> allValidMoves = new ArrayList<>();
-
-		for (int i = 0; i < board.SIZE; i++) {
-			for (int j = 0; j < board.SIZE; j++) {
-				if (validateMove(board, i, j)) {
-					int[] coordinates = { i, j };
-					allValidMoves.add(coordinates);
-				}
-			}
-		}
-
-		return allValidMoves;
-	}
-
-	public void printAllValidMoves(Board board) {
-		for (int[] i : getAllValidMoves(board)) {
-			System.out.println(i[0] + " " + i[1]);
-		}
-	}
-	
-
-
 }

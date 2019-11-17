@@ -1,4 +1,7 @@
 package JumpIn;
+
+import java.util.HashMap;
+
 /**
  * This class creates the board of the game with all the static objects that go on it
  * @author Mariam Almalki
@@ -19,7 +22,7 @@ public class Board {
 	
 	private int numOfRabbitsInHoles;
 	
-	
+	private HashMap<Piece, String> rabbits; //this hashmap is to keep track of the number of rabbits added to the board
 	/**
 	 * Instantiates the array of squares and sets the hole positions
 	 * Holes are set here because they are part of the board (i.e. cannot be moved/ are not pieces)
@@ -27,6 +30,7 @@ public class Board {
 	public Board() {	
 		
 		numOfRabbitsInHoles = 0;
+		rabbits = new HashMap<>();
 		
 		board = new Square[SIZE][SIZE];
 		
@@ -55,6 +59,22 @@ public class Board {
 	public void addPiece(Piece piece, int x, int y) {
 		board[y][x].addPiece(piece);
 		piece.setPosition(x, y);
+		if(piece instanceof Rabbit) {
+			rabbits.put(piece, piece.toString());
+		}
+	}
+	
+	public boolean hasWon() {
+		int numInHoles = 0;
+		for (Piece p : rabbits.keySet()) {
+			if (getSquare(p.getXPos(), p.getYPos()).isHole()) {
+				numInHoles++;
+			}
+		}
+		if (numInHoles == rabbits.size()) { //if all the rabbits are in a hole return true
+			return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -62,8 +82,10 @@ public class Board {
 	 * @param x
 	 * @param y
 	 */
-	public void removePiece(int x, int y) {
+	public Piece removePiece(int x, int y) {
+		Piece temp = board[y][x].getPiece();
 		board[y][x].removePiece();
+		return temp;
 	}
 	
 	
