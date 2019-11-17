@@ -21,6 +21,8 @@ import java.util.Set;
  *         we don't need a new board for each node? Could potentially have just
  *         one board to copy the source and then store each state in a hash...
  *         but then we'd need
+ *         
+ *         problem is that when I'm creating the clones they aren't being associated
  */
 public class Node {
 
@@ -38,8 +40,6 @@ public class Node {
 		this.command = command;
 
 		board = new Board();
-
-		children = new ArrayList<>();
 		
 		animalList = getCopyOfAnimalList(parentsAnimals); //Deep copy the animals of the parent node
 		addAnimalsToBoard();
@@ -76,7 +76,6 @@ public class Node {
 	}
 
 	private Piece getAnimalToMove() {
-
 		for (Piece p : animalList) {
 			if ((p.toString()).equals(pieceToMove))
 				return p;
@@ -86,6 +85,10 @@ public class Node {
 
 	public void addAnimalsToBoard() {
 		for (Piece animal : animalList) {
+			if (animal instanceof Fox) {
+				Fox tail = ((Fox)animal).getAssociatedPart();
+				board.addPiece(tail, tail.getXPos(), tail.getYPos());
+			}
 			board.addPiece(animal, animal.getXPos(), animal.getYPos());
 		}
 	}
@@ -173,22 +176,22 @@ public class Node {
 		List<Piece> a2 = new ArrayList<>();
 		
 		Fox fox1 = new Fox("F1H", Fox.FoxType.HORIZONTAL, true);
-		Fox fox1T = new Fox("F1T", Fox.FoxType.HORIZONTAL, false);
-		((Fox) fox1).addAssociatedPart((Fox) fox1T);
-		((Fox) fox1T).addAssociatedPart((Fox) fox1);
+		//((Fox) fox1).addAssociatedPart((Fox) fox1T);
+		//((Fox) fox1T).addAssociatedPart((Fox) fox1);
 		
 		fox1.setPosition(4, 3);
-		fox1T.setPosition(fox1.getXPos() - 1, fox1.getYPos());
 		
 		
 		Rabbit rabbit1 = new Rabbit("RA1", Color.WHITE); 
 		rabbit1.setPosition(3, 0);
 		Rabbit rabbit2 = new Rabbit("RA2", Color.GRAY);
 		rabbit2.setPosition(4, 2);
+		Rabbit rabbit3 = new Rabbit("RA3", Color.GRAY);
+		rabbit2.setPosition(4, 2);
 		
-		a1.add(fox1); a1.add(fox1T); a1.add(rabbit1); a1.add(rabbit2);
+		a1.add(fox1); a1.add(rabbit1); a1.add(rabbit2);
 		
-		a2.add(fox1); a2.add(fox1T); a2.add(rabbit1); a2.add(rabbit2); 
+		a2.add(fox1);  a2.add(rabbit1); a2.add(rabbit2); 
 		
 		Command c = new Command("move", "RA1" , "32");
 		Node n1 = new Node( null, a1, null);

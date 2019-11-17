@@ -2,7 +2,9 @@
 package JumpIn;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -17,10 +19,13 @@ public class Game {
 
 	private Parser parser;
 	private Board board;
-	private Piece fox1, fox2, fox1T, fox2T, mushroom1, mushroom2, rabbit1, rabbit2, rabbit3;
+	private Piece fox1, fox2, fox1T, fox2T, rabbit1, rabbit2, rabbit3;
+	
 	private HashMap<String, Piece> animalPieces;
-	private int numOfRabbits;
+	private List<String> validPieces;
+	
 	private boolean quitGame;
+	
 	
 	// Will hold a list of Game objects that will contain the previous state of the game after each move
 	private static Stack<Game> undoGameStates;
@@ -39,18 +44,12 @@ public class Game {
 
 		// Instantiate the pieces on the board
 
-		// For the foxes, associated each head with it's tail and each tail with it's
-		// head.
 		fox1 = new Fox("F1H", Fox.FoxType.HORIZONTAL, true);
-		fox1T = new Fox("F1T", Fox.FoxType.HORIZONTAL, false);
-		((Fox) fox1).addAssociatedPart((Fox) fox1T);
-		((Fox) fox1T).addAssociatedPart((Fox) fox1);
+		fox1T = ((Fox) fox1).getAssociatedPart();
+		
 		fox2 = new Fox("F2H", Fox.FoxType.VERTICAL, true);
-		fox2T = new Fox("F2T", Fox.FoxType.VERTICAL, false);
-		((Fox) fox2).addAssociatedPart((Fox) fox2T);
-		((Fox) fox2T).addAssociatedPart((Fox) fox2);
+		fox2T = ((Fox) fox2).getAssociatedPart();
 
-	
 		
 		rabbit1 = new Rabbit("RA1", Color.WHITE); 
 		rabbit2 = new Rabbit("RA2", Color.GRAY);
@@ -68,7 +67,8 @@ public class Game {
 
 		// Add the pieces to the board. Coordinates are row col
 		board.addPiece(fox1, 4, 3);
-		board.addPiece(fox1T, fox1.getXPos() - 1, fox1.getYPos()); // add fox1 tail
+		board.addPiece(fox1T, fox1T.getXPos(), fox1T.getYPos()); // add fox1 tail
+		
 
 		board.addPiece(fox2, 1, 1);
 		board.addPiece(fox2T, fox2.getXPos(), fox2.getYPos() - 1); // add fox2 tail
@@ -99,6 +99,22 @@ public class Game {
 		return animalPieces;
 	}
 
+	/**
+	 * Return an array list of the animals on the board, except for the tails. 
+	 * This is for the solver, because it would be redundant to check for heads and tails. 
+	 * @return
+	 */
+	public ArrayList<Piece> getAnimalsExceptTails(){
+		
+		ArrayList<Piece> animals = new ArrayList<>();
+		for (String s: animalPieces.keySet()) {
+			if (!((animalPieces.get(s) instanceof Fox) && !((Fox)animalPieces.get(s)).isHead())) {
+				animals.add(animalPieces.get(s));
+			}
+		}
+		
+		return animals;
+	}
 	/**
 	 * Main play routine. Loops until end of play.
 	 */
@@ -143,7 +159,7 @@ public class Game {
 
 			if (!validatePieceSelected(command))
 				return false;
-			if (!validateDestination(command.getX(), command.getY()))
+			if (!validateLocation(command.getX(), command.getY()))
 				return false;
 
 			return handleMove(command);
@@ -180,6 +196,17 @@ public class Game {
 		}
 		return false;
 	}
+	
+	private boolean validatePiece(int x, int y) {
+
+		//if (board.getPieceOnBoard(x, y)  == null) return false;
+		if (board.getPieceOnBoard(x, y) instanceof Fox || board.getPieceOnBoard(x, y) instanceof Rabbit) {
+			System.out.println(board.getPieceOnBoard(x, y).toString());
+			return true;
+		}
+		
+		return false;
+	}
 
 	/**
 	 * Checks if the user entered a valid destination to go to. i.e. if it is within
@@ -189,7 +216,7 @@ public class Game {
 	 * @param newY the row to go to
 	 * @return true if the destination is valid
 	 */
-	private boolean validateDestination(int newX, int newY) {
+	private boolean validateLocation(int newX, int newY) {
 		return !board.isOutOfRange(newX, newY);
 	}
 
@@ -203,14 +230,16 @@ public class Game {
 	 * @param command
 	 */
 	public Piece getPieceFromCommand(Command command) {
+		
+		//return board.getPieceOnBoard(command.getCurrX(), command.getCurrY());
 		String pieceString = command.getPiece();
 
 		for (String s : animalPieces.keySet()) {
 			if (pieceString.equalsIgnoreCase(s))
 				return animalPieces.get(s);
 		}
+		return null;
 
-		return null; // The piece is invalid
 	}
 
 	/**

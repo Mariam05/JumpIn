@@ -52,15 +52,12 @@ public abstract class Piece {
 	 */
 	public ArrayList<int[]> getAllValidMoves(Board board) {
 		ArrayList<int[]> allValidMoves = new ArrayList<>();
-		Command command;
-		ArrayList<Command> validCommands = new ArrayList<>();
 
 		for (int i = 0; i < board.SIZE; i++) {
 			for (int j = 0; j < board.SIZE; j++) {
 				if (validateMove(board, i, j)) {
 					int[] coordinates = { i, j };
 					allValidMoves.add(coordinates);
-					validCommands.add(new Command("move", toString(), i + "" + j));
 				}
 			}
 		}

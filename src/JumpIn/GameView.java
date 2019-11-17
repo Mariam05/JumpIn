@@ -21,8 +21,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 /**
- * This is the view class for the GUI. 
- * It has a model (Game object) and updates whenever the model updates
+ * This is the view class for the GUI. It has a model (Game object) and updates
+ * whenever the model updates
+ * 
  * @author Taher Shabaan, Hassan Hassan, Mariam Almalki, Nazifa Tanzim
  *
  */
@@ -31,7 +32,7 @@ public class GameView extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private Container container;
 	JButton board[][];// This will be a board of squares
-	
+
 	private int size; // The size of the board
 
 	private Image piece, whiteRabbit, yellowRabbit, greyRabbit, mushroom, foxface, foxtail, hole;
@@ -44,11 +45,12 @@ public class GameView extends JFrame {
 
 	private Game game;
 	private JMenuBar menuBar;
-	//private JMenu menu;
+	// private JMenu menu;
 	private JMenuItem menuItemHelp, menuItemQuit, menuItemReset, menuItemUndo, menuItemRedo, menuItemHint;
 
 	/**
 	 * Create a new view
+	 * 
 	 * @param model pass the model to the view
 	 */
 	public GameView(Game model) {
@@ -61,7 +63,7 @@ public class GameView extends JFrame {
 		container = new Container();
 		container.setLayout(new GridLayout(size, size));
 
-		add(container); //add the container to the jframe
+		add(container); // add the container to the jframe
 
 		setTitle("JumpIn Game");
 		setSize(700, 700);
@@ -76,6 +78,7 @@ public class GameView extends JFrame {
 
 	/**
 	 * Get the size of the view's board
+	 * 
 	 * @return int of size (in one way bc it's a square)
 	 */
 	public int getBoardSize() {
@@ -100,13 +103,13 @@ public class GameView extends JFrame {
 		board[1][3].setIcon(new ImageIcon(piece));
 		board[4][2].setIcon(new ImageIcon(piece));
 
-		//Add the animals
-		HashMap<String, Piece> animals = game.getAnimalsOnBoard(); //get the animals from the model
-		for (String s : animals.keySet()) { //for each animal
+		// Add the animals
+		HashMap<String, Piece> animals = game.getAnimalsOnBoard(); // get the animals from the model
+		for (String s : animals.keySet()) { // for each animal
 			Piece animal = animals.get(s);
 			int animalRow = animal.getYPos();
 			int animalCol = animal.getXPos();
-			if (animal instanceof Rabbit) { //if it's a rabbit, associate it with the appropriate rabbit image
+			if (animal instanceof Rabbit) { // if it's a rabbit, associate it with the appropriate rabbit image
 				Rabbit r = (Rabbit) animal;
 				if (r.getColour() == Color.WHITE)
 					piece = whiteRabbit.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
@@ -114,16 +117,24 @@ public class GameView extends JFrame {
 					piece = greyRabbit.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
 				if (r.getColour() == Color.YELLOW)
 					piece = yellowRabbit.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
-			} else if (animal instanceof Fox) { //if it's a fox, associate it with the appropriate fox image depending on whether it's a head/tail
+				board[animalRow][animalCol].setIcon(new ImageIcon(piece)); // add the image to the animal's location
+
+			} else if (animal instanceof Fox) { // if it's a fox, associate it with the appropriate fox image depending
+												// on whether it's a head/tail
 				Fox f = (Fox) animal;
+				
 				if (f.isHead()) {
+					Fox ft = f.associatedPart;
+					
 					piece = foxface.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
-				} else {
+					board[animalRow][animalCol].setIcon(new ImageIcon(piece)); // add the image to the animal's location
+
 					piece = foxtail.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
+					board[ft.getYPos()][ft.getXPos()].setIcon(new ImageIcon(piece)); // add the image to the animal's
+																						// location
 				}
 			}
 
-			board[animalRow][animalCol].setIcon(new ImageIcon(piece)); //add the image to the animal's location
 		}
 	}
 
@@ -133,12 +144,12 @@ public class GameView extends JFrame {
 	public void addMenuItems() {
 		// Create menu bar
 		menuBar = new JMenuBar();
-		
+
 		// Add undo button
 		menuItemUndo = new JMenuItem("Undo");
 		menuItemUndo.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 		menuBar.add(menuItemUndo);
-		
+
 		// Add redo button
 		menuItemRedo = new JMenuItem("Redo");
 		menuItemRedo.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
@@ -153,15 +164,15 @@ public class GameView extends JFrame {
 		menuItemReset = new JMenuItem("Reset");
 		menuItemReset.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 		menuBar.add(menuItemReset);
-		
+
 		// Add quit button
 		menuItemQuit = new JMenuItem("Quit");
 		menuItemQuit.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 		menuBar.add(menuItemQuit);
-		
-		menuItemHint = new JMenuItem("Hint",KeyEvent.VK_H);
+
+		menuItemHint = new JMenuItem("Hint", KeyEvent.VK_H);
 		menuItemHint.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-		menuBar.add(menuItemHint); 
+		menuBar.add(menuItemHint);
 
 		add(menuBar, BorderLayout.NORTH);
 	}
@@ -224,7 +235,7 @@ public class GameView extends JFrame {
 		}
 		putIconsOnBoard();
 	}
-	
+
 	public void resetView(Game game) {
 		this.game = game;
 		update();
@@ -242,6 +253,7 @@ public class GameView extends JFrame {
 
 	/**
 	 * If help button is pressed
+	 * 
 	 * @param a
 	 */
 	public void addHelpListener(ActionListener a) {
@@ -250,36 +262,40 @@ public class GameView extends JFrame {
 
 	/**
 	 * If quit button is pressed
+	 * 
 	 * @param a
 	 */
 	public void addQuitListener(ActionListener a) {
 		menuItemQuit.addActionListener(a);
 	}
-	
+
 	/**
 	 * If undo button is pressed
+	 * 
 	 * @param a
 	 * @author Nazifa Tanzim
 	 */
 	public void addUndoListener(ActionListener a) {
 		menuItemUndo.addActionListener(a);
 	}
-	
+
 	/**
 	 * if redo button is pressed
+	 * 
 	 * @param a
 	 * @author Nazifa Tanzim
 	 */
 	public void addRedoListener(ActionListener a) {
 		menuItemRedo.addActionListener(a);
 	}
-	
-	
+
 	public void addHintListener(ActionListener a) {
 		menuItemHint.addActionListener(a);
 	}
+
 	/**
 	 * if reset button is pressed
+	 * 
 	 * @param a
 	 * @author Nazifa Tanzim
 	 */

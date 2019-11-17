@@ -82,7 +82,7 @@ public class GameController {
 	 * Get the piece selected by the user. The information for this is stored in the buttonlistener.
 	 * @param b the button listener that received this event
 	 */
-	private void getPieceSelected(ButtonListener b) {
+	private void getPieceSelected(ButtonListener b) {	
 		word2 = game.getBoard().getSquare(b.getCol(), b.getRow()).getPieceString();
 
 	}

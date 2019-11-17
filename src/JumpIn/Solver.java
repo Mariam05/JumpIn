@@ -24,20 +24,19 @@ public class Solver {
 
 	public Solver(Game game) {
 		System.out.println("Getting help...");
+
 		// Get all the animals that are on the board currently
-		sourceAnimals = new ArrayList<>();
-		for (String p : game.getAnimalsOnBoard().keySet()) {
-			Piece pi = game.getAnimalsOnBoard().get(p);
-			sourceAnimals.add(pi);
-		}
+		sourceAnimals = game.getAnimalsExceptTails();
 
 		source = new Node(null, sourceAnimals, null);
-		
+
 		Node n = BFS();
-		while (n != null) {
+		
+		do {
 			System.out.println(n.getCommand());
+			n.getBoard().printBoard();
 			n = n.getParentNode();
-		}
+		} while(n != null);
 
 		System.out.println("Done");
 	}
@@ -49,31 +48,24 @@ public class Solver {
 
 		Set<Integer> visited = new HashSet<>(); // A set of visited nodes so that we don't loop infinitely
 
-	//	parentNodes = new HashMap<>(); // To store the parents of all nodes
-
 		while (!queue.isEmpty()) {
 
 			Node currNode = queue.remove(); // get and remove the first element in the queue
-			
+
 			if (!visited.contains(currNode.hashCode())) { // check that the state of the node has not yet been visited
 															// before proceeding
 				visited.add(currNode.hashCode()); // add it to the visited list
 
-				System.out.println("Visiting: ");
-				currNode.getBoard().printBoard();
-
-
 				if (currNode.isWinningState()) {
-					System.out.println("Found solution" + currNode.getCommand());
+					System.out.println("Found solution");
 					return currNode;
 				}
 
-				for (Piece p : sourceAnimals) { // for each animal in the game
-					ArrayList<Command> commands = p.getAllValidCommands(currNode.getBoard());// get all the possible
-																								// commands for that
-																								// piece
+				for (Piece p : currNode.getPieces()) { // for each animal in the game
+					ArrayList<Command> commands = p.getAllValidCommands(currNode.getBoard());// get all the possible commands for that piece
+					//System.out.println("Animal: " + p.toString());
 					for (Command c : commands) { // for each command, create a new node based on what state it leads to
-
+						
 						Node newNode = new Node(currNode, currNode.getPieces(), c);
 
 						queue.add(newNode); // add the new node to the queue so that we can explore it
@@ -82,10 +74,10 @@ public class Solver {
 
 				}
 			}
-				
+
 		}
 
-		return null;
+		return null; //solution not found, or there was an error
 	}
 
 }

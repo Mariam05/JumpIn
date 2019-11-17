@@ -52,7 +52,7 @@ public class Square {
 	}
 	
 	public String toString() {
-		if(hasPiece && isHole) return "| " + piece.toString() + "*  ";
+		if(hasPiece && isHole) return "| " + piece.toString() + "* ";
 		if (hasPiece) return "| " + piece.toString() + "  ";
 		if (isHole) return "|  HOL ";
 		return "|      ";

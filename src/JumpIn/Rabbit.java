@@ -67,6 +67,7 @@ public class Rabbit extends Piece {
 	public void handleMove(Board board, int newX, int newY) {
 		int currX = getXPos();
 		int currY = getYPos();
+		
 
 		// Move is validated, complete the action
 		board.removePiece(currX, currY);
@@ -78,6 +79,8 @@ public class Rabbit extends Piece {
 		if (board.isHole(newX, newY)) {
 			board.increaseNumRabbitsInHoles(); // if rabbit entered a hole
 		}
+		
+		setPosition(newX, newY);
 	}
 
 	/**
@@ -89,12 +92,12 @@ public class Rabbit extends Piece {
 		int currX = getXPos();
 		int currY = getYPos();
 
-		if ((Math.abs(currX - newX) < 2) && currY == newY)
+		if ((Math.abs(currX - newX) <= 1) && currY == newY)
 			return false; // moving one square horizontally
-		if ((Math.abs(currY - newY) < 2) && currX == newX)
+		if ((Math.abs(currY - newY) <= 1) && currX == newX)
 			return false; // moving one square vertically
 		if (!((currX != newX && currY == newY) || (currX == newX && currY != newY)))
-			return false; // moving vertically
+			return false; // moving diagonally
 
 		// If destination is already filled
 		if (board.hasPiece(newX, newY))

@@ -149,6 +149,10 @@ public class Board {
 		return board[y][x];
 	}
 	
+	public Piece getPieceOnBoard(int x, int y) {
+		return board[y][x].getPiece();
+	}
+	
 	
 	
 	/**
@@ -177,7 +181,7 @@ public class Board {
 	 */
 	public void printBoard() {
 		
-		System.out.println("         0       1       2       3       4   \n");
+		System.out.println("        0       1       2       3       4   \n");
 		
 		for (int i = 0; i < SIZE; i++) {
 			System.out.print(i+ "    ");
