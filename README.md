@@ -30,6 +30,7 @@ The documentation for this version includes the sequence diagrams, an updated UM
 ### Changes from Previous Version:
 Milestone 2 consists of reimplemented model with new classes such as Fox, rabbit, Piece, Mushroom, Command, CommandWord, Parser to enable more encapsulation and decoupling in the model. JUnit tests were added and reimplementation of the game using MVC design pattern. A sequence diagram was created for milestone 1. The feedback from milestone 1 was implemented and the changes can be found on branch Milestone1V.
 
+
 ### User Manual:
 The main class for this version of the project is called JumpInMVC.java in the JumpIn package. The game is played using the mouse by pressing the animal to be moved first then pressing on the desired location for the animal to be placed.
 The following are the list of menu options you can use: quit help
@@ -59,11 +60,11 @@ Figure1
 ![Figure 2](Documentation/FIGURE2.jpeg)
 Figure2
 
-It was decided to pass the model to the view so that the view can be constructed based on the objects in the model. This makes the code more cohesive and the classes work together, and so that nothing exists in the model that doesn’t exist in the view or vice versa.  
+It was decided to pass the model to the view so that the view can be constructed based on the objects in the model. This makes the code more cohesive and the classes work together, and so that nothing exists in the model that doesnâ€™t exist in the view or vice versa.  
 
 Also, for the model, classes were made for most of the pieces on the board to reduce the smell of the code and help differentiate between the different components of the code. Command, CommandWord and Parser class were implemented to get commands from the user using the GameView(Graphical User Interface) or the console. This decision was based on the feedback received for Milestone 1.
 
-We decided to change the implementation of Fox such that a fox object can represent either a fox’s head or a fox’s tail, and each object is associated with it’s corresponding piece. This implementation proved to be better because then each part can be mapped to its appropriate image.
+We decided to change the implementation of Fox such that a fox object can represent either a foxâ€™s head or a foxâ€™s tail, and each object is associated with itâ€™s corresponding piece. This implementation proved to be better because then each part can be mapped to its appropriate image.
 
 Similarly, we added a colour attribute to Rabbits, so that the right image can be used for each. 
 
