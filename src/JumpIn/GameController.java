@@ -173,15 +173,21 @@ public class GameController {
 		
 	}
 
-	
+	/**
+	 * This listener is for the help option / command
+	 * 
+	 * @author Mariam
+	 *
+	 */
 	class HintListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			(new Solver(game)).getHint();	
+			gameView.displayHint((new Solver(game)).getHint());
 		}
 		
 	}
+	
 	/**
 	 * This listener is for the help option / command
 	 * 
