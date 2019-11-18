@@ -24,11 +24,12 @@
 
 ### Description of Current Version:
 An MVC model is implemented with the game GUI, controller, and model to allow the game to be playable using the mouse. In addition, JUnit tests were added for the model logic testing if the expected results are achieved.
-The documentation for this version includes the sequence diagrams, an updated UML, CRC cards, design decisions, team member roles and responsibilities, a user manual, and the road map ahead. 
+The documentation for this version includes the sequence diagrams, an updated UML, CRC cards, design decisions, team member roles and responsibilities, a user manual, and the road map ahead.
 
-### Changes from Previous Version:
 Milestone 2 consists of reimplemented model with new classes such as Fox, rabbit, Piece, Mushroom, Command, CommandWord, Parser to enable more encapsulation and decoupling in the model. JUnit tests were added and reimplementation of the game using MVC design pattern. A sequence diagram was created for milestone 1. The feedback from milestone 1 was implemented and the changes can be found on branch Milestone1V.
 
+### Changes from Previous Version:
+Milestone 3 has new classes Node and Solver to implement the hint button functionality. Method to validate Fox and Rabbit moves were moved to their respective classes. JUnit tests were added and fixed to test new and altered classes. Additional buttons and their functionalities were implemented (undo, redo, reset, hint).
 
 ### User Manual:
 The main class for this version of the project is called JumpInMVC.java in the JumpIn package. The game is played using the mouse by pressing the animal to be moved first then pressing on the desired location for the animal to be placed.
@@ -77,22 +78,19 @@ For the solver, it was decided to use breadth first search instead of depth firs
 Each node stores it's parent node, which is used so that the solution can be traced back to the source. 
 
 ### Known Issues:
-None at the moment. No levels implemented.
-
+No known issues as of now.
 
 ### Team member roles:
-**Mariam Almalki**: Added command classes and functionality to the code, reimplemented the model to work with MVC, worked on connecting the model, view and controller. Created sequence diagram for Milestone 2 and helped compose design decisions.
+**Mariam Almalki**: Made it so that Fox and Rabbit handle their own moves. Created Node and Solver classes and functionality. Implemented hint button functionality (outputs next command in console). Fixed issues with reset button. Worked on sequence diagram for Milestone 3. Created UML diagram.
 
-**Nazifa Tanzim**: Worked on JUnit testing, split old gameEngine class to create a piece abstract class from which foxes, rabbits, and mushrooms can be made. Worked on reimplementing the model. Created CRC cards and helped with final testing of Milestone2.
+**Nazifa Tanzim**: Created and implemented undo and redo buttons, as well as initial version of reset button. Implemented hint display in view. Worked on sequence diagram.
 
-**Taher Shabaan**: Designed and implemented the look of the View (GUI), wrote JUint tests for various classes. Created the UML diagram for milestone 2. 
+**Taher Shabaan**: Fixed issues with icons disappearing from package after initially pulling repository. Fixed existing JUint tests for classes that were altered. Worked on sequence diagram. 
 
-**Hassan Hassan**: Worked on connecting the model, view and controller, Worked on JUnit testing. Composed all other documentation elements for milestone 2. 
-
+**Hassan Hassan**: Refined alternate MVC of code that was not implemented to reflect (can be found in branch HassanController). Worked on JUnit testing for new classes that were created. Worked on sequence diagram. 
 
 ### Things to Note:
 1.The design not used for connecting the MVC together was worked on in the HassanController branch.
-2.Images are in bin folder. sometimes they disappear depending on what files are being tracked. 
 
 ### Roadmap Ahead
-Add Undo/Redo features to the game to help the user get back to the initial position of the pieces on the board, as well as, helping the user solve the game giving hints on possible moves to solve the game. Also, adding Save/Load features using a database to the game to allow the user to save the positions of the pieces in the game and come back to it later to continue playing the game.
+Add Save/Load features using a database to the game to allow the user to save the positions of the pieces in the game and come back to it later to continue playing the game. Add levels using XML/JSON.
