@@ -63,6 +63,7 @@ public abstract class Piece {
 	 */
 	public abstract void handleMove(Board board, int newX, int newY);
 	
+
 	/**
 	 * Check if the move is valid
 	 * @param board

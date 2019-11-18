@@ -118,7 +118,7 @@ public class GameView extends JFrame {
 				if (r.getColour() == Color.YELLOW)
 					piece = yellowRabbit.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
 				board[animalRow][animalCol].setIcon(new ImageIcon(piece)); // add the image to the animal's location
-
+				
 			} else if (animal instanceof Fox) { // if it's a fox, associate it with the appropriate fox image depending
 												// on whether it's a head/tail
 				Fox f = (Fox) animal;
@@ -131,7 +131,7 @@ public class GameView extends JFrame {
 
 					piece = foxtail.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
 					board[ft.getYPos()][ft.getXPos()].setIcon(new ImageIcon(piece)); // add the image to the animal's
-																						// location
+																					 // location
 				}
 			}
 
@@ -235,14 +235,33 @@ public class GameView extends JFrame {
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
 				board[i][j].setIcon(null);
+				board[i][j].setBackground(new Color(0, 204, 0));
 			}
 		}
 		putIconsOnBoard();
 	}
 
+	/**
+	 * Resets the game and then updates the board accordingly
+	 * @param game
+	 */
 	public void resetView(Game game) {
 		this.game = game;
 		update();
+	}
+	
+	/**
+	 * Displays the hint on the board 
+	 * 
+	 * @param c
+	 */
+	public void displayHint(Command c) {
+		// Highlights the piece to be moved
+		board[game.getPieceFromCommand(c).getYPos()][game.getPieceFromCommand(c).getXPos()]
+				.setBackground(Color.BLUE);
+		
+		// Highlights piece destination
+		board[c.getY()][c.getX()].setBackground(Color.BLUE);
 	}
 
 	/**

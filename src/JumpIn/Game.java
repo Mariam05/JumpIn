@@ -48,7 +48,7 @@ public class Game {
 		fox1 = new Fox("F1H", Fox.FoxType.HORIZONTAL, true);
 		fox1T = ((Fox) fox1).getAssociatedPart();
 		
-		fox2 = new Fox("F2H", Fox.FoxType.VERTICAL, true);
+		fox2 = new Fox("F2V", Fox.FoxType.VERTICAL, true);
 		fox2T = ((Fox) fox2).getAssociatedPart();
 
 		

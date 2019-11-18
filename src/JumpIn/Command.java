@@ -33,7 +33,8 @@ public class Command {
 	}
 
 	/**
-	 * Get the command word
+	 * Return the command word (the first word) of this command. If the command was
+	 * not understood, the result is null.
 	 * 
 	 * @return String of command word
 	 */
@@ -47,10 +48,9 @@ public class Command {
 	}
 
 	/**
-	 * Return the command word (the first word) of this command. If the command was
-	 * not understood, the result is null.
+	 * Name of piece to be moved
 	 * 
-	 * @return The command word.
+	 * @return piece name
 	 */
 	public String getPiece() {
 		return piece;
