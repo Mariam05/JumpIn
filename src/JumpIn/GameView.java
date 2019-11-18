@@ -6,7 +6,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
@@ -15,7 +14,6 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -175,7 +173,7 @@ public class GameView extends JFrame {
 
 		menuItemHint = new JMenuItem("Hint", KeyEvent.VK_H);
 		menuItemHint.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-		menuItemHint.addActionListener(e -> {(new Solver(game)).getHint();});
+		menuItemHint.addActionListener(e -> {displayHint((new Solver(game)).getHint());});
 		menuBar.add(menuItemHint);
 
 		add(menuBar, BorderLayout.NORTH);
@@ -261,7 +259,7 @@ public class GameView extends JFrame {
 				.setBackground(Color.BLUE);
 		
 		// Highlights piece destination
-		board[c.getY()][c.getX()].setBackground(Color.BLUE);
+		board[c.getY()][c.getX()].setBackground(Color.BLUE); 
 	}
 
 	/**

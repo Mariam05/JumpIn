@@ -19,7 +19,7 @@ import java.util.Stack;
  */
 public class Game {
 
-	private Parser parser;
+	private Parser parser; 
 	private Board board;
 	
 	private HashMap<String, Piece> animalPieces;

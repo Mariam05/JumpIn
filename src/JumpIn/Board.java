@@ -5,6 +5,8 @@ import java.util.HashMap;
 /**
  * This class creates the board of the game with all the static objects that go on it
  * @author Mariam Almalki
+ * 
+ * Create a new enum class for boardlevels. 
  *
  */
 public class Board {

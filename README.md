@@ -19,7 +19,6 @@
 * Design Decisions
 * Known Issues
 * Team Member Roles
-* Things to Note (//here we would put things like.. pls look at the other branches for commits by x person)
 * Roadmap Ahead
 
 
@@ -52,6 +51,8 @@ The objective of the game is to move the rabbits and foxes, through a series of 
 around the obstacles until all the rabbits are safely in their hole.
 
 ### Design Decisions:
+
+###### Milestone 2:
 Throughout the research process for this milestone, the team found two different ways to implement the MVC pattern. The first way is shown in figure 1 and the second is shown in figure 2. The team worked on both ways in order to see which is best suited for the task. The team decided to use the method in Figure 1 since it was found to be simpler. The implementation of the second way can be found in the HassanController branch. 
 
 ![Figure 1](Documentation/FIGURE1.jpeg)
@@ -66,14 +67,17 @@ Also, for the model, classes were made for most of the pieces on the board to re
 
 We decided to change the implementation of Fox such that a fox object can represent either a foxâ€™s head or a foxâ€™s tail, and each object is associated with itâ€™s corresponding piece. This implementation proved to be better because then each part can be mapped to its appropriate image.
 
-Similarly, we added a colour attribute to Rabbits, so that the right image can be used for each. 
+Similarly, we added a colour attribute to Rabbits, so that the right image can be used for each.
+
+###### Milestone 3: 
+For this milestone, we had to implement undo/redo functionality as well as a solver for the game. 
+
+For the solver, it was decided to use breadth first search instead of depth first search so that we can find the shortest path to the solution. In the future, if harder levels take too long, we may decide to switch to depth first in order because it is more efficient. 
+
+Each node stores it's parent node, which is used so that the solution can be traced back to the source. 
 
 ### Known Issues:
-The reset button does not work yet. 
-
-The game was designed such that rabbits can jump over empty holes. We didn't realize until later that this is against the rules.
-
-Otherwise none, although potentially: images disappearing from bin folder. The images used in the GUI are located in the project bin folder and often need to be re-added to that folder after pulling the project. 
+None at the moment. No levels implemented.
 
 
 ### Team member roles:
@@ -85,7 +89,6 @@ Otherwise none, although potentially: images disappearing from bin folder. The i
 
 **Hassan Hassan**: Worked on connecting the model, view and controller, Worked on JUnit testing. Composed all other documentation elements for milestone 2. 
 
-**Abdulla Al-wazzan**: Unfortunately did not help the team with Milestone 2 (he left the team), although he did create the originally missing sequence diagram for milestone 1. 
 
 ### Things to Note:
 1.The design not used for connecting the MVC together was worked on in the HassanController branch.
