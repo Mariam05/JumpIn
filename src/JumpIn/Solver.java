@@ -19,9 +19,7 @@ public class Solver {
 
 	private Node source;
 	private List<Piece> sourceAnimals;
-	Node winningNode = null;
-	Map<Node, Node> parentNodes;
-
+	
 	public Solver(Game game) {
 		System.out.println("Getting help...");
 
@@ -45,7 +43,7 @@ public class Solver {
 		return n.getCommand();
 	}
 
-	public Node BFS() {
+	private Node BFS() {
 
 		Queue<Node> queue = new ArrayDeque<>(); // A queue to store the nodes that we want to explore
 		queue.add(source);

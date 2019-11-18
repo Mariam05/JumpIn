@@ -23,6 +23,7 @@ public class Board {
 	private int numOfRabbitsInHoles;
 	
 	private HashMap<Piece, String> rabbits; //this hashmap is to keep track of the number of rabbits added to the board
+	
 	/**
 	 * Instantiates the array of squares and sets the hole positions
 	 * Holes are set here because they are part of the board (i.e. cannot be moved/ are not pieces)
@@ -53,8 +54,6 @@ public class Board {
 		Mushroom mushroom2 = new Mushroom("MSH");
 		addPiece(mushroom1, 2, 4);
 		addPiece(mushroom2, 3, 1);
-		
-
 	}
 	
 	/**
@@ -149,21 +148,16 @@ public class Board {
 		return board[y][x];
 	}
 	
-	public Piece getPieceOnBoard(int x, int y) {
-		return board[y][x].getPiece();
-	}
-	
-	
-	
 	/**
-	 * Checks if a spot on the board is occupied by a piece
+	 * Returns the piece on the specified coordinate of the board
 	 * @param x
 	 * @param y
 	 * @return
 	 */
-	public boolean isSpotEmpty(int x, int y) {
-		return board[y][x].hasPiece();
+	public Piece getPieceOnBoard(int x, int y) {
+		return board[y][x].getPiece();
 	}
+	
 	
 	/**
 	 * Checks if a user inputted coordination is out of range

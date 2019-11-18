@@ -35,7 +35,7 @@ public class Rabbit extends Piece {
 	 * @param colour
 	 */
 	public Rabbit(String pieceName, Color colour) {
-		super(pieceName, Type.RABBIT);
+		super(pieceName);
 		this.colour = colour;
 	}
 
@@ -84,8 +84,7 @@ public class Rabbit extends Piece {
 	}
 
 	/**
-	 * Check if a rabbit's move is valid. An invalid move is if it is simply moving
-	 * to one of the squares beside it
+	 * Check if a rabbit's move is valid.
 	 */
 	public boolean validateMove(Board board, int newX, int newY) {
 
@@ -169,11 +168,5 @@ public class Rabbit extends Piece {
 		return getStringRepresentation().equals(other.getStringRepresentation());
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((getStringRepresentation() == null) ? 0 : getStringRepresentation().hashCode());
-		return result;
-	}
+
 }

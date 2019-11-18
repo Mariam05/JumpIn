@@ -9,7 +9,7 @@ public class Mushroom extends Piece {
 	private String stringRep;
 	
 	public Mushroom(String pieceName) {
-		super(pieceName, Type.MUSHROOM);
+		super(pieceName);
 		stringRep = getStringRepresentation();
 	}
 

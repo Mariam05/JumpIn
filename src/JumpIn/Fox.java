@@ -38,7 +38,7 @@ public class Fox extends Piece {
 	 * The counterpart to this fox (i.e. if it's a head its associated part will be
 	 * the tail)
 	 */
-	Fox associatedPart;
+	private Fox associatedPart;
 
 	/**
 	 * Create a new fox object. Must specify the name, type, and part.
@@ -48,7 +48,7 @@ public class Fox extends Piece {
 	 * @param isHead    bool representing whether its a head or tail
 	 */
 	public Fox(String pieceName, FoxType foxType, boolean isHead) {
-		super(pieceName, Type.FOX);
+		super(pieceName);
 		this.foxType = foxType;
 		this.isHead = isHead;
 		if (isHead) {
@@ -58,10 +58,12 @@ public class Fox extends Piece {
 
 	}
 
+	/**
+	 * Construct a tail for this fox's head 
+	 * @return the tail object
+	 */
 	private Fox makeTail() {
-		Fox tail = new Fox("F" + toString().charAt(1) + "T", foxType, false);
-	
-		return tail;
+		return new Fox("F" + toString().charAt(1) + "T", foxType, false);
 	}
 	
 	private void updateTailPos() {
@@ -72,6 +74,9 @@ public class Fox extends Piece {
 		}
 	}
 	
+	/**
+	 * Change the position of the fox and it's tail. 
+	 */
 	@Override
 	public void setPosition(int x, int y) {
 		super.setPosition(x, y);
@@ -145,14 +150,6 @@ public class Fox extends Piece {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((getStringRepresentation() == null) ? 0 : getStringRepresentation().hashCode());
-		return result;
-	}
-
-	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -170,8 +167,7 @@ public class Fox extends Piece {
 	/**
 	 * Make sure that the fox's move is valid. i.e. that the user is not trying to
 	 * move it in a direction that isn't valid, especially with respect to the
-	 * actual fox. BIG note: it does not check if there are obstacles in the way, or
-	 * if it's going off the board. That's not this method's responsibility.
+	 * actual fox. 
 	 * 
 	 * @param destinationPos the position that the player wants the fox to move.
 	 */

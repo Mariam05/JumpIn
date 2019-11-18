@@ -9,7 +9,9 @@ import java.util.Stack;
 
 /**
  * This is the main class for the JumpIn came. 
- * It acts as the model in the MVC pattern
+ * It acts as the model in the MVC pattern.
+ * 
+ * TODO: add a method that will just take names of the pieces and assembles the board based on that location
  * 
  * @author Mariam Almalki, Nazifa Tanzim
  * @version 2.0 of JumpIn
@@ -19,10 +21,8 @@ public class Game {
 
 	private Parser parser;
 	private Board board;
-	private Piece fox1, fox2, fox1T, fox2T, rabbit1, rabbit2, rabbit3;
 	
 	private HashMap<String, Piece> animalPieces;
-	private List<String> validPieces;
 	
 	private boolean quitGame;
 	
@@ -41,6 +41,7 @@ public class Game {
 		animalPieces = new HashMap<>();
 		board = new Board();
 		quitGame = false;
+		Piece fox1, fox2, fox1T, fox2T, rabbit1, rabbit2, rabbit3;
 
 		// Instantiate the pieces on the board
 
@@ -108,13 +109,14 @@ public class Game {
 		
 		ArrayList<Piece> animals = new ArrayList<>();
 		for (String s: animalPieces.keySet()) {
-			if (!((animalPieces.get(s) instanceof Fox) && !((Fox)animalPieces.get(s)).isHead())) {
+			if (!((animalPieces.get(s) instanceof Fox) && !((Fox)animalPieces.get(s)).isHead())) { //if it's not a tail, add it
 				animals.add(animalPieces.get(s));
 			}
 		}
 		
 		return animals;
 	}
+	
 	/**
 	 * Main play routine. Loops until end of play.
 	 */
@@ -128,7 +130,7 @@ public class Game {
 	}
 
 	/**
-	 * Play the game.
+	 * Called at the beginning only. 
 	 */
 	public void play() {
 		printGameInstructions();
@@ -197,16 +199,6 @@ public class Game {
 		return false;
 	}
 	
-	private boolean validatePiece(int x, int y) {
-
-		//if (board.getPieceOnBoard(x, y)  == null) return false;
-		if (board.getPieceOnBoard(x, y) instanceof Fox || board.getPieceOnBoard(x, y) instanceof Rabbit) {
-			System.out.println(board.getPieceOnBoard(x, y).toString());
-			return true;
-		}
-		
-		return false;
-	}
 
 	/**
 	 * Checks if the user entered a valid destination to go to. i.e. if it is within
@@ -257,7 +249,35 @@ public class Game {
 		return true;
 	}
 
+	/**
+	 * Allows the user to undo a move
+	 * 
+	 * @return the previous game state 
+	 */
+	public Game undo() {
+		redoGameStates.add(this); // Stores current state in redo stack in case user wants to return to this state
+		return undoGameStates.pop(); // Removes previous state from undo stack and returns it
+	}
+	
+	/**
+	 * Allows the user to re-do a move/revert an undo
+	 * 
+	 * @return the game state that was undone
+	 */
+	public Game redo() {
+		undoGameStates.add(this); // Stores current state in undo stack in case user wants to return to this state
+		return redoGameStates.pop(); // Removes previous state from redo stack and returns it
+	}
 
+	/**
+	 * Resets the game
+	 * 
+	 * @return initial state of game
+	 */
+	public Game reset() {
+		return new Game();
+	}
+	
 	public String printGameInstructions() {
 		String title = "JumpIN Instructions: \n\n";
 		String obstacles = "\tThe pieces are: Mushroom, Fox, Rabbit, Hole.\n\n"
@@ -286,34 +306,5 @@ public class Game {
 		// + commands);
 		return title + obstacles + movements + objective + howTo;
 
-	}
-
-	/**
-	 * Allows the user to undo a move
-	 * 
-	 * @return the previous game state 
-	 */
-	public Game undo() {
-		redoGameStates.add(this); // Stores current state in redo stack in case user wants to return to this state
-		return undoGameStates.pop(); // Removes previous state from undo stack and returns it
-	}
-	
-	/**
-	 * Allows the user to re-do a move/revert an undo
-	 * 
-	 * @return the game state that was undone
-	 */
-	public Game redo() {
-		undoGameStates.add(this); // Stores current state in undo stack in case user wants to return to this state
-		return redoGameStates.pop(); // Removes previous state from redo stack and returns it
-	}
-
-	/**
-	 * Resets the game
-	 * 
-	 * @return initial state of game
-	 */
-	public Game reset() {
-		return new Game();
 	}
 }

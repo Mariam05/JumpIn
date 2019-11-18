@@ -26,11 +26,9 @@ import java.util.Set;
  */
 public class Node {
 
-	private int identifier;
 	private Node parentNode;
 	private Board board;
 	private List<Piece> animalList; // a list of animals
-	private List<Node> children;
 	private String pieceToMove;
 	private int newX, newY;
 	private Command command;
@@ -71,9 +69,6 @@ public class Node {
 		return parentNode;
 	}
 
-	public int getidentifier() {
-		return identifier;
-	}
 
 	private Piece getAnimalToMove() {
 		for (Piece p : animalList) {
@@ -95,10 +90,6 @@ public class Node {
 
 	public boolean isWinningState() {
 		return board.hasWon();
-	}
-
-	public void addChild(Node n) {
-		children.add(n);
 	}
 
 	public List<Piece> getCopyOfAnimalList(List<Piece> list) {

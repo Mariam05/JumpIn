@@ -55,12 +55,8 @@ public class GameController {
 		}
 		
 		// Adding listeners to menu items
-		gameView.addHelpListener(new HelpListener());
-		gameView.addQuitListener(new QuitListener());
 		gameView.addUndoListener(new UndoListener());
 		gameView.addRedoListener(new RedoListener());
-		gameView.addResetListener(new ResetListener());
-		gameView.addHintListener(new HintListener());
 	}
 
 	/**
@@ -174,46 +170,6 @@ public class GameController {
 	}
 
 	
-	class HintListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			(new Solver(game)).getHint();	
-		}
-		
-	}
-	/**
-	 * This listener is for the help option / command
-	 * 
-	 * @author Mariam
-	 *
-	 */
-	class HelpListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			String helpMessage = game.printGameInstructions();
-			gameView.displayMessage(helpMessage);
-		}
-
-	}
-
-	/**
-	 * This listener is for the quit option/command
-	 * 
-	 * @author Mariam
-	 *
-	 */
-	class QuitListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			String quitMessage = game.quitMessage();
-			gameView.displayMessage(quitMessage);
-			gameView.dispose();
-
-		}
-	}
-	
 	/**
 	 * Listens for undo option/command
 	 * 
@@ -237,19 +193,6 @@ public class GameController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			redo();
-		}
-	}
-
-	/**
-	 * Listens for reset option/command
-	 * 
-	 * @author Nazifa Tanzim
-	 *
-	 */
-	class ResetListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			gameView.resetView(game.reset());
 		}
 	}
 	

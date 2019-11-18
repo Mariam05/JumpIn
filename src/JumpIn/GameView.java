@@ -90,7 +90,7 @@ public class GameView extends JFrame {
 	 * This method checks the location of all the animals and places an image of
 	 * them on the board .
 	 */
-	public void putIconsOnBoard() {
+	private void putIconsOnBoard() {
 		// Add the holes
 		piece = hole.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
 		for (int i = 1; i < dimensions.length; i = i + 2) {
@@ -124,7 +124,7 @@ public class GameView extends JFrame {
 				Fox f = (Fox) animal;
 				
 				if (f.isHead()) {
-					Fox ft = f.associatedPart;
+					Fox ft = f.getAssociatedPart();
 					
 					piece = foxface.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
 					board[animalRow][animalCol].setIcon(new ImageIcon(piece)); // add the image to the animal's location
@@ -141,7 +141,7 @@ public class GameView extends JFrame {
 	/**
 	 * Create a menu that will allow the user to choose if they want help or quit.
 	 */
-	public void addMenuItems() {
+	private void addMenuItems() {
 		// Create menu bar
 		menuBar = new JMenuBar();
 
@@ -158,20 +158,24 @@ public class GameView extends JFrame {
 		// Add help button
 		menuItemHelp = new JMenuItem("Help");
 		menuItemHelp.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		menuItemHelp.addActionListener(e -> {displayMessage(game.printGameInstructions());});
 		menuBar.add(menuItemHelp);
 
 		// Add reset button
 		menuItemReset = new JMenuItem("Reset");
 		menuItemReset.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		menuItemReset.addActionListener(e -> {dispose(); Main.main(null);});
 		menuBar.add(menuItemReset);
 
 		// Add quit button
 		menuItemQuit = new JMenuItem("Quit");
 		menuItemQuit.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		menuItemQuit.addActionListener(e -> {displayMessage(game.quitMessage()); dispose();});
 		menuBar.add(menuItemQuit);
 
 		menuItemHint = new JMenuItem("Hint", KeyEvent.VK_H);
 		menuItemHint.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		menuItemHint.addActionListener(e -> {(new Solver(game)).getHint();});
 		menuBar.add(menuItemHint);
 
 		add(menuBar, BorderLayout.NORTH);
@@ -181,7 +185,7 @@ public class GameView extends JFrame {
 	 * The board will be created then we are adding the buttons in side it and also
 	 * adding background color
 	 */
-	public void createBoard() {
+	private void createBoard() {
 		board = new JButton[size][size];
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
@@ -200,7 +204,7 @@ public class GameView extends JFrame {
 	/*
 	 * All the animals, mushrooms and holes will be added by using this method
 	 */
-	public void instantiateIcons() {
+	private void instantiateIcons() {
 		// we are adding the holes on the board
 		hole = new ImageIcon(this.getClass().getResource("/JumpIn/black-hole.png")).getImage();
 
@@ -249,24 +253,6 @@ public class GameView extends JFrame {
 	 */
 	public void displayMessage(String message) {
 		JOptionPane.showMessageDialog(this, message);
-	}
-
-	/**
-	 * If help button is pressed
-	 * 
-	 * @param a
-	 */
-	public void addHelpListener(ActionListener a) {
-		menuItemHelp.addActionListener(a);
-	}
-
-	/**
-	 * If quit button is pressed
-	 * 
-	 * @param a
-	 */
-	public void addQuitListener(ActionListener a) {
-		menuItemQuit.addActionListener(a);
 	}
 
 	/**

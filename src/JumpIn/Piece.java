@@ -10,23 +10,10 @@ import java.util.ArrayList;
 public abstract class Piece {
 	
 	/**
-	 * The type of piece. Is this necessary?
-	 * @author tomar
-	 *
-	 */
-	public enum Type {
-		RABBIT, FOX, MUSHROOM
-	}
-	
-	/**
 	 * Used to identify which piece it is
 	 */
 	private String pieceName;
 	
-	/**
-	 * What kind of piece is it. This may not be necessary...
-	 */
-	private Type pieceType;
 	
 	/**
 	 * Where it is currently located on the board
@@ -38,32 +25,11 @@ public abstract class Piece {
 	 * @param pieceName
 	 * @param pieceType
 	 */
-	protected Piece(String pieceName, Type pieceType) {
+	public Piece(String pieceName) {
 		this.pieceName = pieceName;
-		this.pieceType = pieceType;
+		//this.pieceType = pieceType;
 	}
 	
-	/**
-	 * Get all the positions that a piece can move to.
-	 * The positions are stored in an array of 2 elements (first is x and second is y)
-	 * 
-	 * @param board
-	 * @return the arraylist holding the positions of all the valid moves.
-	 */
-	public ArrayList<int[]> getAllValidMoves(Board board) {
-		ArrayList<int[]> allValidMoves = new ArrayList<>();
-
-		for (int i = 0; i < board.SIZE; i++) {
-			for (int j = 0; j < board.SIZE; j++) {
-				if (validateMove(board, i, j)) {
-					int[] coordinates = { i, j };
-					allValidMoves.add(coordinates);
-				}
-			}
-		}
-
-		return allValidMoves;
-	}
 	
 	/**
 	 * Get all the positions that a piece can move to.
@@ -88,16 +54,6 @@ public abstract class Piece {
 	
 	
 	/**
-	 * print all the valid moves, for testing/debugging purposes. 
-	 * @param board
-	 */
-	public void printAllValidMoves(Board board) {
-		for (int[] i : getAllValidMoves(board)) {
-			System.out.print(i[0] + " " + i[1] + "    ");
-		}
-	}
-	
-	/**
 	 * This method will actually change the location of the piece to the 
 	 * new location.  
 	 * @param board
@@ -107,20 +63,28 @@ public abstract class Piece {
 	 */
 	public abstract void handleMove(Board board, int newX, int newY);
 	
-	
+	/**
+	 * Check if the move is valid
+	 * @param board
+	 * @param newX
+	 * @param newY
+	 * @return true if the move is valid
+	 */
 	public abstract boolean validateMove(Board board, int newX, int newY);
 	
+	/**
+	 * This is a factory method to make a new piece based on the string representation of another piece (deep copy)
+	 * @param str the string representation
+	 * @return the new Piece
+	 */
 	public abstract Piece manufacturePiece(String str);
 	
+	/**
+	 * Return a string representation that can be used to uniquely identify the state of a piece
+	 * @return
+	 */
 	public abstract String getStringRepresentation();
 	
-	/**
-	 * Get the type of piece
-	 * @return Type of piece
-	 */
-	public Type getPieceType() {
-		return this.pieceType;
-	}
 	
 	/**
 	 * Set the position of thep piece
@@ -160,5 +124,13 @@ public abstract class Piece {
 	
 	@Override
 	public abstract boolean equals(Object obj);
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((getStringRepresentation() == null) ? 0 : getStringRepresentation().hashCode());
+		return result;
+	}
 	
 }
