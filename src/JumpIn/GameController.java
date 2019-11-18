@@ -102,7 +102,7 @@ public class GameController {
 		if (!validMove) { // if the move is invalid notify the player
 			gameView.displayMessage("Invalid move");
 		} else { // otherwise check for winner and update view
-			undo.add(revert); // Only adding revert command if the move is valid
+			//undo.add(revert); // Only adding revert command if the move is valid
 			if (game.getBoard().hasWon()) {
 				gameView.update();
 				gameView.displayMessage("CONGRATS! You solved the puzzle!");
@@ -138,16 +138,11 @@ public class GameController {
 	 */
 	private void undo() {
 		// Check if the stack is empty
-		if(undo.isEmpty()) {
+		if(!game.undo()) {
 			gameView.displayMessage("No more undo's left");
 		} else {
-			Command c = undo.pop(); // Get the most recent undo command
-			redo.add(getRevertCommand(c)); // Add command to reverse undo
-			processCommand(c.getPiece(), c.getDestination()); // Process undo move
-			undo.pop(); // Remove extra command that gets added during processing
 			gameView.update(); // Update the view
 		}
-		
 	}
 
 	/**

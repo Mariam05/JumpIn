@@ -293,7 +293,7 @@ public class Fox extends Piece {
 		if (!isHead()) {
 			switch (direction) {
 			case ("right"):
-				board.getPieceOnBoard(currX + 1, currY).handleMove(board, newX - 1, newY);
+				board.getPieceOnBoard(currX + 1, currY).handleMove(board, newX + 1, newY);
 				break;
 			case ("left"):
 				board.getPieceOnBoard(currX + 1, currY).handleMove(board, newX + 1, newY);
@@ -302,7 +302,7 @@ public class Fox extends Piece {
 				board.getPieceOnBoard(currX, currY + 1).handleMove(board, newX, newY + 1);
 				break;
 			case ("down"):
-				board.getPieceOnBoard(currX, currY + 1).handleMove(board, newX, newY - 1);
+				board.getPieceOnBoard(currX, currY + 1).handleMove(board, newX, newY + 1);
 				break;
 			}
 		} else {

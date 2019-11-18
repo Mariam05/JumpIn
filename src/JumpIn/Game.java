@@ -1,4 +1,4 @@
-	
+
 package JumpIn;
 
 import java.awt.Color;
@@ -8,10 +8,11 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- * This is the main class for the JumpIn came. 
- * It acts as the model in the MVC pattern.
+ * This is the main class for the JumpIn came. It acts as the model in the MVC
+ * pattern.
  * 
- * TODO: add a method that will just take names of the pieces and assembles the board based on that location
+ * TODO: add a method that will just take names of the pieces and assembles the
+ * board based on that location
  * 
  * @author Mariam Almalki, Nazifa Tanzim
  * @version 2.0 of JumpIn
@@ -20,17 +21,11 @@ import java.util.Stack;
 public class Game {
 
 	private Board board;
-	
+
 	private HashMap<String, Piece> animalPieces;
-	
-	private boolean quitGame;
-	
-	
-	// Will hold a list of Game objects that will contain the previous state of the game after each move
-	private static Stack<Game> undoGameStates;
-	private static Stack<Game> redoGameStates;
-	
-	
+
+	private Stack<Command> undo, redo; // Stores commands to revert moves either way
+
 	/**
 	 * Instantiate the parser and commandWords objects. Set up the board with the
 	 * pieces
@@ -38,23 +33,20 @@ public class Game {
 	public Game() {
 		animalPieces = new HashMap<>();
 		board = new Board();
-		quitGame = false;
 		Piece fox1, fox2, fox1T, fox2T, rabbit1, rabbit2, rabbit3;
 
 		// Instantiate the pieces on the board
 
 		fox1 = new Fox("F1H", Fox.FoxType.HORIZONTAL, true);
 		fox1T = ((Fox) fox1).getAssociatedPart();
-		
+
 		fox2 = new Fox("F2V", Fox.FoxType.VERTICAL, true);
 		fox2T = ((Fox) fox2).getAssociatedPart();
 
-		
-		rabbit1 = new Rabbit("RA1", Color.WHITE); 
+		rabbit1 = new Rabbit("RA1", Color.WHITE);
 		rabbit2 = new Rabbit("RA2", Color.GRAY);
 		rabbit3 = new Rabbit("RA3", Color.YELLOW);
-		
-		
+
 		// Add the pieces to the piece hashmap
 		animalPieces.put(fox1.toString(), fox1);
 		animalPieces.put(fox2.toString(), fox2);
@@ -67,7 +59,6 @@ public class Game {
 		// Add the pieces to the board. Coordinates are row col
 		board.addPiece(fox1, 4, 3);
 		board.addPiece(fox1T, fox1T.getXPos(), fox1T.getYPos()); // add fox1 tail
-		
 
 		board.addPiece(fox2, 1, 1);
 		board.addPiece(fox2T, fox2.getXPos(), fox2.getYPos() - 1); // add fox2 tail
@@ -75,15 +66,15 @@ public class Game {
 		board.addPiece(rabbit1, 3, 0);
 		board.addPiece(rabbit2, 4, 2);
 		board.addPiece(rabbit3, 1, 4);
-		
-		redoGameStates = new Stack<>();
-		undoGameStates = new Stack<>();
-		undoGameStates.add(this); // Adding current (beginning) state to stack
+
+		undo = new Stack<Command>();
+		redo = new Stack<Command>();
 
 	}
 
 	/**
 	 * Returns the board used in the game
+	 * 
 	 * @return
 	 */
 	public Board getBoard() {
@@ -92,6 +83,7 @@ public class Game {
 
 	/**
 	 * Returns the list of animals on the board and their identification string
+	 * 
 	 * @return hashmap of animals on board
 	 */
 	public HashMap<String, Piece> getAnimalsOnBoard() {
@@ -99,22 +91,24 @@ public class Game {
 	}
 
 	/**
-	 * Return an array list of the animals on the board, except for the tails. 
-	 * This is for the solver, because it would be redundant to check for heads and tails. 
+	 * Return an array list of the animals on the board, except for the tails. This
+	 * is for the solver, because it would be redundant to check for heads and
+	 * tails.
+	 * 
 	 * @return
 	 */
-	public ArrayList<Piece> getAnimalsExceptTails(){
-		
+	public ArrayList<Piece> getAnimalsExceptTails() {
+
 		ArrayList<Piece> animals = new ArrayList<>();
-		for (String s: animalPieces.keySet()) {
-			if (!((animalPieces.get(s) instanceof Fox) && !((Fox)animalPieces.get(s)).isHead())) { //if it's not a tail, add it
+		for (String s : animalPieces.keySet()) {
+			if (!((animalPieces.get(s) instanceof Fox) && !((Fox) animalPieces.get(s)).isHead())) { // if it's not a
+																									// tail, add it
 				animals.add(animalPieces.get(s));
 			}
 		}
-		
+
 		return animals;
 	}
-
 
 	/**
 	 * Given a command, process (that is: execute) the command.
@@ -139,12 +133,11 @@ public class Game {
 				return false;
 			if (!validateLocation(command.getX(), command.getY()))
 				return false;
-
+			undo.add(getRevertCommand(command));
 			return handleMove(command);
-			
+
 		} else if (commandWord.equals("quit")) {
 			System.out.println(quitMessage());
-			quitGame = true;
 			return false;
 		}
 
@@ -174,7 +167,6 @@ public class Game {
 		}
 		return false;
 	}
-	
 
 	/**
 	 * Checks if the user entered a valid destination to go to. i.e. if it is within
@@ -198,8 +190,8 @@ public class Game {
 	 * @param command
 	 */
 	public Piece getPieceFromCommand(Command command) {
-		
-		//return board.getPieceOnBoard(command.getCurrX(), command.getCurrY());
+
+		// return board.getPieceOnBoard(command.getCurrX(), command.getCurrY());
 		String pieceString = command.getPiece();
 
 		for (String s : animalPieces.keySet()) {
@@ -218,31 +210,59 @@ public class Game {
 	 */
 	public boolean handleMove(Command command) {
 		Piece piece = getPieceFromCommand(command);
-		if(!piece.validateMove(board, command.getX(), command.getY())){
+		if (!piece.validateMove(board, command.getX(), command.getY())) {
 			return false;
 		}
+		
 		piece.handleMove(board, command.getX(), command.getY());
+		
 		return true;
+	}
+
+	/**
+	 * Gets the command to reverse another
+	 * 
+	 * @param cmd
+	 * @return command to revert command passed as an argument
+	 * @author Nazifa Tanzim
+	 */
+	private Command getRevertCommand(Command cmd) {
+		// Getting the piece that is being moved
+		Piece p = getPieceFromCommand(cmd);
+		if (p instanceof Rabbit || p instanceof Fox) {
+			String originalLocation = p.getXPos() + "" + p.getYPos(); // Getting current position of piece (before it's														// moved)
+			return new Command("move", p.toString(), originalLocation);
+		} else {
+			return null; // Return null if the piece is not an animal
+		}
+
 	}
 
 	/**
 	 * Allows the user to undo a move
 	 * 
-	 * @return the previous game state 
+	 * @return the previous game state
 	 */
-	public Game undo() {
-		redoGameStates.add(this); // Stores current state in redo stack in case user wants to return to this state
-		return undoGameStates.pop(); // Removes previous state from undo stack and returns it
+	public boolean undo() {
+		// Check if the stack is empty
+		if (undo.isEmpty()) {
+			return false;
+		} else {
+			Command c = undo.pop(); // Get the most recent undo command
+			redo.add(getRevertCommand(c)); // Add command to reverse undo
+			handleMove(c); // Process undo move
+			System.out.println(c);
+		}
+		return true;
 	}
-	
+
 	/**
 	 * Allows the user to re-do a move/revert an undo
 	 * 
 	 * @return the game state that was undone
 	 */
-	public Game redo() {
-		undoGameStates.add(this); // Stores current state in undo stack in case user wants to return to this state
-		return redoGameStates.pop(); // Removes previous state from redo stack and returns it
+	public boolean redo() {
+		return false; // Removes previous state from redo stack and returns it
 	}
 
 	/**
@@ -253,7 +273,7 @@ public class Game {
 	public Game reset() {
 		return new Game();
 	}
-	
+
 	public String printGameInstructions() {
 		String title = "JumpIN Instructions: \n\n";
 		String obstacles = "\tThe pieces are: Mushroom, Fox, Rabbit, Hole.\n\n"
