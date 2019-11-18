@@ -27,8 +27,6 @@ public class Fox extends Piece {
 	 */
 	private boolean isHead;
 
-	private String direction; // the direction the fox is moving in
-
 	/**
 	 * The type of fox
 	 */
@@ -59,23 +57,24 @@ public class Fox extends Piece {
 	}
 
 	/**
-	 * Construct a tail for this fox's head 
+	 * Construct a tail for this fox's head
+	 * 
 	 * @return the tail object
 	 */
 	private Fox makeTail() {
 		return new Fox("F" + toString().charAt(1) + "T", foxType, false);
 	}
-	
+
 	private void updateTailPos() {
 		if (isHorizontal()) {
-			associatedPart.setPosition(getXPos()-1, getYPos());
+			associatedPart.setPosition(getXPos() - 1, getYPos());
 		} else {
-			associatedPart.setPosition(getXPos(), getYPos() -1);
+			associatedPart.setPosition(getXPos(), getYPos() - 1);
 		}
 	}
-	
+
 	/**
-	 * Change the position of the fox and it's tail. 
+	 * Change the position of the fox and it's tail.
 	 */
 	@Override
 	public void setPosition(int x, int y) {
@@ -83,7 +82,7 @@ public class Fox extends Piece {
 		if (isHead()) {
 			updateTailPos();
 		}
-		
+
 	}
 
 	/**
@@ -167,7 +166,7 @@ public class Fox extends Piece {
 	/**
 	 * Make sure that the fox's move is valid. i.e. that the user is not trying to
 	 * move it in a direction that isn't valid, especially with respect to the
-	 * actual fox. 
+	 * actual fox.
 	 * 
 	 * @param destinationPos the position that the player wants the fox to move.
 	 */
@@ -194,7 +193,6 @@ public class Fox extends Piece {
 		if (isHorizontal()) {
 
 			if (currX < newX) { // moving right
-				direction = "right";
 				if (isHead()) { // if head, start at square to right and continue to destination
 					start = currX + 1;
 					end = newX;
@@ -213,7 +211,6 @@ public class Fox extends Piece {
 				}
 
 			} else { // moving left
-				direction = "left";
 				if (isHead()) { // if head, start at square left to tail and check to where the tail would reach
 					start = currX - 2;
 					end = newX - 1;
@@ -234,7 +231,6 @@ public class Fox extends Piece {
 
 		} else if (!isHorizontal()) { // this fox moves vertically
 			if (currY > newY) { // moving up
-				direction = "up";
 				if (isHead()) { // if head (head is below tail for vertical fox)
 					start = currY - 2; // start at square above the tail
 					end = newY - 1; // end at square above final head destination
@@ -252,7 +248,6 @@ public class Fox extends Piece {
 				}
 
 			} else { // moving down
-				direction = "down";
 				if (isHead()) { // if head, start at square below head
 					start = currY + 1;
 					end = newY;
@@ -290,29 +285,19 @@ public class Fox extends Piece {
 
 		board.removePiece(currX, currY);
 
-		if (!isHead()) {
-			switch (direction) {
-			case ("right"):
+		if (!isHead()) { //if it's the tail, pass the move job to the head
+			if (isHorizontal()) {
 				board.getPieceOnBoard(currX + 1, currY).handleMove(board, newX + 1, newY);
-				break;
-			case ("left"):
-				board.getPieceOnBoard(currX + 1, currY).handleMove(board, newX + 1, newY);
-				break;
-			case ("up"):
+			} else {
 				board.getPieceOnBoard(currX, currY + 1).handleMove(board, newX, newY + 1);
-				break;
-			case ("down"):
-				board.getPieceOnBoard(currX, currY + 1).handleMove(board, newX, newY + 1);
-				break;
 			}
 		} else {
-
 			if (!isHorizontal()) {
 				board.removePiece(currX, currY - 1); // remove fox tail
 
 				board.addPiece(this, newX, newY); // add head
 				board.addPiece(getAssociatedPart(), newX, newY - 1); // add tail
-				
+
 			} else {
 
 				board.removePiece(currX, currY); // remove head of fox

@@ -140,7 +140,7 @@ public class Node {
 		// positions return false
 		for (Piece p : animalList) {
 			for (Piece p2 : other.animalList) {
-				if (p.toString().equals(other.toString())) {
+				if (p.toString().equals(p2.toString())) {
 					if (!p.equals(p2)) {
 						return false;
 					} else {
@@ -186,14 +186,14 @@ public class Node {
 		
 		Command c = new Command("move", "RA1" , "32");
 		Node n1 = new Node( null, a1, null);
-		Node n2 = new Node( null, a2, c);
+		Node n2 = new Node( null, a2, null);
 		
 		System.out.println("n1: " + n1.hashCode());
 		System.out.println("n2: " + n2.hashCode());	
 		Set<Integer> visited = new HashSet<>();
 		visited.add(n1.hashCode());
 	
-		System.out.println(visited.contains(n2.hashCode()));
+		System.out.println(n1.equals(n2));
 		
 		//System.out.println(((Integer)n1.hashCode()).equals((Integer)n2.hashCode()));
 	}

@@ -146,11 +146,13 @@ public class GameView extends JFrame {
 		// Add undo button
 		menuItemUndo = new JMenuItem("Undo");
 		menuItemUndo.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		menuItemUndo.addActionListener(e -> {undo();});
 		menuBar.add(menuItemUndo);
 
 		// Add redo button
 		menuItemRedo = new JMenuItem("Redo");
 		menuItemRedo.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		menuItemRedo.addActionListener(e -> {redo();});
 		menuBar.add(menuItemRedo);
 
 		// Add help button
@@ -238,15 +240,6 @@ public class GameView extends JFrame {
 		}
 		putIconsOnBoard();
 	}
-
-	/**
-	 * Resets the game and then updates the board accordingly
-	 * @param game
-	 */
-	public void resetView(Game game) {
-		this.game = game;
-		update();
-	}
 	
 	/**
 	 * Displays the hint on the board 
@@ -261,6 +254,33 @@ public class GameView extends JFrame {
 		// Highlights piece destination
 		board[c.getY()][c.getX()].setBackground(Color.BLUE); 
 	}
+	
+	/**
+	 * Undoes current move and stores command to revert it in redo
+	 * 
+	 * @author Nazifa Tanzim
+	 */
+	private void undo() {
+		if(!game.undo()) {
+			displayMessage("No more undo's left");
+		} else {
+			update(); // Update the view
+		}
+	}
+
+	/**
+	 * Allows user to redo a move
+	 * 
+	 * @author Nazifa Tanzim
+	 */
+	private void redo() {
+		if(!game.redo()) {
+			displayMessage("No more redo's left");
+		} else{
+			update(); // Update the view
+		}
+		
+	}
 
 	/**
 	 * Will display a message to the user. Expect message to be on of the following:
@@ -272,37 +292,4 @@ public class GameView extends JFrame {
 		JOptionPane.showMessageDialog(this, message);
 	}
 
-	/**
-	 * If undo button is pressed
-	 * 
-	 * @param a
-	 * @author Nazifa Tanzim
-	 */
-	public void addUndoListener(ActionListener a) {
-		menuItemUndo.addActionListener(a);
-	}
-
-	/**
-	 * if redo button is pressed
-	 * 
-	 * @param a
-	 * @author Nazifa Tanzim
-	 */
-	public void addRedoListener(ActionListener a) {
-		menuItemRedo.addActionListener(a);
-	}
-
-	public void addHintListener(ActionListener a) {
-		menuItemHint.addActionListener(a);
-	}
-
-	/**
-	 * if reset button is pressed
-	 * 
-	 * @param a
-	 * @author Nazifa Tanzim
-	 */
-	public void addResetListener(ActionListener a) {
-		menuItemReset.addActionListener(a);
-	}
 }

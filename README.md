@@ -75,7 +75,13 @@ For this milestone, we had to implement undo/redo functionality as well as a sol
 
 For the solver, it was decided to use breadth first search instead of depth first search so that we can find the shortest path to the solution. In the future, if harder levels take too long, we may decide to switch to depth first in order because it is more efficient. 
 
+Hashcodes were used in order to eliminate any nodes that have already been visited (so that we don't visit them again)
+
 Each node stores it's parent node, which is used so that the solution can be traced back to the source. 
+
+For the undo/redo functionality, a stack of commands was used such that every time one of the buttons is pressed the corresponding stack pops the top command and sends it to the game for processing. 
+
+Many elements were moved out of the controller to the view. This is because it contained many functional interfaces that weren't necessary. Therefore, some buttons (such as help, quit, undo/redo) simply used lambdas to route back to the methods that would have been called had the action went through the controller and then the model. This also reduced the amount of code written by a significant amount. 
 
 ### Known Issues:
 No known issues as of now.

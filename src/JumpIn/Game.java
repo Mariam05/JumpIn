@@ -213,9 +213,9 @@ public class Game {
 		if (!piece.validateMove(board, command.getX(), command.getY())) {
 			return false;
 		}
-		
+
 		piece.handleMove(board, command.getX(), command.getY());
-		
+
 		return true;
 	}
 
@@ -230,7 +230,8 @@ public class Game {
 		// Getting the piece that is being moved
 		Piece p = getPieceFromCommand(cmd);
 		if (p instanceof Rabbit || p instanceof Fox) {
-			String originalLocation = p.getXPos() + "" + p.getYPos(); // Getting current position of piece (before it's														// moved)
+			String originalLocation = p.getXPos() + "" + p.getYPos(); // Getting current position of piece (before it's
+																		// // moved)
 			return new Command("move", p.toString(), originalLocation);
 		} else {
 			return null; // Return null if the piece is not an animal
@@ -247,12 +248,10 @@ public class Game {
 		// Check if the stack is empty
 		if (undo.isEmpty()) {
 			return false;
-		} else {
-			Command c = undo.pop(); // Get the most recent undo command
-			redo.add(getRevertCommand(c)); // Add command to reverse undo
-			handleMove(c); // Process undo move
-			System.out.println(c);
 		}
+		Command c = undo.pop(); // Get the most recent undo command
+		redo.add(getRevertCommand(c)); // Add command to reverse undo
+		handleMove(c); // Process undo move. we already know it's valid, doesn't need to go through process command
 		return true;
 	}
 
@@ -262,7 +261,13 @@ public class Game {
 	 * @return the game state that was undone
 	 */
 	public boolean redo() {
-		return false; // Removes previous state from redo stack and returns it
+		// Check if stack is empty
+		if (redo.isEmpty()) {
+			return false;
+		}
+		Command c = redo.pop(); // Get the most recent redo command
+		processCommand(c); // Process redo move. 
+		return true; // Removes previous state from redo stack and returns it
 	}
 
 	/**
