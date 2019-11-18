@@ -2,10 +2,8 @@ package JumpIn;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.EventObject;
 import java.util.*;
 
-import javax.swing.JButton;
 
 /**
  * The controller of the MVC Pattern.

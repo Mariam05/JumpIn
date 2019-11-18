@@ -312,7 +312,7 @@ public class Fox extends Piece {
 
 				board.addPiece(this, newX, newY); // add head
 				board.addPiece(getAssociatedPart(), newX, newY - 1); // add tail
-
+				
 			} else {
 
 				board.removePiece(currX, currY); // remove head of fox
@@ -320,7 +320,6 @@ public class Fox extends Piece {
 
 				board.addPiece(this, newX, currY); // add head of fox
 				board.addPiece(getAssociatedPart(), newX - 1, currY); // add tail of fox
-
 			}
 		}
 	}

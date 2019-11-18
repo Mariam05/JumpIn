@@ -221,7 +221,7 @@ public class GameView extends JFrame {
 		// instantiate the fox face image
 		foxface = new ImageIcon(this.getClass().getResource("/JumpIn/foxface.png")).getImage();
 
-		// instantiate the fox tail image
+		// instantiate the fox tail image 
 		foxtail = new ImageIcon(this.getClass().getResource("/JumpIn/foxtail.png")).getImage();
 	}
 

@@ -1,4 +1,4 @@
-
+	
 package JumpIn;
 
 import java.awt.Color;
@@ -19,7 +19,6 @@ import java.util.Stack;
  */
 public class Game {
 
-	private Parser parser; 
 	private Board board;
 	
 	private HashMap<String, Piece> animalPieces;
@@ -37,7 +36,6 @@ public class Game {
 	 * pieces
 	 */
 	public Game() {
-		parser = new Parser();
 		animalPieces = new HashMap<>();
 		board = new Board();
 		quitGame = false;
@@ -115,28 +113,6 @@ public class Game {
 		}
 		
 		return animals;
-	}
-	
-	/**
-	 * Main play routine. Loops until end of play.
-	 */
-	public void startNewRound() {
-		board.printBoard();
-		Command command = parser.getCommand();
-		while (processCommand(command) && !board.hasWon()) {
-			board.printBoard();
-			command = parser.getCommand();
-		}
-	}
-
-	/**
-	 * Called at the beginning only. 
-	 */
-	public void play() {
-		printGameInstructions();
-		while (!board.hasWon() & !quitGame) {
-			startNewRound();
-		}
 	}
 
 
