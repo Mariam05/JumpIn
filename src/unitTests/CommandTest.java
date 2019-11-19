@@ -8,7 +8,7 @@ import JumpIn.Command;
 /**
  * JUnit Tests to test the functionality of methods in Command class
  * 
- * @author Nazifa Tanzim
+ * @author Nazifa Tanzim & Taher
  *
  */
 public class CommandTest {

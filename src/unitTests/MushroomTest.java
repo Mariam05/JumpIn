@@ -7,25 +7,24 @@ import org.junit.Test;
 import JumpIn.*;
 
 /*
- * @author TS
+ * @author Taher Shabaan
  * 
  * This class is testing the mushroom constructor, position, name and validateThemove
  */
 public class MushroomTest {
 	
-	
-
 	private Mushroom mushroom ;
-	
+	private Board board;
 	
 	@Before
 	public void setUp() throws Exception {
 		mushroom = new Mushroom("Mushroom1");
+		board = new Board();
 	}
 
 	@Test
 	public void ConstructorTest() {
-		assertEquals(mushroom.getPieceType(),Piece.Type.MUSHROOM);
+		assertEquals(mushroom.toString(), "Mushroom1");
 	}
 	
 	/*
@@ -33,7 +32,7 @@ public class MushroomTest {
 	 */
 	@Test
 	public void ValidatemoveTest() {
-		assertEquals(false,mushroom.validateMove(0, 2));
+		assertEquals(false,mushroom.validateMove(board, 0, 2));
 	}
 	
 	@Test

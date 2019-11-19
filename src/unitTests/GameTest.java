@@ -7,7 +7,7 @@ import JumpIn.*;
 /**
  * Testing Game class functionality
  * 
- * @author Nazifa Tanzim
+ * @author Nazifa Tanzim & Taher Shabaan
  *
  */
 public class GameTest {
@@ -34,7 +34,7 @@ public class GameTest {
 		rabbit = new Rabbit("RA1");
 		fox = new Fox("FO1", Fox.FoxType.HORIZONTAL, true);
 		foxTail = new Fox("F1T", Fox.FoxType.HORIZONTAL, false);
-		fox.addAssociatedPart(foxTail);
+		//fox.addAssociatedPart(foxTail);
 		Board b = new Board();
 		b.addPiece(rabbit, 3, 0);
 		b.addPiece(fox, 4, 3);
@@ -71,13 +71,13 @@ public class GameTest {
 	 */
 	@Test
 	public void testHandleFoxMove() {
+		assert(g.processCommand(c));
+
 		// valid destination
-		c = new Command("move", fox.toString(), "23");
-		assert(g.handleFoxMove(fox,c));
-		
+		c = new Command("move", fox.toString(), "23");		
 		// invalid destination
 		c = new Command("move", fox.toString(), "34");
-		assert(!g.handleFoxMove(fox,c));
+		assert(!g.processCommand(c));
 	}
 
 	/**
@@ -87,11 +87,11 @@ public class GameTest {
 	public void testHandleRabbitMove() {
 		// valid destination
 		c = new Command("move", rabbit.toString(), "32"); 
-		assert(g.handleRabbitMove(rabbit, c));
+		assert(g.processCommand(c));
 		
 		// invalid destination
 		c = new Command("move", rabbit.toString(), "20");
-		assert(!g.handleRabbitMove(rabbit, c));
+		assert(!g.processCommand(c));
 	}
 
 }

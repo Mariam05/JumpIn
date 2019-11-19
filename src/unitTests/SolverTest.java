@@ -4,6 +4,17 @@ import org.junit.Before;
 import org.junit.Test;
 import JumpIn.*;
 
+/**
+ * Test the functionality of the solver.
+ * Because we used BFS, we know that the solution has to be the shortest, and we use the solution from 
+ * the original JumpIn game manual. Therefore, we test the solver by making it solve the original puzzle (with no
+ * moves applied) and checking that each corresponding hint is correct. 
+ * 
+ * We also make sure that the solver works if the player moves the pieces randomly.
+ * 
+ * @author Hassan Hassan
+ *
+ */
 public class SolverTest {
 
 	private Game game;
