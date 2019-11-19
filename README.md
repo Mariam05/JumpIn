@@ -32,10 +32,14 @@ Milestone 2 consists of reimplemented model with new classes such as Fox, rabbit
 Milestone 3 has new classes Node and Solver to implement the hint button functionality. Method to validate Fox and Rabbit moves were moved to their respective classes. JUnit tests were added and fixed to test new and altered classes. Additional buttons and their functionalities were implemented (undo, redo, reset, hint).
 
 ### User Manual:
-The main class for this version of the project is called JumpInMVC.java in the JumpIn package. The game is played using the mouse by pressing the animal to be moved first then pressing on the desired location for the animal to be placed.
-The following are the list of menu options you can use: quit help
+The main class for this version of the project is called Main.java in the JumpIn package. The game is played using the mouse by pressing the animal to be moved first then pressing on the desired location for the animal to be placed.
+The following are the list of menu options you can use: quit help hint reset undo redo 
 	quit will end the game.
-	Help will display the following instructions:
+	hint will highlight the piece to move and the location to move it to in order to do in order to solve the puzzle.
+	undo will undo the last move
+	redo will undo any undos that were previously done.
+	reset will start the game from the beginning.
+	help will display the following instructions:
 		
 The obstacles are: Mushroom, Fox, Rabbit.
 
@@ -50,6 +54,7 @@ Mushrooms and holes are stationary.
 
 The objective of the game is to move the rabbits and foxes, through a series of movements
 around the obstacles until all the rabbits are safely in their hole.
+
 
 ### Design Decisions:
 

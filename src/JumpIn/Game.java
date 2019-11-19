@@ -269,15 +269,7 @@ public class Game {
 		processCommand(c); // Process redo move. 
 		return true; // Removes previous state from redo stack and returns it
 	}
-
-	/**
-	 * Resets the game
-	 * 
-	 * @return initial state of game
-	 */
-	public Game reset() {
-		return new Game();
-	}
+	
 
 	public String printGameInstructions() {
 		String title = "JumpIN Instructions: \n\n";
