@@ -71,7 +71,7 @@ It was decided to pass the model to the view so that the view can be constructed
 
 Also, for the model, classes were made for most of the pieces on the board to reduce the smell of the code and help differentiate between the different components of the code. Command, CommandWord and Parser class were implemented to get commands from the user using the GameView(Graphical User Interface) or the console. This decision was based on the feedback received for Milestone 1.
 
-We decided to change the implementation of Fox such that a fox object can represent either a foxâ€™s head or a foxâ€™s tail, and each object is associated with itâ€™s corresponding piece. This implementation proved to be better because then each part can be mapped to its appropriate image.
+We decided to change the implementation of Fox such that a fox object can represent either a fox head or a fox tail, and each object is associated with itâ€™s corresponding piece. This implementation proved to be better because then each part can be mapped to its appropriate image.
 
 Similarly, we added a colour attribute to Rabbits, so that the right image can be used for each.
 
@@ -90,6 +90,8 @@ Many elements were moved out of the controller to the view. This is because it c
 
 We removed classes such as Parser and CommandWord as well as methods such as play() and startNewRound() because they were made specifically for the text based game and are now unused. 
 
+We decided to change the way that a Fox is created: instead of creating a Fox head and a Fox tail and then associating them with eachother, we made it so that once a Fox head is created, it automatically creates a an associated Fox tail. This was necessary for the solver so that the two pieces move together, and so that only the fox head can be included in the array of animals such that we are not checking two extra pieces unnecessarily. 
+
 ### Known Issues:
 No known issues as of now.
 
@@ -103,7 +105,8 @@ No known issues as of now.
 **Hassan Hassan**: Refined alternate MVC of code that was not implemented to reflect (can be found in branch HassanController). Worked on JUnit testing for new classes that were created. Worked on sequence diagram. 
 
 ### Things to Note:
-1.The design not used for connecting the MVC together was worked on in the HassanController branch.
+1. The design not used for connecting the MVC together was worked on in the HassanController branch.
+2. For the sequence diagram, for some methods such as processCommand(), the sequence of calls was only shown once to avoid clutter. 
 
 ### Roadmap Ahead
 Add Save/Load features using a database to the game to allow the user to save the positions of the pieces in the game and come back to it later to continue playing the game. Add levels using XML/JSON.

@@ -75,8 +75,7 @@ public class Solver {
 															// before proceeding
 				visited.add(currNode.hashCode()); // add it to the visited list
 
-				if (currNode.isWinningState()) {
-					System.out.println("Found solution");
+				if (currNode.isWinningState()) { //check if the current node contains a winning state
 					return currNode;
 				}
 
