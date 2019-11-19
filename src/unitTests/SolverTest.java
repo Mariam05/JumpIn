@@ -1,7 +1,8 @@
+package unitTests;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-
+import JumpIn.*;
 
 public class SolverTest {
 

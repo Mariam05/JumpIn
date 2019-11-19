@@ -15,7 +15,7 @@ import java.util.Stack;
  * board based on that location
  * 
  * @author Mariam Almalki, Nazifa Tanzim
- * @version 2.0 of JumpIn
+ * @version 3.0 of JumpIn
  *
  */
 public class Game {

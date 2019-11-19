@@ -88,6 +88,8 @@ For the undo/redo functionality, a stack of commands was used such that every ti
 
 Many elements were moved out of the controller to the view. This is because it contained many functional interfaces that weren't necessary. Therefore, some buttons (such as help, quit, undo/redo) simply used lambdas to route back to the methods that would have been called had the action went through the controller and then the model. This also reduced the amount of code written by a significant amount. 
 
+We removed classes such as Parser and CommandWord as well as methods such as play() and startNewRound() because they were made specifically for the text based game and are now unused. 
+
 ### Known Issues:
 No known issues as of now.
 

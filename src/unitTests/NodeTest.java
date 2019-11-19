@@ -1,3 +1,4 @@
+package unitTests;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
@@ -5,7 +6,13 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import JumpIn.*;
 
+/**
+ * Test the functionalitiies of the Node class
+ * @author Hassan Hassan
+ *
+ */
 public class NodeTest {
 
 	private Node node;

@@ -36,7 +36,6 @@ public class GameController {
 
 	/**
 	 * Add a button action listener to each button in the view
-	 * Add action listeners to menu buttons
 	 */
 	private void addActionListeners() {
 		// Iterating through board and adding button listeners to every square

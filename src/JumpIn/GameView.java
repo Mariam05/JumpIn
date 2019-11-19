@@ -173,6 +173,7 @@ public class GameView extends JFrame {
 		menuItemQuit.addActionListener(e -> {displayMessage(game.quitMessage()); dispose();});
 		menuBar.add(menuItemQuit);
 
+		//Add hint button
 		menuItemHint = new JMenuItem("Hint", KeyEvent.VK_H);
 		menuItemHint.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 		menuItemHint.addActionListener(e -> {displayHint((new Solver(game)).getHint());});
@@ -206,25 +207,25 @@ public class GameView extends JFrame {
 	 */
 	private void instantiateIcons() {
 		// we are adding the holes on the board
-		hole = new ImageIcon(this.getClass().getResource("/JumpIn/black-hole.png")).getImage();
+		hole = new ImageIcon(this.getClass().getResource("/JumpIn/Icons/black-hole.png")).getImage();
 
 		// instantiate the mushroom image
-		mushroom = new ImageIcon(this.getClass().getResource("/JumpIn/mushroom.png")).getImage();
+		mushroom = new ImageIcon(this.getClass().getResource("/JumpIn/Icons/mushroom.png")).getImage();
 
 		// instantiate the white rabbit image
-		whiteRabbit = new ImageIcon(this.getClass().getResource("/JumpIn/whiteRabbit.png")).getImage();
+		whiteRabbit = new ImageIcon(this.getClass().getResource("/JumpIn/Icons/whiteRabbit.png")).getImage();
 
 		// instantiate the grey rabbit image
-		greyRabbit = new ImageIcon(this.getClass().getResource("/JumpIn/rabbit.png")).getImage();
+		greyRabbit = new ImageIcon(this.getClass().getResource("/JumpIn/Icons/rabbit.png")).getImage();
 
 		// instantiate the yellow rabbit image
-		yellowRabbit = new ImageIcon(this.getClass().getResource("/JumpIn/yellowandBlack.png")).getImage();
+		yellowRabbit = new ImageIcon(this.getClass().getResource("/JumpIn/Icons/yellowandBlack.png")).getImage();
 
 		// instantiate the fox face image
-		foxface = new ImageIcon(this.getClass().getResource("/JumpIn/foxface.png")).getImage();
+		foxface = new ImageIcon(this.getClass().getResource("/JumpIn/Icons/foxface.png")).getImage();
 
 		// instantiate the fox tail image 
-		foxtail = new ImageIcon(this.getClass().getResource("/JumpIn/foxtail.png")).getImage();
+		foxtail = new ImageIcon(this.getClass().getResource("/JumpIn/Icons/foxtail.png")).getImage();
 	}
 
 	/**

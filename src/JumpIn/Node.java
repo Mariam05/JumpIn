@@ -7,32 +7,52 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/*
- * Create a new board in each node and add all the pieces to that board.
- */
 /**
- * A node contains the locations of the pieces on a board as well as the status
- * of the board.
+ * A node represents the state of the game, which includes all its pieces and their locations.
+ * Each node must know it's parent node, and will inherit it's parent's animals and a command. 
  * 
- * @author tomar - the source is the current state of the game. - then we choose
- *         a piece - then we get all the valid moves for a piece, passing the
- *         source's board - then we create a new node with the location of the
- *         new piece. - may need to store the command that got it there - maybe
- *         we don't need a new board for each node? Could potentially have just
- *         one board to copy the source and then store each state in a hash...
- *         but then we'd need
- *         
- *         problem is that when I'm creating the clones they aren't being associated
+ * @author Mariam Almalki
  */
 public class Node {
 
+	/**
+	 * The Node's parent. the source will have this as null
+	 */
 	private Node parentNode;
+	
+	/**
+	 * A new board to hold the pieces, complete the moves, and check for the winning status
+	 */
 	private Board board;
+	
+	/**
+	 * The list of animals on the board
+	 */
 	private List<Piece> animalList; // a list of animals
+	
+	/**
+	 * The name of the piece to move. 
+	 */
 	private String pieceToMove;
+	
+	/**
+	 * The new location for the piece to go to
+	 */
 	private int newX, newY;
+	
+	/**
+	 * The command inherited from the parent node.
+	 */
 	private Command command;
 
+	/**
+	 * Constructor to create a new node. 
+	 * It makes a deep copy of all the animals such that it is not altering the parent's animals,
+	 * then it sets up the board and implements the move / command on the board 
+	 * @param parentNode
+	 * @param parentsAnimals
+	 * @param command
+	 */
 	public Node(Node parentNode, List<Piece> parentsAnimals, Command command) {
 		this.parentNode = parentNode;
 		this.command = command;
@@ -53,23 +73,43 @@ public class Node {
 
 	}
 	
+	/**
+	 * Return animals on the board
+	 * @return
+	 */
 	public List<Piece> getPieces(){
 		return animalList;
 	}
 	
+	/**
+	 * Get the command that was handled in this node. 
+	 * @return Command object
+	 */
 	public Command getCommand() {
 		return command;
 	}
 	
+	/**
+	 * Get this node's board. This is used to get all valid moves later on 
+	 * @return Board object
+	 */
 	public Board getBoard() {
 		return board;
 	}
 
+	/**
+	 * Get the parent node of this node. 
+	 * @return Node object
+	 */
 	public Node getParentNode() {
 		return parentNode;
 	}
 
 
+	/**
+	 * Determine which animal is being moved
+	 * @return
+	 */
 	private Piece getAnimalToMove() {
 		for (Piece p : animalList) {
 			if ((p.toString()).equals(pieceToMove))
@@ -78,6 +118,9 @@ public class Node {
 		return null;
 	}
 
+	/**
+	 * Add all animals to the board
+	 */
 	public void addAnimalsToBoard() {
 		for (Piece animal : animalList) {
 			if (animal instanceof Fox) {
@@ -88,10 +131,19 @@ public class Node {
 		}
 	}
 
+	/**
+	 * Check if this node contains a winning state (i.e. all rabbits in hole)
+	 * @return true if winning state. 
+	 */
 	public boolean isWinningState() {
 		return board.hasWon();
 	}
 
+	/**
+	 * Get a deep copy of all animals
+	 * @param list the animal list to make a deep copy of
+	 * @return the list of animals
+	 */
 	public List<Piece> getCopyOfAnimalList(List<Piece> list) {
 		List<Piece> copyAnimals = new ArrayList<>();
 		for (Piece p : list) {
@@ -156,46 +208,4 @@ public class Node {
 
 		return true;
 	}
-
-	/**
-	 * Just to test if aspects of this class work
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		List<Piece> a1 = new ArrayList<>();
-		List<Piece> a2 = new ArrayList<>();
-		
-		Fox fox1 = new Fox("F1H", Fox.FoxType.HORIZONTAL, true);
-		//((Fox) fox1).addAssociatedPart((Fox) fox1T);
-		//((Fox) fox1T).addAssociatedPart((Fox) fox1);
-		
-		fox1.setPosition(4, 3);
-		
-		
-		Rabbit rabbit1 = new Rabbit("RA1", Color.WHITE); 
-		rabbit1.setPosition(3, 0);
-		Rabbit rabbit2 = new Rabbit("RA2", Color.GRAY);
-		rabbit2.setPosition(4, 2);
-		Rabbit rabbit3 = new Rabbit("RA3", Color.GRAY);
-		rabbit2.setPosition(4, 2);
-		
-		a1.add(fox1); a1.add(rabbit1); a1.add(rabbit2);
-		
-		a2.add(fox1);  a2.add(rabbit1); a2.add(rabbit2); 
-		
-		Command c = new Command("move", "RA1" , "32");
-		Node n1 = new Node( null, a1, null);
-		Node n2 = new Node( null, a2, null);
-		
-		System.out.println("n1: " + n1.hashCode());
-		System.out.println("n2: " + n2.hashCode());	
-		Set<Integer> visited = new HashSet<>();
-		visited.add(n1.hashCode());
-	
-		System.out.println(n1.equals(n2));
-		
-		//System.out.println(((Integer)n1.hashCode()).equals((Integer)n2.hashCode()));
-	}
-
 }
