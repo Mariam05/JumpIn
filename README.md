@@ -20,7 +20,8 @@
 * Known Issues
 * Team Member Roles
 * Roadmap Ahead
-
+* UML
+* Sequence Diagram
 
 ### Description of Current Version:
 An MVC model is implemented with the game GUI, controller, and model to allow the game to be playable using the mouse. In addition, JUnit tests were added for the model logic testing if the expected results are achieved.
@@ -106,7 +107,14 @@ No known issues as of now.
 
 ### Things to Note:
 1. The design not used for connecting the MVC together was worked on in the HassanController branch.
-2. For the sequence diagram, for some methods such as processCommand(), the sequence of calls was only shown once to avoid clutter. 
+2. For the sequence diagram, for some methods such as processCommand(), the sequence of calls was only shown once to avoid clutter.
 
 ### Roadmap Ahead
 Add Save/Load features using a database to the game to allow the user to save the positions of the pieces in the game and come back to it later to continue playing the game. Add levels using XML/JSON.
+
+### UML
+The following UML is also attached as a .violet.html file in the documentation (can be opened and viewed in a browser if downloaded)
+![UML](Documentation/milestone3UML.png)
+
+### Sequence Diagram
+![UML](Documentation/milestone3Sequence.png)
