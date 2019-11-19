@@ -33,13 +33,13 @@ Milestone 3 has new classes Node and Solver to implement the hint button functio
 
 ### User Manual:
 The main class for this version of the project is called Main.java in the JumpIn package. The game is played using the mouse by pressing the animal to be moved first then pressing on the desired location for the animal to be placed.
-The following are the list of menu options you can use: quit help hint reset undo redo 
-	quit will end the game.
-	hint will highlight the piece to move and the location to move it to in order to do in order to solve the puzzle.
-	undo will undo the last move
-	redo will undo any undos that were previously done.
-	reset will start the game from the beginning.
-	help will display the following instructions:
+The following are the list of menu options you can use: _quit help hint reset undo redo_\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_quit_ will end the game.\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_hint_ will highlight the piece to move and the location to move it to in order to do in order to solve the puzzle.\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_undo_ will undo the last move.\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_redo_ will undo any undos that were previously done.\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_reset_ will start the game from the beginning.\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_help_ will display the following instructions:
 		
 The obstacles are: Mushroom, Fox, Rabbit.
 
@@ -71,7 +71,7 @@ It was decided to pass the model to the view so that the view can be constructed
 
 Also, for the model, classes were made for most of the pieces on the board to reduce the smell of the code and help differentiate between the different components of the code. Command, CommandWord and Parser class were implemented to get commands from the user using the GameView(Graphical User Interface) or the console. This decision was based on the feedback received for Milestone 1.
 
-We decided to change the implementation of Fox such that a fox object can represent either a foxâ€™s head or a foxâ€™s tail, and each object is associated with itâ€™s corresponding piece. This implementation proved to be better because then each part can be mapped to its appropriate image.
+We decided to change the implementation of Fox such that a fox object can represent either a fox head or a fox tail, and each object is associated with itâ€™s corresponding piece. This implementation proved to be better because then each part can be mapped to its appropriate image.
 
 Similarly, we added a colour attribute to Rabbits, so that the right image can be used for each.
 
