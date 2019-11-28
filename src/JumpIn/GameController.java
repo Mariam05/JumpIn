@@ -16,7 +16,7 @@ public class GameController {
 	private Game game; //the model
 	private GameView gameView; //the view
 	private int numOfButtonsPressed; //the number of buttons pressed by the user in a round
-	private Command command; //The commnd to form
+	private Command command; //The command to form
 	private String word2, word3; //The words that will make up the command
 	private static final String COMMAND = "move"; //The default command (other commands are represented by buttons in view)
 
@@ -30,7 +30,9 @@ public class GameController {
 		this.gameView = gameView;
 		
 		numOfButtonsPressed = 0;
-		addActionListeners();
+		
+		gameView.addGameListener(new GameListener());
+		//addActionListeners();
 
 	}
 
@@ -97,6 +99,14 @@ public class GameController {
 				gameView.dispose();
 			}
 			gameView.update();
+		}
+	}
+	
+	class GameListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			gameView.goToGame();
+			addActionListeners();
 		}
 	}
 

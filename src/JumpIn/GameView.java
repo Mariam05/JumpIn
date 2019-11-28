@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionListener;
@@ -14,9 +15,12 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  * This is the view class for the GUI. It has a model (Game object) and updates
@@ -29,7 +33,8 @@ public class GameView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private Container container;
-	JButton board[][];// This will be a board of squares
+	private JPanel startPage;
+	JButton board[][], newGameBtn, loadGameBtn;// This will be a board of squares
 
 	private int size; // The size of the board
 
@@ -43,7 +48,6 @@ public class GameView extends JFrame {
 
 	private Game game;
 	private JMenuBar menuBar;
-	// private JMenu menu;
 	private JMenuItem menuItemHelp, menuItemQuit, menuItemReset, menuItemUndo, menuItemRedo, menuItemHint;
 
 	/**
@@ -58,22 +62,73 @@ public class GameView extends JFrame {
 
 		size = model.getBoard().SIZE;
 
+		// Creating start page
+		createStartPage();		
+		
 		container = new Container();
 		container.setLayout(new GridLayout(size, size));
-
-		add(container); // add the container to the jframe
 
 		setTitle("JumpIn Game");
 		setSize(700, 700);
 		setResizable(false);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setVisible(true);
+
+	}
+	
+	public void goToGame() {
+		remove(startPage);
+		displayGame();
+	}
+
+	/**
+	 * Setting up the game board
+	 */
+	private void displayGame() {
+		add(container); // add the container to the jframe
 		addMenuItems();
 		createBoard();
 		instantiateIcons();
 		putIconsOnBoard();
 	}
-
+	
+	/**
+	 * Creating start page
+	 */
+	private void createStartPage() {
+		startPage = new JPanel();
+		startPage.setLayout(null);
+		startPage.setBackground(new Color(0, 204, 0));
+		add(startPage);
+		
+		newGameBtn = new JButton("Start a New Game");
+		loadGameBtn = new JButton("Load Previous Game");
+		
+		newGameBtn.setBounds(250, 200, 170, 50);
+		loadGameBtn.setBounds(250, 400, 170, 50);
+		
+		JLabel title = new JLabel("JUMP IN");
+		title.setFont(new Font ("AvantGarde", Font.BOLD, 100));
+		title.setBounds(130, 40, 500, 100);
+		title.setBackground(new Color(0, 204, 0));
+		title.setBorder(null);
+		
+		startPage.add(title);
+		startPage.add(newGameBtn);
+		startPage.add(loadGameBtn);
+		
+		// TODO call function in game to load a saved game
+		loadGameBtn.addActionListener(e -> {displayMessage("load saved game");});
+		
+	}
+	
+	/** 
+	 * creating levels page
+	 * 
+	 */
+	private void createLevelsPage() {
+		
+	}
 	/**
 	 * Get the size of the view's board
 	 * 
@@ -132,7 +187,6 @@ public class GameView extends JFrame {
 																					 // location
 				}
 			}
-
 		}
 	}
 
@@ -291,6 +345,10 @@ public class GameView extends JFrame {
 	 */
 	public void displayMessage(String message) {
 		JOptionPane.showMessageDialog(this, message);
+	}
+	
+	public void addGameListener(ActionListener a) {
+		newGameBtn.addActionListener(a);
 	}
 
 }
