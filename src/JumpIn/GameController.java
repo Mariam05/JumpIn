@@ -31,11 +31,10 @@ public class GameController {
 		
 		numOfButtonsPressed = 0;
 		
-		gameView.addGameListener(new GameListener());
-		//addActionListeners();
+		gameView.addNewGameListener(new GameListener()); // Adds listener for when user wants to start a new game
 
 	}
-
+	
 	/**
 	 * Add a button action listener to each button in the view
 	 */
@@ -46,7 +45,6 @@ public class GameController {
 				gameView.board[i][j].addActionListener(new ButtonListener(i, j));
 			}
 		}
-		
 	}
 
 	/**
@@ -102,11 +100,32 @@ public class GameController {
 		}
 	}
 	
-	class GameListener implements ActionListener {
+	/**
+	 * Listens to see if the user has chosen a level to play
+	 * Allows controller to add action listeners at the appropriate time
+	 * 
+	 * @author Nazifa Tanzim
+	 *
+	 */
+	class LevelListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			gameView.goToGame();
 			addActionListeners();
+		}
+	}
+	
+	/**
+	 * Listens to see if user wants to start a new game
+	 * 
+	 * @author Nazifa Tanzim
+	 *
+	 */
+	class GameListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			gameView.goToLevelPage();
+			gameView.addLevelListener(new LevelListener());
 		}
 	}
 

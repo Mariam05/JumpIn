@@ -33,8 +33,8 @@ public class GameView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private Container container;
-	private JPanel startPage;
-	JButton board[][], newGameBtn, loadGameBtn;// This will be a board of squares
+	private JPanel startPage, levelsPage;
+	JButton board[][], levels[][], newGameBtn, loadGameBtn, levelBtn;// This will be a board of squares
 
 	private int size; // The size of the board
 
@@ -47,7 +47,7 @@ public class GameView extends JFrame {
 	private int dimensions[] = { 0, 0, 0, 4, 4, 0, 4, 4, 2, 2 };
 
 	private Game game;
-	private JMenuBar menuBar;
+	private JMenuBar menuBar, defaultLvl, customLvl;
 	private JMenuItem menuItemHelp, menuItemQuit, menuItemReset, menuItemUndo, menuItemRedo, menuItemHint;
 
 	/**
@@ -77,8 +77,16 @@ public class GameView extends JFrame {
 	}
 	
 	public void goToGame() {
-		remove(startPage);
+		remove(levelsPage);
 		displayGame();
+	}
+	
+	/**
+	 * 
+	 */
+	public void goToLevelPage() {
+		remove(startPage);
+		createLevelsPage();
 	}
 
 	/**
@@ -102,22 +110,28 @@ public class GameView extends JFrame {
 		add(startPage);
 		
 		newGameBtn = new JButton("Start a New Game");
-		loadGameBtn = new JButton("Load Previous Game");
+		newGameBtn.setBounds(250, 350, 210, 50);
+		newGameBtn.setFont(new Font ("Monospaced", Font.BOLD, 20));
+		newGameBtn.setBackground(Color.WHITE);
+		newGameBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+		newGameBtn.setForeground(Color.BLUE);
 		
-		newGameBtn.setBounds(250, 200, 170, 50);
-		loadGameBtn.setBounds(250, 400, 170, 50);
+		loadGameBtn = new JButton("Load Previous Game");
+		loadGameBtn.setBounds(230, 450, 250, 50);
+		loadGameBtn.setFont(new Font ("Monospaced", Font.BOLD, 20));
+		loadGameBtn.setBackground(Color.WHITE);
+		loadGameBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+		loadGameBtn.setForeground(Color.BLUE);
 		
 		JLabel title = new JLabel("JUMP IN");
-		title.setFont(new Font ("AvantGarde", Font.BOLD, 100));
-		title.setBounds(130, 40, 500, 100);
-		title.setBackground(new Color(0, 204, 0));
-		title.setBorder(null);
+		title.setFont(new Font ("Monospaced", Font.BOLD, 125));
+		title.setBounds(70, 100, 900, 100);
+		title.setForeground(Color.WHITE);
 		
 		startPage.add(title);
 		startPage.add(newGameBtn);
 		startPage.add(loadGameBtn);
 		
-		// TODO call function in game to load a saved game
 		loadGameBtn.addActionListener(e -> {displayMessage("load saved game");});
 		
 	}
@@ -128,6 +142,38 @@ public class GameView extends JFrame {
 	 */
 	private void createLevelsPage() {
 		
+		levelsPage = new JPanel();
+		levelsPage.setLayout(null);
+		levelsPage.setBackground(new Color(0, 204, 0));
+		add(levelsPage);
+		
+		defaultLvl = new JMenuBar();
+		defaultLvl.add(new JLabel("  Default Levels"));
+		defaultLvl.setBounds(0, 0, 700, 30);
+		levelsPage.add(defaultLvl);
+		
+		JPanel defaultLvlSection = new JPanel();
+		defaultLvlSection.setLayout(new GridLayout(4,5));
+		defaultLvlSection.setBounds(0, 30, 700, 300);
+		levelsPage.add(defaultLvlSection);
+		
+		levels = new JButton[5][4];
+		int count = 0;
+		for(int i = 0; i < 5; i++) {
+			for(int j = 0; j < 4; j++) {
+				count++;
+				levels[i][j] = new JButton("Level " + count);
+				levels[i][j].setFont(new Font ("Monospaced", Font.BOLD, 20));
+				levels[i][j].setBackground(Color.WHITE);
+				levels[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+				levels[i][j].setForeground(Color.BLUE);
+				levels[i][j].setName("" + count); // To compare to "name" in json
+				defaultLvlSection.add(levels[i][j]);
+				
+			}
+		}
+		
+		setVisible(true);
 	}
 	/**
 	 * Get the size of the view's board
@@ -347,7 +393,23 @@ public class GameView extends JFrame {
 		JOptionPane.showMessageDialog(this, message);
 	}
 	
-	public void addGameListener(ActionListener a) {
+	/**
+	 * 
+	 * @param a
+	 */
+	public void addLevelListener(ActionListener a) {
+		for(int i = 0; i < 5; i++) {
+			for(int j = 0; j < 4; j++) {
+				levels[i][j].addActionListener(a);
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @param a
+	 */
+	public void addNewGameListener(ActionListener a) {
 		newGameBtn.addActionListener(a);
 	}
 
