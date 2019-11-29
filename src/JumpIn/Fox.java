@@ -242,8 +242,8 @@ public class Fox extends Piece {
 				if (board.isOutOfRange(end, currY))
 					return false;
 
-				for (int i = start; i < end; i++) { // reprompt if path isn't clear
-					if (board.getSquare(i, currY).hasPiece())
+				for (int i = start; i >= end; i--) { // reprompt if path isn't clear
+					if (board.getSquare(currX, i).hasPiece())
 						return false;
 				}
 

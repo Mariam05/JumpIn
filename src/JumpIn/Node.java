@@ -8,8 +8,9 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * A node represents the state of the game, which includes all its pieces and their locations.
- * Each node must know it's parent node, and will inherit it's parent's animals and a command. 
+ * A node represents the state of the game, which includes all its pieces and
+ * their locations. Each node must know it's parent node, and will inherit it's
+ * parent's animals and a command.
  * 
  * @author Mariam Almalki
  */
@@ -19,78 +20,83 @@ public class Node {
 	 * The Node's parent. the source will have this as null
 	 */
 	private Node parentNode;
-	
+
 	/**
-	 * A new board to hold the pieces, complete the moves, and check for the winning status
+	 * A new board to hold the pieces, complete the moves, and check for the winning
+	 * status
 	 */
 	private Board board;
-	
+
 	/**
 	 * The list of animals on the board
 	 */
 	private List<Piece> animalList; // a list of animals
-	
+
 	/**
-	 * The name of the piece to move. 
+	 * The name of the piece to move.
 	 */
 	private String pieceToMove;
-	
+
 	/**
 	 * The new location for the piece to go to
 	 */
 	private int newX, newY;
-	
+
 	/**
 	 * The command inherited from the parent node.
 	 */
 	private Command command;
 
 	/**
-	 * Constructor to create a new node. 
-	 * It makes a deep copy of all the animals such that it is not altering the parent's animals,
-	 * then it sets up the board and implements the move / command on the board 
+	 * Constructor to create a new node. It makes a deep copy of all the animals
+	 * such that it is not altering the parent's animals, then it sets up the board
+	 * and implements the move / command on the board
+	 * 
 	 * @param parentNode
 	 * @param parentsAnimals
 	 * @param command
 	 */
-	public Node(Node parentNode, List<Piece> parentsAnimals, Command command) {
+	public Node(Node parentNode, String parentBoard, Command command) {
 		this.parentNode = parentNode;
 		this.command = command;
+		animalList = new ArrayList<>();
 
-		board = new Board();
+		board = Board.makeBoard(parentBoard);
 		
-		animalList = getCopyOfAnimalList(parentsAnimals); //Deep copy the animals of the parent node
-		addAnimalsToBoard();
+		animalList = board.getPieceObjects();
 
-		if (command != null) { //command could be null if this is the source
+		if (command != null) { // command could be null if this is the source
 			pieceToMove = command.getPiece();
 			newX = command.getX();
 			newY = command.getY();
 
 			getAnimalToMove().handleMove(board, newX, newY);
-			
+
 		}
 
 	}
-	
+
 	/**
 	 * Return animals on the board
+	 * 
 	 * @return
 	 */
-	public List<Piece> getPieces(){
+	public List<Piece> getPieces() {
 		return animalList;
 	}
-	
+
 	/**
-	 * Get the command that was handled in this node. 
+	 * Get the command that was handled in this node.
+	 * 
 	 * @return Command object
 	 */
 	public Command getCommand() {
 		return command;
 	}
-	
+
 	/**
-	 * Get this node's board. This is used to get all valid moves later on 
+	 * Get this node's board. This is used to get all valid moves later on
+	 * 
 	 * @return Board object
 	 */
 	public Board getBoard() {
@@ -98,16 +104,17 @@ public class Node {
 	}
 
 	/**
-	 * Get the parent node of this node. 
+	 * Get the parent node of this node.
+	 * 
 	 * @return Node object
 	 */
 	public Node getParentNode() {
 		return parentNode;
 	}
 
-
 	/**
 	 * Determine which animal is being moved
+	 * 
 	 * @return
 	 */
 	private Piece getAnimalToMove() {
@@ -115,43 +122,18 @@ public class Node {
 			if ((p.toString()).equals(pieceToMove))
 				return p;
 		}
-		return null;
-	}
-
-	/**
-	 * Add all animals to the board
-	 */
-	public void addAnimalsToBoard() {
-		for (Piece animal : animalList) {
-			if (animal instanceof Fox) {
-				Fox tail = ((Fox)animal).getAssociatedPart();
-				board.addPiece(tail, tail.getXPos(), tail.getYPos());
-			}
-			board.addPiece(animal, animal.getXPos(), animal.getYPos());
-		}
+		return null; //animal not found
 	}
 
 	/**
 	 * Check if this node contains a winning state (i.e. all rabbits in hole)
-	 * @return true if winning state. 
+	 * 
+	 * @return true if winning state.
 	 */
 	public boolean isWinningState() {
 		return board.hasWon();
 	}
 
-	/**
-	 * Get a deep copy of all animals
-	 * @param list the animal list to make a deep copy of
-	 * @return the list of animals
-	 */
-	public List<Piece> getCopyOfAnimalList(List<Piece> list) {
-		List<Piece> copyAnimals = new ArrayList<>();
-		for (Piece p : list) {
-			Piece p2 = p.manufacturePiece(p.getStringRepresentation());
-			copyAnimals.add(p2);
-		}
-		return copyAnimals;
-	}
 
 	/**
 	 * Generate a hashcode for the state of the board in order to ensure that we
@@ -161,7 +143,7 @@ public class Node {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((animalList == null) ? 0 : animalList.hashCode());
+		result = prime * result + ((board == null) ? 0 : board.hashCode());
 		return result;
 	}
 
@@ -208,4 +190,5 @@ public class Node {
 
 		return true;
 	}
+
 }

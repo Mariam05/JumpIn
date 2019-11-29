@@ -208,41 +208,40 @@ public class GameView extends JFrame {
 			board[dimensions[i - 1]][dimensions[i]].setBackground(new Color(153, 0, 0));
 		}
 
-		// Add the mushrooms
-		piece = mushroom.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
-		board[1][3].setIcon(new ImageIcon(piece));
-		board[4][2].setIcon(new ImageIcon(piece));
-
 		// Add the animals
-		HashMap<String, Piece> animals = game.getAnimalsOnBoard(); // get the animals from the model
-		for (String s : animals.keySet()) { // for each animal
-			Piece animal = animals.get(s);
-			int animalRow = animal.getYPos();
-			int animalCol = animal.getXPos();
-			if (animal instanceof Rabbit) { // if it's a rabbit, associate it with the appropriate rabbit image
-				Rabbit r = (Rabbit) animal;
+		HashMap<String, Piece> pieces = game.getAnimalsOnBoard(); // get the animals from the model
+		for (String s : pieces.keySet()) { // for each animal
+			Piece p = pieces.get(s);
+			int pieceRow = p.getYPos();
+			int pieceCol = p.getXPos();
+			if (p instanceof Rabbit) { // if it's a rabbit, associate it with the appropriate rabbit image
+				Rabbit r = (Rabbit) p;
 				if (r.getColour() == Color.WHITE)
 					piece = whiteRabbit.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
 				if (r.getColour() == Color.GRAY)
 					piece = greyRabbit.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
 				if (r.getColour() == Color.YELLOW)
 					piece = yellowRabbit.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
-				board[animalRow][animalCol].setIcon(new ImageIcon(piece)); // add the image to the animal's location
+				board[pieceRow][pieceCol].setIcon(new ImageIcon(piece)); // add the image to the animal's location
 				
-			} else if (animal instanceof Fox) { // if it's a fox, associate it with the appropriate fox image depending
+			} else if (p instanceof Fox) { // if it's a fox, associate it with the appropriate fox image depending
 												// on whether it's a head/tail
-				Fox f = (Fox) animal;
+				Fox f = (Fox) p;
 				
 				if (f.isHead()) {
 					Fox ft = f.getAssociatedPart();
 					
 					piece = foxface.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
-					board[animalRow][animalCol].setIcon(new ImageIcon(piece)); // add the image to the animal's location
+					board[pieceRow][pieceCol].setIcon(new ImageIcon(piece)); // add the image to the animal's location
 
 					piece = foxtail.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
 					board[ft.getYPos()][ft.getXPos()].setIcon(new ImageIcon(piece)); // add the image to the animal's
 																					 // location
 				}
+			} else if (p instanceof Mushroom) {// Add the mushrooms
+				piece = mushroom.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
+				board[pieceRow][pieceCol].setIcon(new ImageIcon(piece));
+				
 			}
 		}
 	}

@@ -1,0 +1,83 @@
+{"defaultLevels": [
+		{
+			"name": 1,
+			"board": "X X X X X MSH X X X MSH RA1 X X X RA2 X X X X X X X X X X"
+		},
+		{
+			"name": 2,
+			"board": "X MSH X X X X X X FHU1 FTU1 RA1 X X X RA2 X X X X X X X X X X"
+		},
+		{
+			"name": 3,
+			"board": "X X X X X X X X X X MSH X MSH MSH X FTD1 FHD1 X X X X X X RA3 X"
+		},
+		{
+			"name": 4,
+			"board": "X X X X X FHU1 FTU1 X X RA1 X X X X MSH RA3 MSH X FHL0 X X X RA2 FTL0 X"
+		},
+		{           
+			"name": 5,
+			"board": "X X X X X X X X X X X X X X MSH X FTD1 FHD1 RA1 X X X X X RA2"
+		},
+		{
+			"name": 6,
+			"board": "X X X X X FTD1 FHD1 X RA1 X X X X X RA2 X FHL0 X X X X FTL0 MSH X X"
+		},
+		{
+			"name": 7,
+			"board": "X X X X X MSH X X X X MSH X MSH X X X X RA2 FTD1 FHD1 RA1 X X X X"
+		},
+		{
+			"name": 8,
+			"board": "X MSH X X X FTD1 FHD1 X FTR0 X X MSH X FHR0 X X RA2 X X X X MSH X X RA1"
+		},
+		{
+			"name": 9,
+			"board": "X FTR1 X X X X FHR1 X FHU0 FTU0 X X X X X X RA1 MSH MSH MSH X X X X RA2"
+		},
+		{
+			"name": 10,
+			"board": "RA2 X X X X FTD1 FHD1 X X RA1 X MSH X X X FHU0 FTU0 X X X MSH X X X X"
+		},
+		{
+			"name": 11,
+			"board": "X X MSH FTR1 X X MSH X FHR1 X X X X X X X RA2 RA1 FHU0 FTU0 X X X X X"
+		},
+		{
+			"name": 12,
+			"board": "RA1 X X X X X FTR1 MSH X X X FHR1 MSH X X MSH X X RA2 X X X X X X"
+		},
+		{
+			"name": 13,
+			"board": "X MSH MSH X MSH RA1 FHU1 FTU1 FHL0 X X X X FTL0 X RA2 X X X X X RA3 X X X"
+		},
+		{
+			"name": 14,
+			"board": "X MSH X X X RA3 X X MSH RA2 MSH X X X X FTD1 FHD1 X X RA1 X X X X X"
+		},
+		{
+			"name": 15,
+			"board": "X X X RA1 MSH X X X X X X MSH RA3 BRG X X X FTD1 FHD1 X X X X X MSH"
+		},
+		{
+			"name": 16,
+			"board": "X FTR1 X RA3 X X FHR1 X X RA1 X X MSH X X X FHU0 FTU0 X X MSH RA2 X MSH X"
+		},
+		{
+			"name": 17,
+			"board": "RA3 X X X X X RA1 X RA2 MSH X X MSH X X X FHL1 X FTR0 X X FTL1 X FHR0 MSH"
+		},
+		{
+			"name": 18,
+			"board": "X X RA2 X MSH RA1 X X X X X X RA3 X X X FHU1 FTU1 FHL0 X MSH X MSH FTL0 X"
+		},
+		{
+			"name": 19,
+			"board": "X FTR1 X RA2 X X FHR1 X X X X X MSH FHL0 X MSH RA3 X FTL0 X X X RA1 X MSH"
+		},
+		{
+			"name": 20,
+			"board": "X FTR1 X MSH X X FHR1 X X X X X MSH X X MSH RA3 X X RA2 X X RA1 X X"
+		}
+	]
+}
