@@ -106,8 +106,9 @@ No known issues as of now.
 **Hassan Hassan**: Refined alternate MVC of code that was not implemented to reflect (can be found in branch HassanController). Worked on JUnit testing for new classes that were created. Worked on sequence diagram. 
 
 ### Things to Note:
-1. The design not used for connecting the MVC together was worked on in the HassanController branch.
-2. For the sequence diagram, for some methods such as processCommand(), the sequence of calls was only shown once to avoid clutter.
+1. The 'hint' may take a few seconds to load based on how far the puzzle is from completion
+2. The design not used for connecting the MVC together was worked on in the HassanController branch.
+3. For the sequence diagram, for some methods such as processCommand(), the sequence of calls was only shown once to avoid clutter.
 
 ### Roadmap Ahead
 Add Save/Load features using a database to the game to allow the user to save the positions of the pieces in the game and come back to it later to continue playing the game. Add levels using XML/JSON.
