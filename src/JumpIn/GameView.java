@@ -34,7 +34,7 @@ public class GameView extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private Container container;
 	private JPanel startPage, levelsPage;
-	JButton board[][], levels[][], newGameBtn, loadGameBtn, levelBtn;// This will be a board of squares
+	JButton board[][], levels[][], newGameBtn, loadGameBtn, levelBtn, buildLvlBtn;// This will be a board of squares
 
 	private int size; // The size of the board
 
@@ -178,11 +178,14 @@ public class GameView extends JFrame {
 		
 		// Header for custom levels section
 		JMenuBar customLvl = new JMenuBar();
-		customLvl.add(new JLabel("  Custom Levels"));
+		customLvl.add(new JLabel("  Custom Levels   "));
 		customLvl.setBounds(0, 330, 700, 30);
 		levelsPage.add(customLvl);
 		
-		// TODO add customize button and back/return to main menu button
+		// Adding buld/customize level button
+		buildLvlBtn = new JButton("Build A Level");
+		customLvl.add(buildLvlBtn);
+		// TODO add back/return to main menu button
 		
 		setVisible(true);
 	}
