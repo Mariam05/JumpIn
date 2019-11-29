@@ -28,7 +28,6 @@ public class GameController {
 	public GameController(Game game, GameView gameView) {
 		this.game = game;
 		this.gameView = gameView;
-		
 		numOfButtonsPressed = 0;
 		addActionListeners();
 

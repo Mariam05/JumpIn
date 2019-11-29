@@ -49,7 +49,7 @@ public class Solver {
 		Node n = BFS(); //solve the puzzle and get the node with the winning state
 		
 		//move up through the nodes until we reach the first first move in this solution
-		while (n.getParentNode() != source) { 
+		while (n.getParentNode() != null && n.getParentNode() != source ) { 
 			n = n.getParentNode();
 			
 		}

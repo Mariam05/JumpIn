@@ -48,7 +48,7 @@ public class Square {
 	 */
 	public String getPieceString() {
 		if (hasPiece) return piece.toString();
-		return "";
+		return "X"; //if  X
 	}
 	
 	public String toString() {
@@ -56,6 +56,13 @@ public class Square {
 		if (hasPiece) return "| " + piece.toString() + "  ";
 		if (isHole) return "|  HOL ";
 		return "|      ";
+	}
+	
+	public String individualString() {
+		if(hasPiece && isHole) return  piece.toString();
+		if (hasPiece) return piece.toString() ;
+		if (isHole) return "HOL";
+		return "X";
 	}
 
 	/**
