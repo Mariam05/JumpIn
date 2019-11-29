@@ -141,22 +141,25 @@ public class GameView extends JFrame {
 	 * 
 	 */
 	private void createLevelsPage() {
-		
+		// JPanel to store all the levels options and labels
 		levelsPage = new JPanel();
 		levelsPage.setLayout(null);
 		levelsPage.setBackground(new Color(0, 204, 0));
 		add(levelsPage);
 		
+		// Header for the default levels
 		defaultLvl = new JMenuBar();
 		defaultLvl.add(new JLabel("  Default Levels"));
 		defaultLvl.setBounds(0, 0, 700, 30);
 		levelsPage.add(defaultLvl);
 		
+		// Creating a grid to store all the default levels
 		JPanel defaultLvlSection = new JPanel();
 		defaultLvlSection.setLayout(new GridLayout(4,5));
 		defaultLvlSection.setBounds(0, 30, 700, 300);
 		levelsPage.add(defaultLvlSection);
 		
+		// Filling the grid with buttons to take user to corresponding game
 		levels = new JButton[5][4];
 		int count = 0;
 		for(int i = 0; i < 5; i++) {
@@ -172,6 +175,14 @@ public class GameView extends JFrame {
 				
 			}
 		}
+		
+		// Header for custom levels section
+		JMenuBar customLvl = new JMenuBar();
+		customLvl.add(new JLabel("  Custom Levels"));
+		customLvl.setBounds(0, 330, 700, 30);
+		levelsPage.add(customLvl);
+		
+		// TODO add customize button and back/return to main menu button
 		
 		setVisible(true);
 	}
@@ -261,6 +272,9 @@ public class GameView extends JFrame {
 		menuItemHelp.addActionListener(e -> {displayMessage(game.printGameInstructions());});
 		menuBar.add(menuItemHelp);
 
+		// TODO fix it so that it only resets the level and not the entire game
+		// potentially do this via serialization i.e. store initial state and retrieve it when necessary
+		
 		// Add reset button
 		menuItemReset = new JMenuItem("Reset");
 		menuItemReset.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
@@ -394,6 +408,7 @@ public class GameView extends JFrame {
 	}
 	
 	/**
+	 * Add listener to each level option
 	 * 
 	 * @param a
 	 */
@@ -406,6 +421,7 @@ public class GameView extends JFrame {
 	}
 	
 	/**
+	 * Listens for when user wants to start a new game
 	 * 
 	 * @param a
 	 */

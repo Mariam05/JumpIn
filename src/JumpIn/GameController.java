@@ -31,7 +31,8 @@ public class GameController {
 		
 		numOfButtonsPressed = 0;
 		
-		gameView.addNewGameListener(new GameListener()); // Adds listener for when user wants to start a new game
+		// Adds listener for when user wants to start a new game
+		gameView.addNewGameListener(new GameListener()); 
 
 	}
 	
