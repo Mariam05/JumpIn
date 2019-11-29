@@ -22,7 +22,7 @@ public class Game {
 
 	private Board board;
 
-	private HashMap<String, Piece> animalPieces;
+	private HashMap<String, Piece> pieces;
 
 	private Stack<Command> undo, redo; // Stores commands to revert moves either way
 
@@ -31,10 +31,9 @@ public class Game {
 	 * pieces
 	 */
 	public Game() {
-		board = new Board();
-
-		board.addDefaultPieces();
-		animalPieces = board.getAnimalsOnBoard();
+		board = Board.makeBoardFromLevel("6");
+		//board.addDefaultPieces();
+		pieces = board.getPiecesOnBoard();
 		undo = new Stack<Command>();
 		redo = new Stack<Command>();
 
@@ -55,7 +54,7 @@ public class Game {
 	 * @return hashmap of animals on board
 	 */
 	public HashMap<String, Piece> getAnimalsOnBoard() {
-		return board.getAnimalsOnBoard();
+		return board.getPiecesOnBoard();
 	}
 
 	/**
@@ -65,13 +64,13 @@ public class Game {
 	 * 
 	 * @return
 	 */
-	public ArrayList<Piece> getAnimalsExceptTails() {
+	public ArrayList<Piece> getPiecesExceptTails() {
 
 		ArrayList<Piece> animals = new ArrayList<>();
-		for (String s : animalPieces.keySet()) {
-			if (!((animalPieces.get(s) instanceof Fox) && !((Fox) animalPieces.get(s)).isHead())) { // if it's not a
+		for (String s : pieces.keySet()) {
+			if (!((pieces.get(s) instanceof Fox) && !((Fox) pieces.get(s)).isHead())) { // if it's not a
 																									// tail, add it
-				animals.add(animalPieces.get(s));
+				animals.add(pieces.get(s));
 			}
 		}
 
@@ -129,7 +128,7 @@ public class Game {
 	 */
 	private boolean validatePieceSelected(Command command) {
 		String piece = command.getPiece();
-		for (String s : animalPieces.keySet()) {
+		for (String s : pieces.keySet()) {
 			if (piece.equalsIgnoreCase(s))
 				return true;
 		}
@@ -159,12 +158,11 @@ public class Game {
 	 */
 	public Piece getPieceFromCommand(Command command) {
 
-		// return board.getPieceOnBoard(command.getCurrX(), command.getCurrY());
 		String pieceString = command.getPiece();
 
-		for (String s : animalPieces.keySet()) {
+		for (String s : pieces.keySet()) {
 			if (pieceString.equalsIgnoreCase(s))
-				return animalPieces.get(s);
+				return pieces.get(s);
 		}
 		return null;
 

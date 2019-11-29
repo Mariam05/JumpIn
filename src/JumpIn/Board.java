@@ -1,7 +1,9 @@
 package JumpIn;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import JumpIn.Fox.FoxType;
 
@@ -26,15 +28,11 @@ public class Board {
 	 */
 	public final int SIZE = 5;
 
-	private int numOfRabbitsInHoles;
+	private HashMap<String, Piece> piecesOnBoard;
 
-	private HashMap<String, Piece> animalPieces;
-
-	private HashMap<Piece, String> allPossiblePieces;
+	private List<Piece> pieceObjectsList;
 
 	Piece fox1, fox2, fox1T, fox2T, rabbit1, rabbit2, rabbit3;
-
-	private HashMap<Piece, String> rabbits; // this hashmap is to keep track of the number of rabbits added to the board
 
 	/**
 	 * Instantiates the array of squares and sets the hole positions Holes are set
@@ -43,9 +41,8 @@ public class Board {
 	 */
 	public Board() {
 
-		numOfRabbitsInHoles = 0;
-		rabbits = new HashMap<>();
-		animalPieces = new HashMap<>();
+		piecesOnBoard = new HashMap<>();
+		pieceObjectsList = new ArrayList<>();
 
 		board = new Square[SIZE][SIZE];
 
@@ -62,8 +59,12 @@ public class Board {
 		board[4][0].addHole();
 		board[4][4].addHole();
 		board[2][2].addHole();
-		
+
 		// addAllInitialPieces();
+	}
+
+	public List<Piece> getPieceObjects() {
+		return pieceObjectsList;
 	}
 
 	public void addDefaultPieces() {
@@ -85,13 +86,13 @@ public class Board {
 		rabbit3 = new Rabbit("RA3", Color.YELLOW);
 
 		// Add the pieces to the piece hashmap
-		animalPieces.put(fox1.toString(), fox1);
-		animalPieces.put(fox2.toString(), fox2);
-		animalPieces.put(fox1T.toString(), fox1T);
-		animalPieces.put(fox2T.toString(), fox2T);
-		animalPieces.put(rabbit1.toString(), rabbit1);
-		animalPieces.put(rabbit2.toString(), rabbit2);
-		animalPieces.put(rabbit3.toString(), rabbit3);
+		piecesOnBoard.put(fox1.toString(), fox1);
+		piecesOnBoard.put(fox2.toString(), fox2);
+		piecesOnBoard.put(fox1T.toString(), fox1T);
+		piecesOnBoard.put(fox2T.toString(), fox2T);
+		piecesOnBoard.put(rabbit1.toString(), rabbit1);
+		piecesOnBoard.put(rabbit2.toString(), rabbit2);
+		piecesOnBoard.put(rabbit3.toString(), rabbit3);
 
 		// Add the pieces to the board. Coordinates are row col
 		addPiece(fox1, 4, 3);
@@ -114,41 +115,79 @@ public class Board {
 	public static Board makeBoard(String boardString) {
 		Board newBoard = new Board();
 
-		String[] elements = boardString.split(" ");
+		String[] elements = boardString.split("[ ]+");
 
-		int i = 0;
+		int i = 0, k = 0;
+		Color c = Color.WHITE;
 		for (int y = 0; y < newBoard.SIZE; y++) { // row
 			for (int x = 0; x < newBoard.SIZE; x++) { // col
 				String currPiece = elements[i];
 				FoxType type = null;
 				Piece temp;
 				switch (currPiece) {
-				case ("RA1"): // send down
-				case ("RA2"): // send down
-				case ("RA3"):
-					temp = new Rabbit(currPiece); // white rabbit
-					newBoard.addPiece(temp, x, y); // the levels.json has them listed by columns
+				
+				case ("RA1"): // send down, white rabbit
+					c = Color.WHITE;
+					temp = new Rabbit(currPiece, c); // white rabbit
+					newBoard.addPiece(temp, y, x); // the levels.json has them listed by columns
+					newBoard.piecesOnBoard.put(currPiece, temp);
+					newBoard.pieceObjectsList.add(temp);
 					break;
+					
+				case ("RA2"): // send down, grey rabbit
+					c = Color.GRAY;
+					temp = new Rabbit(currPiece, c); // grey rabbit
+					newBoard.addPiece(temp, y, x); // the levels.json has them listed by columns
+					newBoard.piecesOnBoard.put(currPiece, temp);
+					newBoard.pieceObjectsList.add(temp);
+					break;
+					
+				case ("RA3"):
+					c = Color.YELLOW;
+					temp = new Rabbit(currPiece, c); // yellow rabbit
+					newBoard.addPiece(temp, y, x); // the levels.json has them listed by columns
+					
+					newBoard.piecesOnBoard.put(currPiece, temp);
+					newBoard.pieceObjectsList.add(temp);
+					break;
+					
 				case ("F1H"): // horizontal fox
 					type = FoxType.HORIZONTAL; // send down
+				
 				case ("F2V"): // vertical fox
 					type = (type == null) ? FoxType.VERTICAL : type;
 					temp = new Fox(currPiece, type, true);
 					Piece tail = ((Fox) temp).getAssociatedPart();
-					newBoard.addPiece(temp, x, y);
+					
+					newBoard.addPiece(temp, y, x);
 					newBoard.addPiece(tail, tail.getXPos(), tail.getYPos());
+					
+					newBoard.piecesOnBoard.put(currPiece, temp);
+					newBoard.piecesOnBoard.put(tail.toString(), tail);
+					
+					newBoard.pieceObjectsList.add(temp);
+					newBoard.pieceObjectsList.add(tail);
 					break;
+					
 				case ("MSH"): // mushroom
 					temp = new Mushroom(currPiece);
-					newBoard.addPiece(temp, x, y);
+					newBoard.addPiece(temp, y, x);
+					newBoard.piecesOnBoard.put(currPiece + k, temp);
+					k++; // k is just to give the mushrooms diff names so that the hashmap contains them
+							// all
+					newBoard.pieceObjectsList.add(temp);
 					break;
 				}
-
+				// System.out.println("i: " + currPiece + " y: " + y + " x: " + x);
 				i++;
 			}
 		}
 
 		return newBoard;
+	}
+
+	public static Board makeBoardFromLevel(String levelname) {
+		return makeBoard(LevelsParser.getLevel(levelname));
 	}
 
 	/**
@@ -162,21 +201,21 @@ public class Board {
 		board[y][x].addPiece(piece);
 		piece.setPosition(x, y);
 		if (piece instanceof Rabbit) {
-			rabbits.put(piece, piece.toString());
+			if (board[y][x].isHole())
+				((Rabbit) piece).setInHole();
 		}
 	}
 
 	public boolean hasWon() {
-		int numInHoles = 0;
-		for (Piece p : rabbits.keySet()) {
-			if (getSquare(p.getXPos(), p.getYPos()).isHole()) {
-				numInHoles++;
+
+		for (String s : piecesOnBoard.keySet()) {
+			Piece p = piecesOnBoard.get(s);
+			if (p instanceof Rabbit) {
+				if (!(((Rabbit) p).isInHole()))
+					return false;
 			}
 		}
-		if (numInHoles == rabbits.size()) { // if all the rabbits are in a hole return true
-			return true;
-		}
-		return false;
+		return true;
 	}
 
 	/**
@@ -184,8 +223,8 @@ public class Board {
 	 * 
 	 * @return hashmap of animals on board
 	 */
-	public HashMap<String, Piece> getAnimalsOnBoard() {
-		return animalPieces;
+	public HashMap<String, Piece> getPiecesOnBoard() {
+		return piecesOnBoard;
 	}
 
 	/**
@@ -267,11 +306,21 @@ public class Board {
 		return false;
 	}
 
+	/**
+	 * Represent the pieces on this board with a string. 
+	 * Tails are not shown in the string representation
+	 * 
+	 * @return
+	 */
 	public String getStringRepresentation() {
 		String s = "";
-		for (int i = 0; i < SIZE; i++) {
-			for (int j = 0; j < SIZE; j++) {
-				s += board[i][j].individualString() + " ";
+		for (int i = 0; i < SIZE; i++) { // row
+			for (int j = 0; j < SIZE; j++) { // column
+				if ((board[j][i].getPiece() instanceof Fox) && !((Fox) board[j][i].getPiece()).isHead()) { //if tail
+					s += "X ";
+				} else {
+					s += board[j][i].getPieceString() + " "; // adds by column
+				}
 			}
 		}
 		return s;
@@ -282,34 +331,36 @@ public class Board {
 	 */
 	public void printBoard() {
 
-		System.out.println("        0       1       2       3       4   \n");
+		System.out.println("          0         1         2         3         4   \n");
 
 		for (int i = 0; i < SIZE; i++) {
 			System.out.print(i + "    ");
 			for (int j = 0; j < SIZE; j++) {
-				System.out.print("|  " + board[i][j].toString() + "  ");
+				System.out.print("  " + board[i][j].toString() + " ");
 			}
 			System.out.print("|\n");
 		}
 	}
-
-	public void increaseNumRabbitsInHoles() {
-		numOfRabbitsInHoles++;
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((getStringRepresentation() == null) ? 0 : getStringRepresentation().hashCode());
+		return result;
 	}
-
-	public void decreaseNumRabbitsInHoles() {
-		numOfRabbitsInHoles--;
-	}
-
-	public int getNumRabbitsInHoles() {
-		return numOfRabbitsInHoles;
-	}
-
-	public static void main(String[] args) {
-		Board b = new Board();
-		b.addDefaultPieces();
-		System.out.println(b.getStringRepresentation());
-		Board.makeBoard("X FTR1 X MSH X X FHR1 X X X X X MSH X X MSH RA3 X X RA2 X X RA1 X X");
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		
+		Board b = (Board)obj;
+		return this.getStringRepresentation().equals(b.getStringRepresentation());
 	}
 
 }

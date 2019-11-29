@@ -52,18 +52,18 @@ public class Square {
 	}
 	
 	public String toString() {
-		if(hasPiece && isHole) return "| " + piece.toString() + "* ";
-		if (hasPiece) return "| " + piece.toString() + "  ";
+		if(hasPiece && isHole) return "|  " + piece.toString() + "*";
+		if (hasPiece) return "|  " + piece.toString() + " ";
 		if (isHole) return "|  HOL ";
 		return "|      ";
 	}
 	
-	public String individualString() {
-		if(hasPiece && isHole) return  piece.toString();
-		if (hasPiece) return piece.toString() ;
-		if (isHole) return "HOL";
-		return "X";
-	}
+//	public String individualString() {
+//		if(hasPiece && isHole) return  piece.toString();
+//		if (hasPiece) return piece.toString() ;
+//		if (isHole) return "HOL";
+//		return "X";
+//	}
 
 	/**
 	 * If square has piece

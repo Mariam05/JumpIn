@@ -1,4 +1,7 @@
 package JumpIn;
+
+import java.util.Scanner;
+
 /**
  * Class for mushroom objects, which are stationary. 
  * @author tomar
@@ -6,11 +9,8 @@ package JumpIn;
  */
 public class Mushroom extends Piece {
 
-	private String stringRep;
-	
 	public Mushroom(String pieceName) {
 		super(pieceName);
-		stringRep = getStringRepresentation();
 	}
 
 
@@ -25,21 +25,31 @@ public class Mushroom extends Piece {
 
 	@Override
 	public boolean validateMove(Board board, int newX, int newY) {
-		// TODO Auto-generated method stub
+		// Mushrooms can't be moved
 		return false;
 	}
 
 
 	@Override
 	public Piece manufacturePiece(String str) {
-		// TODO Auto-generated method stub
-		return null;
+		Scanner dscanner = new Scanner(str).useDelimiter("\\s*,\\s*");
+
+		String name = dscanner.next();
+		int xPos = dscanner.nextInt();
+		int yPos = dscanner.nextInt();
+		
+		dscanner.close();
+		
+		Mushroom newMushroom = new Mushroom(name);
+		newMushroom.setPosition(xPos, yPos);
+		
+		return newMushroom;
 	}
 
 
 	@Override
 	public String getStringRepresentation() {
-		return toString() + getXPos() + "" + getYPos() ;
+		return toString() + "," + getXPos() + "," + getYPos() ;
 	}
 
 
@@ -53,7 +63,7 @@ public class Mushroom extends Piece {
 			return false;
 		
 		Mushroom other = (Mushroom) obj;
-		return stringRep.equals(other.stringRep);
+		return getStringRepresentation().equals(other.getStringRepresentation());
 	}
 	
 	
