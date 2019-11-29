@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionListener;
@@ -14,9 +15,12 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  * This is the view class for the GUI. It has a model (Game object) and updates
@@ -29,7 +33,8 @@ public class GameView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private Container container;
-	JButton board[][];// This will be a board of squares
+	private JPanel startPage, levelsPage;
+	JButton board[][], levels[][], newGameBtn, loadGameBtn, levelBtn;// This will be a board of squares
 
 	private int size; // The size of the board
 
@@ -42,8 +47,7 @@ public class GameView extends JFrame {
 	private int dimensions[] = { 0, 0, 0, 4, 4, 0, 4, 4, 2, 2 };
 
 	private Game game;
-	private JMenuBar menuBar;
-	// private JMenu menu;
+	private JMenuBar menuBar, defaultLvl, customLvl;
 	private JMenuItem menuItemHelp, menuItemQuit, menuItemReset, menuItemUndo, menuItemRedo, menuItemHint;
 
 	/**
@@ -58,22 +62,130 @@ public class GameView extends JFrame {
 
 		size = model.getBoard().SIZE;
 
+		// Creating start page
+		createStartPage();		
+		
 		container = new Container();
 		container.setLayout(new GridLayout(size, size));
-
-		add(container); // add the container to the jframe
 
 		setTitle("JumpIn Game");
 		setSize(700, 700);
 		setResizable(false);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setVisible(true);
+
+	}
+	
+	public void goToGame() {
+		remove(levelsPage);
+		displayGame();
+	}
+	
+	/**
+	 * 
+	 */
+	public void goToLevelPage() {
+		remove(startPage);
+		createLevelsPage();
+	}
+
+	/**
+	 * Setting up the game board
+	 */
+	private void displayGame() {
+		add(container); // add the container to the jframe
 		addMenuItems();
 		createBoard();
 		instantiateIcons();
 		putIconsOnBoard();
 	}
-
+	
+	/**
+	 * Creating start page
+	 */
+	private void createStartPage() {
+		startPage = new JPanel();
+		startPage.setLayout(null);
+		startPage.setBackground(new Color(0, 204, 0));
+		add(startPage);
+		
+		newGameBtn = new JButton("Start a New Game");
+		newGameBtn.setBounds(250, 350, 210, 50);
+		newGameBtn.setFont(new Font ("Monospaced", Font.BOLD, 20));
+		newGameBtn.setBackground(Color.WHITE);
+		newGameBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+		newGameBtn.setForeground(Color.BLUE);
+		
+		loadGameBtn = new JButton("Load Previous Game");
+		loadGameBtn.setBounds(230, 450, 250, 50);
+		loadGameBtn.setFont(new Font ("Monospaced", Font.BOLD, 20));
+		loadGameBtn.setBackground(Color.WHITE);
+		loadGameBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+		loadGameBtn.setForeground(Color.BLUE);
+		
+		JLabel title = new JLabel("JUMP IN");
+		title.setFont(new Font ("Monospaced", Font.BOLD, 125));
+		title.setBounds(70, 100, 900, 100);
+		title.setForeground(Color.WHITE);
+		
+		startPage.add(title);
+		startPage.add(newGameBtn);
+		startPage.add(loadGameBtn);
+		
+		loadGameBtn.addActionListener(e -> {displayMessage("load saved game");});
+		
+	}
+	
+	/** 
+	 * creating levels page
+	 * 
+	 */
+	private void createLevelsPage() {
+		// JPanel to store all the levels options and labels
+		levelsPage = new JPanel();
+		levelsPage.setLayout(null);
+		levelsPage.setBackground(new Color(0, 204, 0));
+		add(levelsPage);
+		
+		// Header for the default levels
+		defaultLvl = new JMenuBar();
+		defaultLvl.add(new JLabel("  Default Levels"));
+		defaultLvl.setBounds(0, 0, 700, 30);
+		levelsPage.add(defaultLvl);
+		
+		// Creating a grid to store all the default levels
+		JPanel defaultLvlSection = new JPanel();
+		defaultLvlSection.setLayout(new GridLayout(4,5));
+		defaultLvlSection.setBounds(0, 30, 700, 300);
+		levelsPage.add(defaultLvlSection);
+		
+		// Filling the grid with buttons to take user to corresponding game
+		levels = new JButton[5][4];
+		int count = 0;
+		for(int i = 0; i < 5; i++) {
+			for(int j = 0; j < 4; j++) {
+				count++;
+				levels[i][j] = new JButton("Level " + count);
+				levels[i][j].setFont(new Font ("Monospaced", Font.BOLD, 20));
+				levels[i][j].setBackground(Color.WHITE);
+				levels[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+				levels[i][j].setForeground(Color.BLUE);
+				levels[i][j].setName("" + count); // To compare to "name" in json
+				defaultLvlSection.add(levels[i][j]);
+				
+			}
+		}
+		
+		// Header for custom levels section
+		JMenuBar customLvl = new JMenuBar();
+		customLvl.add(new JLabel("  Custom Levels"));
+		customLvl.setBounds(0, 330, 700, 30);
+		levelsPage.add(customLvl);
+		
+		// TODO add customize button and back/return to main menu button
+		
+		setVisible(true);
+	}
 	/**
 	 * Get the size of the view's board
 	 * 
@@ -96,43 +208,41 @@ public class GameView extends JFrame {
 			board[dimensions[i - 1]][dimensions[i]].setBackground(new Color(153, 0, 0));
 		}
 
-		// Add the mushrooms
-		piece = mushroom.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
-		board[1][3].setIcon(new ImageIcon(piece));
-		board[4][2].setIcon(new ImageIcon(piece));
-
 		// Add the animals
-		HashMap<String, Piece> animals = game.getAnimalsOnBoard(); // get the animals from the model
-		for (String s : animals.keySet()) { // for each animal
-			Piece animal = animals.get(s);
-			int animalRow = animal.getYPos();
-			int animalCol = animal.getXPos();
-			if (animal instanceof Rabbit) { // if it's a rabbit, associate it with the appropriate rabbit image
-				Rabbit r = (Rabbit) animal;
+		HashMap<String, Piece> pieces = game.getAnimalsOnBoard(); // get the animals from the model
+		for (String s : pieces.keySet()) { // for each animal
+			Piece p = pieces.get(s);
+			int pieceRow = p.getYPos();
+			int pieceCol = p.getXPos();
+			if (p instanceof Rabbit) { // if it's a rabbit, associate it with the appropriate rabbit image
+				Rabbit r = (Rabbit) p;
 				if (r.getColour() == Color.WHITE)
 					piece = whiteRabbit.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
 				if (r.getColour() == Color.GRAY)
 					piece = greyRabbit.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
 				if (r.getColour() == Color.YELLOW)
 					piece = yellowRabbit.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
-				board[animalRow][animalCol].setIcon(new ImageIcon(piece)); // add the image to the animal's location
+				board[pieceRow][pieceCol].setIcon(new ImageIcon(piece)); // add the image to the animal's location
 				
-			} else if (animal instanceof Fox) { // if it's a fox, associate it with the appropriate fox image depending
+			} else if (p instanceof Fox) { // if it's a fox, associate it with the appropriate fox image depending
 												// on whether it's a head/tail
-				Fox f = (Fox) animal;
+				Fox f = (Fox) p;
 				
 				if (f.isHead()) {
 					Fox ft = f.getAssociatedPart();
 					
 					piece = foxface.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
-					board[animalRow][animalCol].setIcon(new ImageIcon(piece)); // add the image to the animal's location
+					board[pieceRow][pieceCol].setIcon(new ImageIcon(piece)); // add the image to the animal's location
 
 					piece = foxtail.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
 					board[ft.getYPos()][ft.getXPos()].setIcon(new ImageIcon(piece)); // add the image to the animal's
 																					 // location
 				}
+			} else if (p instanceof Mushroom) {// Add the mushrooms
+				piece = mushroom.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
+				board[pieceRow][pieceCol].setIcon(new ImageIcon(piece));
+				
 			}
-
 		}
 	}
 
@@ -161,6 +271,9 @@ public class GameView extends JFrame {
 		menuItemHelp.addActionListener(e -> {displayMessage(game.printGameInstructions());});
 		menuBar.add(menuItemHelp);
 
+		// TODO fix it so that it only resets the level and not the entire game
+		// potentially do this via serialization i.e. store initial state and retrieve it when necessary
+		
 		// Add reset button
 		menuItemReset = new JMenuItem("Reset");
 		menuItemReset.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
@@ -291,6 +404,28 @@ public class GameView extends JFrame {
 	 */
 	public void displayMessage(String message) {
 		JOptionPane.showMessageDialog(this, message);
+	}
+	
+	/**
+	 * Add listener to each level option
+	 * 
+	 * @param a
+	 */
+	public void addLevelListener(ActionListener a) {
+		for(int i = 0; i < 5; i++) {
+			for(int j = 0; j < 4; j++) {
+				levels[i][j].addActionListener(a);
+			}
+		}
+	}
+	
+	/**
+	 * Listens for when user wants to start a new game
+	 * 
+	 * @param a
+	 */
+	public void addNewGameListener(ActionListener a) {
+		newGameBtn.addActionListener(a);
 	}
 
 }

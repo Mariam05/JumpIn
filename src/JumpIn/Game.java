@@ -22,7 +22,7 @@ public class Game {
 
 	private Board board;
 
-	private HashMap<String, Piece> animalPieces;
+	private HashMap<String, Piece> pieces;
 
 	private Stack<Command> undo, redo; // Stores commands to revert moves either way
 
@@ -31,42 +31,9 @@ public class Game {
 	 * pieces
 	 */
 	public Game() {
-		animalPieces = new HashMap<>();
-		board = new Board();
-		Piece fox1, fox2, fox1T, fox2T, rabbit1, rabbit2, rabbit3;
-
-		// Instantiate the pieces on the board
-
-		fox1 = new Fox("F1H", Fox.FoxType.HORIZONTAL, true);
-		fox1T = ((Fox) fox1).getAssociatedPart();
-
-		fox2 = new Fox("F2V", Fox.FoxType.VERTICAL, true);
-		fox2T = ((Fox) fox2).getAssociatedPart();
-
-		rabbit1 = new Rabbit("RA1", Color.WHITE);
-		rabbit2 = new Rabbit("RA2", Color.GRAY);
-		rabbit3 = new Rabbit("RA3", Color.YELLOW);
-
-		// Add the pieces to the piece hashmap
-		animalPieces.put(fox1.toString(), fox1);
-		animalPieces.put(fox2.toString(), fox2);
-		animalPieces.put(fox1T.toString(), fox1T);
-		animalPieces.put(fox2T.toString(), fox2T);
-		animalPieces.put(rabbit1.toString(), rabbit1);
-		animalPieces.put(rabbit2.toString(), rabbit2);
-		animalPieces.put(rabbit3.toString(), rabbit3);
-
-		// Add the pieces to the board. Coordinates are row col
-		board.addPiece(fox1, 4, 3);
-		board.addPiece(fox1T, fox1T.getXPos(), fox1T.getYPos()); // add fox1 tail
-
-		board.addPiece(fox2, 1, 1);
-		board.addPiece(fox2T, fox2.getXPos(), fox2.getYPos() - 1); // add fox2 tail
-
-		board.addPiece(rabbit1, 3, 0);
-		board.addPiece(rabbit2, 4, 2);
-		board.addPiece(rabbit3, 1, 4);
-
+		board = Board.makeBoardFromLevel("6");
+		//board.addDefaultPieces();
+		pieces = board.getPiecesOnBoard();
 		undo = new Stack<Command>();
 		redo = new Stack<Command>();
 
@@ -87,7 +54,7 @@ public class Game {
 	 * @return hashmap of animals on board
 	 */
 	public HashMap<String, Piece> getAnimalsOnBoard() {
-		return animalPieces;
+		return board.getPiecesOnBoard();
 	}
 
 	/**
@@ -97,13 +64,13 @@ public class Game {
 	 * 
 	 * @return
 	 */
-	public ArrayList<Piece> getAnimalsExceptTails() {
+	public ArrayList<Piece> getPiecesExceptTails() {
 
 		ArrayList<Piece> animals = new ArrayList<>();
-		for (String s : animalPieces.keySet()) {
-			if (!((animalPieces.get(s) instanceof Fox) && !((Fox) animalPieces.get(s)).isHead())) { // if it's not a
+		for (String s : pieces.keySet()) {
+			if (!((pieces.get(s) instanceof Fox) && !((Fox) pieces.get(s)).isHead())) { // if it's not a
 																									// tail, add it
-				animals.add(animalPieces.get(s));
+				animals.add(pieces.get(s));
 			}
 		}
 
@@ -161,7 +128,7 @@ public class Game {
 	 */
 	private boolean validatePieceSelected(Command command) {
 		String piece = command.getPiece();
-		for (String s : animalPieces.keySet()) {
+		for (String s : pieces.keySet()) {
 			if (piece.equalsIgnoreCase(s))
 				return true;
 		}
@@ -191,12 +158,11 @@ public class Game {
 	 */
 	public Piece getPieceFromCommand(Command command) {
 
-		// return board.getPieceOnBoard(command.getCurrX(), command.getCurrY());
 		String pieceString = command.getPiece();
 
-		for (String s : animalPieces.keySet()) {
+		for (String s : pieces.keySet()) {
 			if (pieceString.equalsIgnoreCase(s))
-				return animalPieces.get(s);
+				return pieces.get(s);
 		}
 		return null;
 

@@ -22,7 +22,7 @@ public class NodeTest {
 	@Before
 	public void setUp() throws Exception {
 		game = new Game();
-		node = new Node(null,game.getAnimalsExceptTails(),null);
+		node = new Node(null,game.getPiecesExceptTails(),null);
 		command = new Command("move","RA1","32");
 	}
 
@@ -33,7 +33,7 @@ public class NodeTest {
 	public void constructorTest() {
 		assertEquals(null,node.getCommand());
 		assertEquals(null,node.getParentNode());
-		assertEquals(game.getAnimalsExceptTails(),node.getPieces());
+		assertEquals(game.getPiecesExceptTails(),node.getPieces());
 	}
 	
 	/*
@@ -42,7 +42,7 @@ public class NodeTest {
 	@Test
 	public void getPiecesTest() {
 		//testing with original pieces with no pieces moved
-		assertEquals(game.getAnimalsExceptTails(),node.getPieces());
+		assertEquals(game.getPiecesExceptTails(),node.getPieces());
 		
 		//testing after pieces are moved
 		Node node1 = new Node(node,node.getPieces(),new Command("move","RA1","32"));
@@ -59,7 +59,7 @@ public class NodeTest {
 		assertEquals(null,node.getCommand());
 		
 		//testing with a command
-		node = new Node(null,game.getAnimalsExceptTails(),command);
+		node = new Node(null,game.getPiecesExceptTails(),command);
 		assertEquals(command,node.getCommand());
 	}
 	
@@ -91,8 +91,8 @@ public class NodeTest {
 		assertEquals(node.getParentNode(),null);
 		
 		//testing with parent node
-		Node parent = new Node(null,game.getAnimalsExceptTails(),null);
-		node = new Node(parent,game.getAnimalsExceptTails(),null);
+		Node parent = new Node(null,game.getPiecesExceptTails(),null);
+		node = new Node(parent,game.getPiecesExceptTails(),null);
 		assertEquals(parent,node.getParentNode());
 		
 	}
@@ -104,7 +104,7 @@ public class NodeTest {
 	public void getAnimalToMoveTest() {
 		//Testing if rabbit 1 is moved to column 3 and row 2 in both boards
 		game.handleMove(command);
-		node = new Node(null,game.getAnimalsExceptTails(),command);
+		node = new Node(null,game.getPiecesExceptTails(),command);
 		assertEquals(game.getBoard().getSquare(3, 2).getPieceString(),node.getBoard().getSquare(3, 2).getPieceString()); 
 	}
 	
@@ -114,7 +114,7 @@ public class NodeTest {
 	 */
 	@Test
 	public void addAnimalsToBoardTest() {		
-		assertEquals(game.getAnimalsExceptTails(),node.getPieces()); 
+		assertEquals(game.getPiecesExceptTails(),node.getPieces()); 
 	}
 	
 	/*
@@ -124,7 +124,7 @@ public class NodeTest {
 	public void isWinningStateTest() {
 		//Testing when node is wrong or null
 		assertEquals(false,node.isWinningState());
-		node = new Node(null,game.getAnimalsExceptTails(),new Command("move","F2V","14"));
+		node = new Node(null,game.getPiecesExceptTails(),new Command("move","F2V","14"));
 		
 		//Testing when game is won and node1 is the correct hint
 		Node node1 = new Node(node,node.getPieces(),new Command("move","RA1","32"));
@@ -143,11 +143,11 @@ public class NodeTest {
 	@Test
 	public void getCopyOfAnimalListTest() {
 		//Testing with game pieces on the board
-		node.getCopyOfAnimalList(game.getAnimalsExceptTails());
-		assertEquals(node.getPieces(),game.getAnimalsExceptTails());
+		node.getCopyOfAnimalList(game.getPiecesExceptTails());
+		assertEquals(node.getPieces(),game.getPiecesExceptTails());
 		
 		//Testing with another node
-		node = new Node(null,game.getAnimalsExceptTails(),new Command("move","F2V","14"));
+		node = new Node(null,game.getPiecesExceptTails(),new Command("move","F2V","14"));
 		Node node1 = new Node(node,node.getPieces(),new Command("move","RA1","32"));
 		
 		assertEquals(node1.getPieces(),node.getCopyOfAnimalList(node1.getPieces()));
@@ -165,7 +165,7 @@ public class NodeTest {
 		assertEquals(32,node1.hashCode());
 		
 		//Testing with a non-Empty List
-		assertEquals(game.getAnimalsExceptTails().hashCode()+(31*1),node.hashCode());
+		assertEquals(game.getPiecesExceptTails().hashCode()+(31*1),node.hashCode());
 	}
 	
 	/*
@@ -174,7 +174,7 @@ public class NodeTest {
 	@Test
 	public void equalsTest() {
 		//Testing with two identical nodes
-		Node node1 = new Node(null,game.getAnimalsExceptTails(),null);
+		Node node1 = new Node(null,game.getPiecesExceptTails(),null);
 		assertEquals(true,node.equals(node1));
 		
 		//Testing with a null object
@@ -186,9 +186,9 @@ public class NodeTest {
 		//Testing with two different nodes
 		assertEquals(false,node.equals(new Node(null,new ArrayList<>(),null)));
 		
-		assertEquals(false,node.equals(new Node(null,game.getAnimalsExceptTails(),command)));
+		assertEquals(false,node.equals(new Node(null,game.getPiecesExceptTails(),command)));
 		
-		Node node2 = new Node(node1,game.getAnimalsExceptTails(),command);
+		Node node2 = new Node(node1,game.getPiecesExceptTails(),command);
 		assertEquals(false,node.equals(node2));
 	}
 	

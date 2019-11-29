@@ -18,6 +18,7 @@ public class Rabbit extends Piece {
 	 */
 	private Color colour;
 
+	private boolean inHole;
 
 	/**
 	 * Create a new rabbit object. The default colour is white
@@ -37,8 +38,17 @@ public class Rabbit extends Piece {
 	public Rabbit(String pieceName, Color colour) {
 		super(pieceName);
 		this.colour = colour;
+		inHole = false;
 	}
 
+	public boolean isInHole() {
+		return inHole;
+	}
+	
+	public void setInHole() {
+		inHole = true;
+	}
+	
 	/**
 	 * Set the colour of the rabbit
 	 * 
@@ -71,15 +81,12 @@ public class Rabbit extends Piece {
 
 		// Move is validated, complete the action
 		board.removePiece(currX, currY);
-		board.addPiece(this, newX, newY);
 
 		if (board.isHole(currX, currY)) {
-			board.decreaseNumRabbitsInHoles(); // if the rabbit was in a hole and now is not
+			inHole = false; // if the rabbit was in a hole and now is not
 		}
-		if (board.isHole(newX, newY)) {
-			board.increaseNumRabbitsInHoles(); // if rabbit entered a hole
-		}
-		
+
+		board.addPiece(this, newX, newY);
 		setPosition(newX, newY);
 	}
 
