@@ -12,15 +12,18 @@ import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 
 /**
  * This is the view class for the GUI. It has a model (Game object) and updates
@@ -34,7 +37,9 @@ public class GameView extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private Container container;
 	private JPanel startPage, levelsPage;
-	JButton board[][], levels[][], newGameBtn, loadGameBtn, levelBtn, buildLvlBtn;// This will be a board of squares
+	private JButton newGameBtn, loadGameBtn;
+	private JScrollPane defaultLevelsPane, customLevelsPane;
+	JButton board[][]; // This will be a board of squares
 
 	private int size; // The size of the board
 
@@ -47,9 +52,13 @@ public class GameView extends JFrame {
 	private int dimensions[] = { 0, 0, 0, 4, 4, 0, 4, 4, 2, 2 };
 
 	private Game game;
-	private JMenuBar menuBar, defaultLvl, customLvl;
+	private JMenuBar menuBar;
 	private JMenuItem menuItemHelp, menuItemQuit, menuItemReset, menuItemUndo, menuItemRedo, menuItemHint;
-
+	
+	// These will hold the names of all the levels
+	private static JList<String> defaultLevels, customLevels;
+	private static DefaultListModel<String> defaultList = new DefaultListModel<>(), customList = new DefaultListModel<>();
+	
 	/**
 	 * Create a new view
 	 * 
@@ -76,16 +85,21 @@ public class GameView extends JFrame {
 
 	}
 	
+	/**
+	 * Switches from levels page to game 
+	 * 
+	 */
 	public void goToGame() {
 		remove(levelsPage);
 		displayGame();
 	}
 	
 	/**
-	 * 
+	 * Switches from start page to levels page
 	 */
 	public void goToLevelPage() {
 		remove(startPage);
+		initializeDefaultLevels();
 		createLevelsPage();
 	}
 
@@ -109,6 +123,7 @@ public class GameView extends JFrame {
 		startPage.setBackground(new Color(0, 204, 0));
 		add(startPage);
 		
+		// Adding button to go to levels page
 		newGameBtn = new JButton("Start a New Game");
 		newGameBtn.setBounds(250, 350, 210, 50);
 		newGameBtn.setFont(new Font ("Monospaced", Font.BOLD, 20));
@@ -116,6 +131,7 @@ public class GameView extends JFrame {
 		newGameBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 		newGameBtn.setForeground(Color.BLUE);
 		
+		// Adding button to load previous game
 		loadGameBtn = new JButton("Load Previous Game");
 		loadGameBtn.setBounds(230, 450, 250, 50);
 		loadGameBtn.setFont(new Font ("Monospaced", Font.BOLD, 20));
@@ -123,11 +139,13 @@ public class GameView extends JFrame {
 		loadGameBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 		loadGameBtn.setForeground(Color.BLUE);
 		
+		// Adding game title
 		JLabel title = new JLabel("JUMP IN");
 		title.setFont(new Font ("Monospaced", Font.BOLD, 125));
 		title.setBounds(70, 100, 900, 100);
 		title.setForeground(Color.WHITE);
 		
+		// Adding all components to panel
 		startPage.add(title);
 		startPage.add(newGameBtn);
 		startPage.add(loadGameBtn);
@@ -143,52 +161,61 @@ public class GameView extends JFrame {
 	private void createLevelsPage() {
 		// JPanel to store all the levels options and labels
 		levelsPage = new JPanel();
-		levelsPage.setLayout(null);
+		levelsPage.setLayout(new BorderLayout());
 		levelsPage.setBackground(new Color(0, 204, 0));
 		add(levelsPage);
 		
-		// Header for the default levels
-		defaultLvl = new JMenuBar();
-		defaultLvl.add(new JLabel("  Default Levels"));
-		defaultLvl.setBounds(0, 0, 700, 30);
-		levelsPage.add(defaultLvl);
+		// Adding headers for the different levels options
+		JPanel headers = new JPanel();
+		levelsPage.add(headers, BorderLayout.NORTH);
+
+		JLabel defaultLvl = new JLabel("Default Levels        ");
+		defaultLvl.setFont(new Font ("Monospaced", Font.BOLD, 20));
+		headers.add(defaultLvl);
+
+		JLabel customLvl = new JLabel("|      Custom Levels   ");
+		customLvl.setFont(new Font ("Monospaced", Font.BOLD, 20));
+		headers.add(customLvl);
 		
-		// Creating a grid to store all the default levels
-		JPanel defaultLvlSection = new JPanel();
-		defaultLvlSection.setLayout(new GridLayout(4,5));
-		defaultLvlSection.setBounds(0, 30, 700, 300);
-		levelsPage.add(defaultLvlSection);
+		//Adding buttons to navigate the page
+		JPanel buttons = new JPanel();
+		buttons.setLayout(new GridLayout(1, 2));
+		levelsPage.add(buttons, BorderLayout.SOUTH);		
+
+		JButton backBtn = new JButton("Back");
+		backBtn.addActionListener(e -> {defaultList.clear();dispose(); Main.main(null);});
+		buttons.add(backBtn);		
+
+		JButton select = new JButton("Start");
+		buttons.add(select);		
+
+		JButton buildLvlBtn = new JButton("Build A Level");
+		buttons.add(buildLvlBtn);
 		
-		// Filling the grid with buttons to take user to corresponding game
-		levels = new JButton[5][4];
-		int count = 0;
-		for(int i = 0; i < 5; i++) {
-			for(int j = 0; j < 4; j++) {
-				count++;
-				levels[i][j] = new JButton("Level " + count);
-				levels[i][j].setFont(new Font ("Monospaced", Font.BOLD, 20));
-				levels[i][j].setBackground(Color.WHITE);
-				levels[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-				levels[i][j].setForeground(Color.BLUE);
-				levels[i][j].setName("" + count); // To compare to "name" in json
-				defaultLvlSection.add(levels[i][j]);
-				
-			}
-		}
+		// Adding the levels lists to scroll panes
+		JScrollPane pane1 = new JScrollPane(defaultLevels);
+		JScrollPane pane2 = new JScrollPane(customLevels);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, pane1, pane2);
 		
-		// Header for custom levels section
-		JMenuBar customLvl = new JMenuBar();
-		customLvl.add(new JLabel("  Custom Levels   "));
-		customLvl.setBounds(0, 330, 700, 30);
-		levelsPage.add(customLvl);
-		
-		// Adding buld/customize level button
-		buildLvlBtn = new JButton("Build A Level");
-		customLvl.add(buildLvlBtn);
-		// TODO add back/return to main menu button
+		splitPane.setDividerLocation(345);
+		splitPane.setBounds(0, 30, 700, 600);
+		levelsPage.add(splitPane, BorderLayout.CENTER);
 		
 		setVisible(true);
 	}
+	
+	/**
+	 * Initializes the list of levels
+	 */
+	private void initializeDefaultLevels() {
+		for(int i = 1; i <= 6; i++) {
+			defaultList.addElement("Level " + i);
+		}
+		
+		defaultLevels = new JList<>(defaultList);
+		customLevels = new JList<>(customList);
+	}
+	
 	/**
 	 * Get the size of the view's board
 	 * 
@@ -407,19 +434,6 @@ public class GameView extends JFrame {
 	 */
 	public void displayMessage(String message) {
 		JOptionPane.showMessageDialog(this, message);
-	}
-	
-	/**
-	 * Add listener to each level option
-	 * 
-	 * @param a
-	 */
-	public void addLevelListener(ActionListener a) {
-		for(int i = 0; i < 5; i++) {
-			for(int j = 0; j < 4; j++) {
-				levels[i][j].addActionListener(a);
-			}
-		}
 	}
 	
 	/**
