@@ -187,6 +187,7 @@ public class GameView extends JFrame {
 		buttons.add(backBtn);		
 
 		JButton start = new JButton("Start");
+		start.addActionListener(e -> {goToGame();});
 		buttons.add(start);		
 
 		JButton buildLvlBtn = new JButton("Build A Level");
