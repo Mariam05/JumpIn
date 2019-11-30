@@ -31,8 +31,7 @@ public class Game {
 	 * pieces
 	 */
 	public Game() {
-		board = Board.makeBoardFromLevel("1");
-		//board.addDefaultPieces();
+		setBoard("4"); // Will go to level 4 by default
 		pieces = board.getPiecesOnBoard();
 		undo = new Stack<Command>();
 		redo = new Stack<Command>();
@@ -46,6 +45,15 @@ public class Game {
 	 */
 	public Board getBoard() {
 		return this.board;
+	}
+	
+	/**
+	 * Create the board associated with the level name
+	 * 
+	 * @param levelName
+	 */
+	public void setBoard(String levelName) {
+		board = Board.makeBoardFromLevel(levelName);
 	}
 
 	/**
