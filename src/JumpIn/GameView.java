@@ -40,7 +40,7 @@ public class GameView extends JFrame implements Serializable {
 	private JPanel startPage, levelsPage;
 	private JButton newGameBtn, loadGameBtn;
 	private JScrollPane defaultLevelsPane, customLevelsPane;
-	JButton board[][]; // This will be a board of squares
+	JButton board[][], startBtn; // This will be a board of squares
 
 	private int size; // The size of the board
 
@@ -199,9 +199,8 @@ public class GameView extends JFrame implements Serializable {
 		backBtn.addActionListener(e -> {defaultList.clear();dispose(); Main.main(null);});
 		buttons.add(backBtn);		
 
-		JButton start = new JButton("Start");
-		start.addActionListener(e -> {goToGame();});
-		buttons.add(start);		
+		startBtn = new JButton("Start");
+		buttons.add(startBtn);		
 
 		JButton buildLvlBtn = new JButton("Build A Level");
 		buttons.add(buildLvlBtn);
