@@ -277,8 +277,13 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 			JOptionPane.showMessageDialog(this, "This game is unsolveable!");
 		} else {
 			String levelName = JOptionPane.showInputDialog("Enter a name for your level");
-			String boardRepresentation = board.getStringRepresentation();
-			LevelsParser.addCustomLevelToFile(levelName, boardRepresentation);
+
+			// Won't save level to json without a valid name
+			if(levelName != null) {
+				String boardRepresentation = board.getStringRepresentation();
+				LevelsParser.addCustomLevelToFile(levelName, boardRepresentation);
+			}
+			
 			gameView.goBack();
 		}
 

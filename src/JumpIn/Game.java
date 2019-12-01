@@ -28,7 +28,7 @@ public class Game {
 	 * pieces
 	 */
 	public Game() {
-		setBoard("1"); // Init to level 1 by default
+		setBoard("4"); // Init to level 1 by default
 		undo = new Stack<Command>();
 		redo = new Stack<Command>();
 
