@@ -59,8 +59,6 @@ public class Board {
 		board[4][0].addHole();
 		board[4][4].addHole();
 		board[2][2].addHole();
-
-		// addAllInitialPieces();
 	}
 
 	public List<Piece> getPieceObjects() {

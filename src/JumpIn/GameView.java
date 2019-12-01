@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.Serializable;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
@@ -32,14 +33,14 @@ import javax.swing.JSplitPane;
  * @author Taher Shabaan, Hassan Hassan, Mariam Almalki, Nazifa Tanzim
  *
  */
-public class GameView extends JFrame {
+public class GameView extends JFrame implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private Container container;
 	private JPanel startPage, levelsPage;
 	private JButton newGameBtn, loadGameBtn;
 	private JScrollPane defaultLevelsPane, customLevelsPane;
-	JButton board[][], startBtn; // This will be a board of squares
+	JButton board[][]; // This will be a board of squares
 
 	private int size; // The size of the board
 
@@ -53,7 +54,7 @@ public class GameView extends JFrame {
 
 	private Game game;
 	private JMenuBar menuBar;
-	private JMenuItem menuItemHelp, menuItemQuit, menuItemReset, menuItemUndo, menuItemRedo, menuItemHint;
+	private JMenuItem menuItemHelp, menuItemQuit, menuItemReset, menuItemUndo, menuItemRedo, menuItemHint, menuItemSave, menuItemLoad;
 	
 	// These will hold the names of all the levels
 	private static JList<String> defaultLevels, customLevels;
@@ -139,6 +140,18 @@ public class GameView extends JFrame {
 		loadGameBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 		loadGameBtn.setForeground(Color.BLUE);
 		
+		//When the user will press save so we'll create a SaveData object and pass this as we want the user
+		//to save this view then after that call the save method in ResourceManager class and pass the save object and fileName
+		loadGameBtn.addActionListener(event -> {
+			try {
+				SaveData data = (SaveData) ResourceManager.load("levelSaved");//levelSaved is the file that will be loaded and don't use xxx/levelSaved
+			}
+			catch (Exception e) {
+				System.out.println("Couldn't load: " + e.getMessage());
+			}
+		});
+
+		
 		// Adding game title
 		JLabel title = new JLabel("JUMP IN");
 		title.setFont(new Font ("Monospaced", Font.BOLD, 125));
@@ -186,8 +199,9 @@ public class GameView extends JFrame {
 		backBtn.addActionListener(e -> {defaultList.clear();dispose(); Main.main(null);});
 		buttons.add(backBtn);		
 
-		startBtn = new JButton("Start");
-		buttons.add(startBtn);		
+		JButton start = new JButton("Start");
+		start.addActionListener(e -> {goToGame();});
+		buttons.add(start);		
 
 		JButton buildLvlBtn = new JButton("Build A Level");
 		buttons.add(buildLvlBtn);
@@ -321,7 +335,26 @@ public class GameView extends JFrame {
 		menuItemHint.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 		menuItemHint.addActionListener(e -> {displayHint((new Solver(game)).getHint());});
 		menuBar.add(menuItemHint);
-
+		
+		//Add save BUTTON
+		
+		menuItemSave = new JMenuItem("Save");
+		menuItemSave.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		//When the user will press save so we'll create a SaveData object and pass this as we want the user
+		//to save this view then after that call the save method in ResourceManager class and pass the save object and fileName
+		menuItemSave.addActionListener(event -> {
+			SaveData data = new SaveData(game);
+			try {
+				ResourceManager.save(data,"levelSaved");//levelSaved is the file and don't use xxx/levelSaved
+			}
+			catch (Exception e) {
+				System.out.println("Couldn't save: " + e.getMessage());
+			}
+		});
+		menuBar.add(menuItemSave);
+		
+		
+		
 		add(menuBar, BorderLayout.NORTH);
 	}
 
