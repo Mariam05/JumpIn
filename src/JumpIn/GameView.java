@@ -25,6 +25,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.KeyStroke;
 
 /**
  * This is the view class for the GUI. It has a model (Game object) and updates
@@ -38,9 +39,10 @@ public class GameView extends JFrame implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Container container;
 	private JPanel startPage, levelsPage;
-	private JButton newGameBtn, loadGameBtn, startBtn;
+
+	private JButton newGameBtn, loadGameBtn;
 	private JScrollPane defaultLevelsPane, customLevelsPane;
-	JButton board[][]; // This will be a board of squares
+	JButton board[][], startBtn; // This will be a board of squares
 
 	private int size; // The size of the board
 
@@ -141,6 +143,18 @@ public class GameView extends JFrame implements Serializable {
 		loadGameBtn.setBackground(Color.WHITE);
 		loadGameBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 		loadGameBtn.setForeground(Color.BLUE);
+
+		//When the user will press save so we'll create a SaveData object and pass this as we want the user
+		//to save this view then after that call the save method in ResourceManager class and pass the save object and fileName
+		loadGameBtn.addActionListener(event -> {
+			try {
+				SaveData data = (SaveData) ResourceManager.load("levelSaved");//levelSaved is the file that will be loaded and don't use xxx/levelSaved
+			}
+			catch (Exception e) {
+				System.out.println("Couldn't load: " + e.getMessage());
+			}
+		});
+
 		
 		// Adding game title
 		JLabel title = new JLabel("JUMP IN");
@@ -190,8 +204,7 @@ public class GameView extends JFrame implements Serializable {
 		buttons.add(backBtn);		
 
 		startBtn = new JButton("Start");
-		startBtn.addActionListener(e -> {goToGame();});
-		buttons.add(startBtn);		
+		buttons.add(startBtn);			
 
 		JButton buildLvlBtn = new JButton("Build A Level");
 		buttons.add(buildLvlBtn);
@@ -291,12 +304,14 @@ public class GameView extends JFrame implements Serializable {
 		menuItemUndo = new JMenuItem("Undo");
 		menuItemUndo.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 		menuItemUndo.addActionListener(e -> {undo();});
+		menuItemUndo.setAccelerator(KeyStroke.getKeyStroke('u')); //can activae undo by pressing u
 		menuBar.add(menuItemUndo);
 
 		// Add redo button
 		menuItemRedo = new JMenuItem("Redo");
 		menuItemRedo.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 		menuItemRedo.addActionListener(e -> {redo();});
+		menuItemRedo.setAccelerator(KeyStroke.getKeyStroke('r')); //can activate redo by pressing r
 		menuBar.add(menuItemRedo);
 
 		// Add help button
@@ -304,6 +319,7 @@ public class GameView extends JFrame implements Serializable {
 		menuItemHelp.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 		menuItemHelp.addActionListener(e -> {displayMessage(game.printGameInstructions());});
 		menuBar.add(menuItemHelp);
+		
 
 		// TODO fix it so that it only resets the level and not the entire game
 		// potentially do this via serialization i.e. store initial state and retrieve it when necessary
@@ -318,48 +334,33 @@ public class GameView extends JFrame implements Serializable {
 		menuItemQuit = new JMenuItem("Quit");
 		menuItemQuit.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 		menuItemQuit.addActionListener(e -> {displayMessage(game.quitMessage()); dispose();});
+		menuItemQuit.setAccelerator(KeyStroke.getKeyStroke('q')); //can activate quit by pressing q
 		menuBar.add(menuItemQuit);
 
 		//Add hint button
 		menuItemHint = new JMenuItem("Hint", KeyEvent.VK_H);
 		menuItemHint.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 		menuItemHint.addActionListener(e -> {displayHint((new Solver(game)).getHint());});
+		menuItemHint.setAccelerator(KeyStroke.getKeyStroke('h')); //can activate hint by pressing h
 		menuBar.add(menuItemHint);
 		
 		//Add save BUTTON
-		
-//		menuItemSave = new JMenuItem("Save");
-//		menuItemSave.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-//		//When the user will press save so we'll create a SaveData object and pass this as we want the user
-//		//to save this view then after that call the save method in ResourceManager class and pass the save object and fileName
-//		menuItemSave.addActionListener(event -> {
-//			SaveData data = new SaveData(game);
-//			try {
-//				ResourceManager.save(data,"levelSaved");//levelSaved is the file and don't use xxx/levelSaved
-//			}
-//			catch (Exception e) {
-//				System.out.println("Couldn't save: " + e.getMessage());
-//			}
-//		});
-//		menuBar.add(menuItemSave);
-//		
-//		//Add load BUTTON
-//		
-//		menuItemLoad = new JMenuItem("Save");
-//		menuItemLoad.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-//		//When the user will press save so we'll create a SaveData object and pass this as we want the user
-//		//to save this view then after that call the save method in ResourceManager class and pass the save object and fileName
-//		menuItemLoad.addActionListener(event -> {
-//			
-//			try {
-//				SaveData data = (SaveData) ResourceManager.load("levelSaved");//levelSaved is the file that will be loaded and don't use xxx/levelSaved
-//			}
-//			catch (Exception e) {
-//				System.out.println("Couldn't load: " + e.getMessage());
-//			}
-//		});
-//		menuBar.add(menuItemLoad);
 
+		menuItemSave = new JMenuItem("Save");
+		menuItemSave.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		//When the user will press save so we'll create a SaveData object and pass this as we want the user
+		//to save this view then after that call the save method in ResourceManager class and pass the save object and fileName
+		menuItemSave.addActionListener(event -> {
+			SaveData data = new SaveData(game);
+			try {
+				ResourceManager.save(data,"levelSaved");//levelSaved is the file and don't use xxx/levelSaved
+			}
+			catch (Exception e) {
+				System.out.println("Couldn't save: " + e.getMessage());
+			}
+		});
+		menuBar.add(menuItemSave);
+		
 		add(menuBar, BorderLayout.NORTH);
 	}
 
@@ -383,7 +384,7 @@ public class GameView extends JFrame implements Serializable {
 		}
 	}
 
-	/*
+	/**
 	 * All the animals, mushrooms and holes will be added by using this method
 	 */
 	private void instantiateIcons() {
@@ -489,6 +490,10 @@ public class GameView extends JFrame implements Serializable {
 	 */
 	public void addLevelListener(ActionListener a) {
 		startBtn.addActionListener(a);
+	}
+	
+	public void addLevelSelectionListener(ActionListener a) {
+		
 	}
 
 }
