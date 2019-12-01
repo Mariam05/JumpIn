@@ -378,7 +378,7 @@ public class GameView extends JFrame implements Serializable {
 		}
 	}
 
-	/*
+	/**
 	 * All the animals, mushrooms and holes will be added by using this method
 	 */
 	private void instantiateIcons() {
@@ -476,6 +476,18 @@ public class GameView extends JFrame implements Serializable {
 	 */
 	public void addNewGameListener(ActionListener a) {
 		newGameBtn.addActionListener(a);
+	}
+	
+	/**
+	 * Listens for when a level has been selected for a new game
+	 * @param a
+	 */
+	public void addLevelListener(ActionListener a) {
+		startBtn.addActionListener(a);
+	}
+	
+	public void addLevelSelectionListener(ActionListener a) {
+		
 	}
 
 }
