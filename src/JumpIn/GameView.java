@@ -208,6 +208,11 @@ public class GameView extends JFrame implements Serializable {
 
 		JButton buildLvlBtn = new JButton("Build A Level");
 		buttons.add(buildLvlBtn);
+		buildLvlBtn.addActionListener(e -> {
+			remove(levelsPage);
+			add(new LevelBuilderPanel(size));
+			setVisible(true);
+		});
 		
 		// Adding the levels lists to scroll panes
 		JScrollPane pane1 = new JScrollPane(defaultLevels);

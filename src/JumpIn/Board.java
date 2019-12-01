@@ -65,6 +65,9 @@ public class Board {
 		return pieceObjectsList;
 	}
 
+	public void addToPieceHashmap(String name, Piece p) {
+		piecesOnBoard.put(name, p);
+	}
 	public void addDefaultPieces() {
 		Mushroom mushroom1 = new Mushroom("MSH");
 		Mushroom mushroom2 = new Mushroom("MSH");
@@ -205,7 +208,6 @@ public class Board {
 	}
 
 	public boolean hasWon() {
-
 		for (String s : piecesOnBoard.keySet()) {
 			Piece p = piecesOnBoard.get(s);
 			if (p instanceof Rabbit) {

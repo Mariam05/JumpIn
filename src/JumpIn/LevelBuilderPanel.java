@@ -221,6 +221,7 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 	private void handleDone() {
 		if (board.hasWon()) {
 			JOptionPane.showMessageDialog(this, "There is nothing to solve, this game is in winning state!");
+			return;
 		}
 
 		// Check if the level built is solveable
@@ -228,7 +229,10 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 		if (solver.getHint() == null) {
 			JOptionPane.showMessageDialog(this, "This game is unsolveable!");
 		} else {
-			
+			String levelName = JOptionPane.showInputDialog("Enter a name for your level");
+			String boardRepresentation = board.getStringRepresentation();
+			LevelsParser.addCustomLevelToFile(levelName, boardRepresentation);
+			this.setVisible(false);
 		}
 
 	}
@@ -244,6 +248,7 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 		case ("Rabbit"):
 			RA1 = new Rabbit(rabbits[rCount], rabbitColours[rCount]);
 			board.addPiece(RA1, j, i);
+			board.addToPieceHashmap(RA1.toString(), RA1);
 			rCount++;
 			break;
 		case ("HFox"):
@@ -252,18 +257,25 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 			Piece tail = ((Fox) F1H).getAssociatedPart();
 			board.addPiece(F1H, j, i);
 			board.addPiece(tail, tail.getXPos(), tail.getYPos());
+			board.addToPieceHashmap(F1H.toString(), F1H);
+			board.addToPieceHashmap(tail.toString(), tail);
 			fCount++;
 			break;
 		case ("VFox"):
-			F2V = new Fox("F" + j + "H", FoxType.VERTICAL, true);
+			F2V = new Fox("F" + j + "V", FoxType.VERTICAL, true);
 			Piece vtail = ((Fox) F2V).getAssociatedPart();
 			board.addPiece(F2V, j, i);
 			board.addPiece(vtail, vtail.getXPos(), vtail.getYPos());
+			
+			board.addToPieceHashmap(F2V.toString(), F2V);
+			board.addToPieceHashmap(vtail.toString(), vtail);
+			
 			fCount++;
 			break;
 		case ("Mushroom"):
 			MSH = new Mushroom("MSH");
 			board.addPiece(MSH, j, i);
+			board.addToPieceHashmap("MSH" + mCount, MSH);
 			mCount++;
 			break;
 		}
