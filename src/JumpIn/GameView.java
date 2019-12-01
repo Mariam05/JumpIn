@@ -75,9 +75,10 @@ public class GameView extends JFrame implements Serializable {
 		this.setLayout(new BorderLayout());
 
 		this.game = model;
-
 		size = model.getBoard().SIZE;
-
+		
+		selectedLevel = null;
+		
 		// Creating start page
 		createStartPage();		
 		
@@ -367,7 +368,7 @@ public class GameView extends JFrame implements Serializable {
 		// Add reset button
 		menuItemReset = new JMenuItem("Reset");
 		menuItemReset.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-		menuItemReset.addActionListener(e -> {dispose(); Main.main(null);});
+		menuItemReset.addActionListener(e -> {defaultList.clear();dispose(); Main.main(null);});
 		menuBar.add(menuItemReset);
 
 		// Add quit button

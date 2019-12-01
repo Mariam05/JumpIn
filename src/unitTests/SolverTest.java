@@ -53,7 +53,7 @@ public class SolverTest {
 	@Test
 	public void testGetHint() {
 		//Testing hint before any move is made
-		solver = new Solver(game);
+		solver = new Solver(game.getBoard());
 		assertEquals(command,solver.getHint());		
 	}
 	
@@ -64,7 +64,7 @@ public class SolverTest {
 	public void testGetHintAfterMove() {
 		//Testing hint after one move is made
 		game.handleMove(command);
-		solver = new Solver(game);
+		solver = new Solver(game.getBoard());
 		assertEquals(command1,solver.getHint());
 	}
 	
@@ -76,7 +76,7 @@ public class SolverTest {
 		//Testing hint after two moves are made
 		game.handleMove(command);
 		game.handleMove(command1);
-		solver = new Solver(game);
+		solver = new Solver(game.getBoard());
 		assertEquals(command2,solver.getHint());
 	}
 	
@@ -89,7 +89,7 @@ public class SolverTest {
 		game.handleMove(command);
 		game.handleMove(command1);
 		game.handleMove(command2);
-		solver = new Solver(game);
+		solver = new Solver(game.getBoard());
 		assertEquals(command3,solver.getHint());
 	}
 	
@@ -103,7 +103,7 @@ public class SolverTest {
 		game.handleMove(command1);
 		game.handleMove(command2);
 		game.handleMove(command3);
-		solver = new Solver(game);
+		solver = new Solver(game.getBoard());
 		assertEquals(command4,solver.getHint());
 	}
 	
@@ -118,7 +118,7 @@ public class SolverTest {
 		game.handleMove(command2);
 		game.handleMove(command3);
 		game.handleMove(command4);
-		solver = new Solver(game);
+		solver = new Solver(game.getBoard());
 		assertEquals(command5,solver.getHint());
 	}
 	
@@ -129,7 +129,7 @@ public class SolverTest {
 	public void testGetHintAfterRandomMove() {
 		//Testing hint after random move is made
 		game.handleMove(random);
-		solver = new Solver(game);
+		solver = new Solver(game.getBoard());
 		assertEquals(command,solver.getHint());		
 	}
 	
@@ -141,7 +141,7 @@ public class SolverTest {
 		//Testing hint after two random moves are made
 		game.handleMove(random);
 		game.handleMove(random1);
-		solver = new Solver(game);
+		solver = new Solver(game.getBoard());
 		assertEquals(command,solver.getHint());		
 	}
 	
@@ -154,7 +154,7 @@ public class SolverTest {
 		game.handleMove(random);
 		game.handleMove(random1);
 		game.handleMove(command);
-		solver = new Solver(game);
+		solver = new Solver(game.getBoard());
 		assertEquals(command1,solver.getHint());		
 	}
 	
@@ -168,7 +168,7 @@ public class SolverTest {
 		game.handleMove(random);//"move","F1H","13"
 		game.handleMove(command);//move RA1 32
 		game.handleMove(random3);//"move","F2V","12"
-		solver = new Solver(game);
+		solver = new Solver(game.getBoard());
 		assertEquals(command1,solver.getHint());		
 	}
 	
@@ -183,7 +183,7 @@ public class SolverTest {
 		game.handleMove(command);//move RA1 32
 		game.handleMove(random3);//"move","F2V","12"
 		game.handleMove(command1);//move RA2 22
-		solver = new Solver(game);
+		solver = new Solver(game.getBoard());
 		Command comm = new Command("move","RA1","02");
 		assertEquals(comm,solver.getHint());		
 	}
