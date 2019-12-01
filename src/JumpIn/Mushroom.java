@@ -15,18 +15,18 @@ public class Mushroom extends Piece {
 
 
 	/**
-	 * Currently not moving the mushrooms. May need to implement this for the levels part
+	 * The player isn't allowed to move the mushroom. 
+	 * For the level builder, we put the mushrooms using the setPosition()
 	 */
 	@Override
 	public void handleMove(Board board, int newX, int newY) {
-		// TODO Auto-generated method stub
+		// 
 	}
 
 
 	@Override
 	public boolean validateMove(Board board, int newX, int newY) {
-		// Mushrooms can't be moved
-		return false;
+		return !board.hasPiece(newX, newY); //if it doesn't have a piece it can be moved there
 	}
 
 

@@ -31,7 +31,7 @@ public class Game {
 	 * pieces
 	 */
 	public Game() {
-		board = Board.makeBoardFromLevel("6");
+		board = Board.makeBoardFromLevel("5"); 
 		//board.addDefaultPieces();
 		pieces = board.getPiecesOnBoard();
 		undo = new Stack<Command>();

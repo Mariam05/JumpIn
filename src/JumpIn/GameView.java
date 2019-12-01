@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 
 /**
  * This is the view class for the GUI. It has a model (Game object) and updates
@@ -33,12 +35,12 @@ public class GameView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private Container container;
-	private JPanel startPage, levelsPage;
+	private JPanel startPage, levelsPage, currentPage;
 	JButton board[][], levels[][], newGameBtn, loadGameBtn, levelBtn;// This will be a board of squares
-
+	JButton createBoardBtn;
 	private int size; // The size of the board
 
-	private Image piece, whiteRabbit, yellowRabbit, greyRabbit, mushroom, foxface, foxtail, hole;
+	public Image piece, whiteRabbit, yellowRabbit, greyRabbit, mushroom, foxface, foxtail, hole;
 
 	/**
 	 * this will be used twice firstly to add holes and secondly to change the
@@ -61,9 +63,11 @@ public class GameView extends JFrame {
 		this.game = model;
 
 		size = model.getBoard().SIZE;
+		board = new JButton[size][size];
 
 		// Creating start page
-		createStartPage();		
+		createStartPage();	
+		currentPage = startPage;
 		
 		container = new Container();
 		container.setLayout(new GridLayout(size, size));
@@ -87,6 +91,7 @@ public class GameView extends JFrame {
 	public void goToLevelPage() {
 		remove(startPage);
 		createLevelsPage();
+		currentPage = levelsPage;
 	}
 
 	/**
@@ -95,7 +100,7 @@ public class GameView extends JFrame {
 	private void displayGame() {
 		add(container); // add the container to the jframe
 		addMenuItems();
-		createBoard();
+		createButtonsBoard(board);
 		instantiateIcons();
 		putIconsOnBoard();
 	}
@@ -123,6 +128,13 @@ public class GameView extends JFrame {
 		loadGameBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 		loadGameBtn.setForeground(Color.BLUE);
 		
+		createBoardBtn = new JButton("Create a Puzzle");
+		createBoardBtn.setBounds(230, 550, 250, 50);
+		createBoardBtn.setFont(new Font ("Monospaced", Font.BOLD, 20));
+		createBoardBtn.setBackground(Color.WHITE);
+		createBoardBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+		createBoardBtn.setForeground(Color.BLUE);
+		
 		JLabel title = new JLabel("JUMP IN");
 		title.setFont(new Font ("Monospaced", Font.BOLD, 125));
 		title.setBounds(70, 100, 900, 100);
@@ -131,8 +143,10 @@ public class GameView extends JFrame {
 		startPage.add(title);
 		startPage.add(newGameBtn);
 		startPage.add(loadGameBtn);
+		startPage.add(createBoardBtn);
 		
 		loadGameBtn.addActionListener(e -> {displayMessage("load saved game");});
+		createBoardBtn.addActionListener(e -> {remove(startPage); add(new LevelBuilderPanel(size)); setVisible(true);});
 		
 	}
 	
@@ -252,6 +266,8 @@ public class GameView extends JFrame {
 	private void addMenuItems() {
 		// Create menu bar
 		menuBar = new JMenuBar();
+		
+		final int SHORTCUT_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(); // to save typing
 
 		// Add undo button
 		menuItemUndo = new JMenuItem("Undo");
@@ -290,6 +306,7 @@ public class GameView extends JFrame {
 		menuItemHint = new JMenuItem("Hint", KeyEvent.VK_H);
 		menuItemHint.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 		menuItemHint.addActionListener(e -> {displayHint((new Solver(game)).getHint());});
+		menuItemHint.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, SHORTCUT_MASK));
 		menuBar.add(menuItemHint);
 
 		add(menuBar, BorderLayout.NORTH);
@@ -299,8 +316,7 @@ public class GameView extends JFrame {
 	 * The board will be created then we are adding the buttons in side it and also
 	 * adding background color
 	 */
-	private void createBoard() {
-		board = new JButton[size][size];
+	private void createButtonsBoard(JButton[][] board) {
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
 				JButton button = new JButton();
