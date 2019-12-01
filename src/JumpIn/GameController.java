@@ -110,6 +110,7 @@ public class GameController {
 	class LevelListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			game.setBoard(gameView.getSelectedLevel());
 			gameView.goToGame();
 			addActionListeners();
 		}
