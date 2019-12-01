@@ -452,5 +452,9 @@ public class GameView extends JFrame {
 	public void addLevelListener(ActionListener a) {
 		startBtn.addActionListener(a);
 	}
+	
+	public void addLevelSelectionListener(ActionListener a) {
+		
+	}
 
 }
