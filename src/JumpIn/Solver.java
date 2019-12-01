@@ -41,6 +41,8 @@ public class Solver {
 	public Command getHint() {
 		Node n = BFS(); // solve the puzzle and get the node with the winning state
 
+		if (n == null) return null; //no solution found
+		
 		// move up through the nodes until we reach the first first move in this
 		// solution
 		while (n.getParentNode() != null && n.getParentNode() != source) {

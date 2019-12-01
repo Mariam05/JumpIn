@@ -41,7 +41,7 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 	 */
 	private JPanel boardPanel;
 
-	private JMenuItem rabbit, vFox, hFox, mushroom, save;
+	private JMenuItem rabbit, vFox, hFox, mushroom, done;
 	private JMenuBar menuBar;
 	private Image mushroomPic, foxHPic, foxTPic, rabbit1Pic, rollOverPic, holePic, grassPic, rabbit2Pic, rabbit3Pic;
 	private JButton[][] bBoard;
@@ -84,10 +84,10 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 
 		menuBar = new JMenuBar();
 
-		save = new JMenuItem("Save");
-		save.addActionListener(this);
-		save.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-		save.setName("Save");
+		done = new JMenuItem("Done");
+		done.addActionListener(this);
+		done.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		done.setName("Done");
 
 		rabbit = new JMenuItem("Rabbit");
 		rabbit.addActionListener(this);
@@ -114,7 +114,7 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 		// mushroom.setBackground(Color.red);
 		// mushroom.setForeground(Color.WHITE);
 
-		menuBar.add(save);
+		menuBar.add(done);
 		menuBar.add(rabbit);
 		menuBar.add(hFox);
 		menuBar.add(mushroom);
@@ -209,20 +209,28 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 				rollOverPic = mushroomPic;
 				currPieceSelected = "Mushroom";
 				break;
-			case("Save"):
-				handleSave();break;
+			case ("Done"):
+				handleDone();
+				break;
 			}
 
 		}
 
 	}
-	
-	private void handleSave() {
+
+	private void handleDone() {
 		if (board.hasWon()) {
 			JOptionPane.showMessageDialog(this, "There is nothing to solve, this game is in winning state!");
 		}
+
+		// Check if the level built is solveable
 		Solver solver = new Solver(board);
-		
+		if (solver.getHint() == null) {
+			JOptionPane.showMessageDialog(this, "This game is unsolveable!");
+		} else {
+			
+		}
+
 	}
 
 	/**
@@ -234,29 +242,29 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 	public void addPieceToBoard(int i, int j) {
 		switch (currPieceSelected) {
 		case ("Rabbit"):
-				RA1 = new Rabbit(rabbits[rCount], rabbitColours[rCount]);
-				board.addPiece(RA1, j, i);
-				rCount++;
+			RA1 = new Rabbit(rabbits[rCount], rabbitColours[rCount]);
+			board.addPiece(RA1, j, i);
+			rCount++;
 			break;
 		case ("HFox"):
 
-				F1H = new Fox("F" + j + "H", FoxType.HORIZONTAL, true);
-				Piece tail = ((Fox) F1H).getAssociatedPart();
-				board.addPiece(F1H, j, i);
-				board.addPiece(tail, tail.getXPos(), tail.getYPos());
-				fCount++;
+			F1H = new Fox("F" + j + "H", FoxType.HORIZONTAL, true);
+			Piece tail = ((Fox) F1H).getAssociatedPart();
+			board.addPiece(F1H, j, i);
+			board.addPiece(tail, tail.getXPos(), tail.getYPos());
+			fCount++;
 			break;
 		case ("VFox"):
-				F2V = new Fox("F" + j + "H", FoxType.VERTICAL, true);
-				Piece vtail = ((Fox) F2V).getAssociatedPart();
-				board.addPiece(F2V, j, i);
-				board.addPiece(vtail, vtail.getXPos(), vtail.getYPos());
-				fCount++;
+			F2V = new Fox("F" + j + "H", FoxType.VERTICAL, true);
+			Piece vtail = ((Fox) F2V).getAssociatedPart();
+			board.addPiece(F2V, j, i);
+			board.addPiece(vtail, vtail.getXPos(), vtail.getYPos());
+			fCount++;
 			break;
 		case ("Mushroom"):
-				MSH = new Mushroom("MSH");
-				board.addPiece(MSH, j, i);
-				mCount++;
+			MSH = new Mushroom("MSH");
+			board.addPiece(MSH, j, i);
+			mCount++;
 			break;
 		}
 
@@ -264,7 +272,7 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 
 	/**
 	 * Check that the square(s) that the user wants to place the piece on is/are
-	 * valid, and that 
+	 * valid, and that
 	 * 
 	 * @param currPiece the piece to place
 	 * @param i         the row coordinate
@@ -301,6 +309,7 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 
 	/**
 	 * Check if the user can place anymore pieces
+	 * 
 	 * @param currPieceSelected
 	 * @return true if pieces are all used up
 	 */
@@ -312,16 +321,17 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 			return (rCount >= 3);
 		case ("HFox"):
 		case ("VFox"):
-			return (fCount >= 2) ;
+			return (fCount >= 2);
 		}
 
 		return false; // input was wrong
 	}
 
-	
 	/**
-	 * Informs the user that they can't place anymore of that specific piece. 
-	 * This method is separate from arePiecesUsedUp because the latter is used in different contexts. 
+	 * Informs the user that they can't place anymore of that specific piece. This
+	 * method is separate from arePiecesUsedUp because the latter is used in
+	 * different contexts.
+	 * 
 	 * @param currPieceSelected
 	 */
 	public void sendPiecesUsedUpMessage(String currPieceSelected) {
@@ -339,10 +349,10 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 		}
 	}
 
-	
 	/**
 	 * This class is created to handle a mouse hovering over a button and then
 	 * clicking on it
+	 * 
 	 * @author Mariam
 	 *
 	 */
@@ -422,7 +432,8 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 								new ImageIcon(foxTPic.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH)));
 					}
 
-				} else{ //if it's an invalid location, disable rollover. Otherwise, it will show previously selected icon
+				} else { // if it's an invalid location, disable rollover. Otherwise, it will show
+							// previously selected icon
 					bBoard[i][j].setRolloverEnabled(false);
 				}
 			}
