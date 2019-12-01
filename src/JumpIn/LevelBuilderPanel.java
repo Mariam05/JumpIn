@@ -59,14 +59,17 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 	String currPieceSelected = null;
 
 	private Piece F1H, F2V, RA1, MSH;
+	private GameView gameView;
 
 	private Stack<String> piecesAdded;
 
-	public LevelBuilderPanel(int size) {
+	public LevelBuilderPanel(int size, GameView gameView) {
 		super(new BorderLayout());
 		rCount = 0;
 		fCount = 0;
 		mCount = 0;
+		
+		this.gameView = gameView;
 
 		boardPanel = new JPanel(new GridLayout(size, size));
 		instantiateIcons();
@@ -276,7 +279,7 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 			String levelName = JOptionPane.showInputDialog("Enter a name for your level");
 			String boardRepresentation = board.getStringRepresentation();
 			LevelsParser.addCustomLevelToFile(levelName, boardRepresentation);
-			this.setVisible(false);
+			gameView.goBack();
 		}
 
 	}

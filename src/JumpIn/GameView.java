@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Stack;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -64,6 +65,8 @@ public class GameView extends JFrame implements Serializable {
 	private static DefaultListModel<String> defaultList = new DefaultListModel<>(), customList = new DefaultListModel<>();
 	private String selectedLevel;
 	
+	private Stack<JPanel> previousPanels;
+	
 	/**
 	 * Create a new view
 	 * 
@@ -78,6 +81,7 @@ public class GameView extends JFrame implements Serializable {
 		size = model.getBoard().SIZE;
 		
 		selectedLevel = null;
+		previousPanels = new Stack<>();
 		
 		// Creating start page
 		createStartPage();		
@@ -138,6 +142,7 @@ public class GameView extends JFrame implements Serializable {
 	 */
 	private void createStartPage() {
 		startPage = new JPanel();
+		previousPanels.add(startPage);
 		startPage.setLayout(null);
 		startPage.setBackground(new Color(0, 204, 0));
 		add(startPage);
@@ -192,6 +197,7 @@ public class GameView extends JFrame implements Serializable {
 	private void createLevelsPage() {
 		// JPanel to store all the levels options and labels
 		levelsPage = new JPanel();
+		previousPanels.add(levelsPage);
 		levelsPage.setLayout(new BorderLayout());
 		levelsPage.setBackground(new Color(0, 204, 0));
 		add(levelsPage);
@@ -214,7 +220,7 @@ public class GameView extends JFrame implements Serializable {
 		levelsPage.add(buttons, BorderLayout.SOUTH);		
 
 		JButton backBtn = new JButton("Back");
-		backBtn.addActionListener(e -> {dispose();Main.main(null);});
+		backBtn.addActionListener(e -> goBack());
 		buttons.add(backBtn);		
 
 		startBtn = new JButton("Start");
@@ -224,7 +230,9 @@ public class GameView extends JFrame implements Serializable {
 		buttons.add(buildLvlBtn);
 		buildLvlBtn.addActionListener(e -> {
 			remove(levelsPage);
-			add(new LevelBuilderPanel(size));
+			JPanel levelBuilderPanel = new LevelBuilderPanel(size, this);
+			previousPanels.add(levelBuilderPanel);
+			add(levelBuilderPanel);
 			setVisible(true);
 		});
 		
@@ -286,6 +294,12 @@ public class GameView extends JFrame implements Serializable {
 	public int getBoardSize() {
 		return this.size;
 
+	}
+	
+	public void goBack() {
+		JPanel currPanel = previousPanels.pop();
+		currPanel.setVisible(false);
+		add(previousPanels.peek());
 	}
 
 	/**
