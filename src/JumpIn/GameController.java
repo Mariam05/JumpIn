@@ -94,9 +94,10 @@ public class GameController {
 			if (game.getBoard().hasWon()) {
 				gameView.update();
 				gameView.displayMessage("CONGRATS! You solved the puzzle!");
-				gameView.dispose();
-			}
+				gameView.goBack();
+			} else {
 			gameView.update();
+			}
 		}
 	}
 	

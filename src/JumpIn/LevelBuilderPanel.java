@@ -271,7 +271,6 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 			return;
 		}
 
-		System.out.println(board.getStringRepresentation());
 		// Check if the level built is solveable
 		Solver solver = new Solver(board);
 		if (solver.getHint() == null) {
