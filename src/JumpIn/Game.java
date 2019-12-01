@@ -1,10 +1,7 @@
 
 package JumpIn;
 
-import java.awt.Color;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Stack;
 
 /**
@@ -31,8 +28,7 @@ public class Game {
 	 * pieces
 	 */
 	public Game() {
-		setBoard("4"); // Will go to level 4 by default
-		pieces = board.getPiecesOnBoard();
+		setBoard("1"); // Init to level 1 by default
 		undo = new Stack<Command>();
 		redo = new Stack<Command>();
 
@@ -54,6 +50,7 @@ public class Game {
 	 */
 	public void setBoard(String levelName) {
 		board = Board.makeBoardFromLevel(levelName);
+		pieces = board.getPiecesOnBoard();
 	}
 
 	/**
