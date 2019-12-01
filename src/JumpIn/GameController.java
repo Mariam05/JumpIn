@@ -125,7 +125,7 @@ public class GameController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			gameView.goToLevelPage();
-			gameView.addLevelListener(new LevelListener());
+			gameView.addLevelListener(new LevelListener()); 
 		}
 	}
 
