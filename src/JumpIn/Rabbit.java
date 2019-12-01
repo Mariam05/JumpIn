@@ -45,8 +45,8 @@ public class Rabbit extends Piece {
 		return inHole;
 	}
 	
-	public void setInHole() {
-		inHole = true;
+	public void setInHole(boolean b) {
+		inHole = b;
 	}
 	
 	/**

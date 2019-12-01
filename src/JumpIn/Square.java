@@ -93,6 +93,10 @@ public class Square {
 	 */
 	public void removePiece() {
 		this.hasPiece = false;
+		if (piece instanceof Rabbit && isHole) {
+			Rabbit r = (Rabbit)piece;
+			r.setInHole(false);
+		}
 		piece = null;
 		
 	}

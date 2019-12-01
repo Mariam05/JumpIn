@@ -203,7 +203,7 @@ public class Board {
 		piece.setPosition(x, y);
 		if (piece instanceof Rabbit) {
 			if (board[y][x].isHole())
-				((Rabbit) piece).setInHole();
+				((Rabbit) piece).setInHole(true);
 		}
 	}
 
@@ -255,7 +255,7 @@ public class Board {
 	 */
 	public Piece removePiece(int x, int y) {
 		Piece temp = board[y][x].getPiece();
-		board[y][x].removePiece();
+		board[y][x].removePiece();	
 		return temp;
 	}
 

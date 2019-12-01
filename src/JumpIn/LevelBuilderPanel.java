@@ -6,10 +6,13 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Stack;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -19,6 +22,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
 import JumpIn.Fox.FoxType;
 
@@ -41,7 +45,7 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 	 */
 	private JPanel boardPanel;
 
-	private JMenuItem rabbit, vFox, hFox, mushroom, done;
+	private JMenuItem rabbit, vFox, hFox, mushroom, done, removeLast;
 	private JMenuBar menuBar;
 	private Image mushroomPic, foxHPic, foxTPic, rabbit1Pic, rollOverPic, holePic, grassPic, rabbit2Pic, rabbit3Pic;
 	private JButton[][] bBoard;
@@ -54,7 +58,9 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 
 	String currPieceSelected = null;
 
-	private Piece F1H, F2V, RA1, RA2, RA3, MSH;
+	private Piece F1H, F2V, RA1, MSH;
+
+	private Stack<String> piecesAdded;
 
 	public LevelBuilderPanel(int size) {
 		super(new BorderLayout());
@@ -72,7 +78,7 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 		createPieceMenu();
 		createButtonsBoard(bBoard);
 
-//		instantiatePieces();
+		piecesAdded = new Stack<>();
 
 		add(boardPanel, BorderLayout.CENTER);
 	}
@@ -97,28 +103,30 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 		hFox = new JMenuItem("Horizontal Fox");
 		hFox.addActionListener(this);
 		hFox.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-		hFox.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 		hFox.setName("HFox");
 
 		vFox = new JMenuItem("Vertical Fox");
 		vFox.addActionListener(this);
-		vFox.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 		vFox.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 		vFox.setName("VFox");
 
 		mushroom = new JMenuItem("Mushroom");
 		mushroom.addActionListener(this);
 		mushroom.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-		mushroom.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 		mushroom.setName("Mushroom");
-		// mushroom.setBackground(Color.red);
-		// mushroom.setForeground(Color.WHITE);
+
+		removeLast = new JMenuItem("Undo");
+		removeLast.addActionListener(this);
+		removeLast.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		removeLast.setName("Undo");
+		removeLast.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
 		menuBar.add(done);
 		menuBar.add(rabbit);
 		menuBar.add(hFox);
 		menuBar.add(mushroom);
 		menuBar.add(vFox);
+		menuBar.add(removeLast);
 
 		add(menuBar, BorderLayout.PAGE_START);
 
@@ -212,10 +220,46 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 			case ("Done"):
 				handleDone();
 				break;
-			}
+			case ("Undo"):
+				if (!piecesAdded.isEmpty()) {
+					String pieceRemoved = piecesAdded.pop();
+					Piece p = board.getPiecesOnBoard().get(pieceRemoved);
+					board.removePiece(p.getXPos(), p.getYPos());
+					if (p instanceof Fox) {
+						fCount--;
+						Piece tail = ((Fox) p).getAssociatedPart();
+						board.removePiece(tail.getXPos(), tail.getYPos());
 
+						bBoard[p.getYPos()][p.getXPos()].setIcon(
+								new ImageIcon(grassPic.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH)));
+						bBoard[tail.getYPos()][tail.getXPos()].setIcon(
+								new ImageIcon(grassPic.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH)));
+					}
+					if (p instanceof Rabbit) {
+						rCount--;
+						removeMushroomOrRabbit(p);
+					}
+					if (p instanceof Mushroom) {
+						mCount--;
+						removeMushroomOrRabbit(p);
+					}
+
+				}
+
+			}
 		}
 
+	}
+
+	private void removeMushroomOrRabbit(Piece p) {
+		if (board.isHole(p.getXPos(), p.getYPos())) {
+			bBoard[p.getYPos()][p.getXPos()]
+					.setIcon(new ImageIcon(holePic.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH)));
+		} else {
+			bBoard[p.getYPos()][p.getXPos()]
+					.setIcon(new ImageIcon(grassPic.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH)));
+		}
+		board.removePiece(p.getXPos(), p.getYPos());
 	}
 
 	private void handleDone() {
@@ -249,6 +293,7 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 			RA1 = new Rabbit(rabbits[rCount], rabbitColours[rCount]);
 			board.addPiece(RA1, j, i);
 			board.addToPieceHashmap(RA1.toString(), RA1);
+			piecesAdded.add(RA1.toString());
 			rCount++;
 			break;
 		case ("HFox"):
@@ -259,6 +304,7 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 			board.addPiece(tail, tail.getXPos(), tail.getYPos());
 			board.addToPieceHashmap(F1H.toString(), F1H);
 			board.addToPieceHashmap(tail.toString(), tail);
+			piecesAdded.add(F1H.toString());
 			fCount++;
 			break;
 		case ("VFox"):
@@ -266,16 +312,19 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 			Piece vtail = ((Fox) F2V).getAssociatedPart();
 			board.addPiece(F2V, j, i);
 			board.addPiece(vtail, vtail.getXPos(), vtail.getYPos());
-			
+
 			board.addToPieceHashmap(F2V.toString(), F2V);
 			board.addToPieceHashmap(vtail.toString(), vtail);
-			
+
+			piecesAdded.add(F2V.toString());
+
 			fCount++;
 			break;
 		case ("Mushroom"):
 			MSH = new Mushroom("MSH");
 			board.addPiece(MSH, j, i);
-			board.addToPieceHashmap("MSH" + mCount, MSH);
+			board.addToPieceHashmap("MSH" + mCount, MSH); // add mCount to uniquely identify each mushroom
+			piecesAdded.add("MSH" + mCount);
 			mCount++;
 			break;
 		}

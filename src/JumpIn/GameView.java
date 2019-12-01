@@ -85,6 +85,8 @@ public class GameView extends JFrame implements Serializable {
 		container = new Container();
 		container.setLayout(new GridLayout(size, size));
 
+		instantiateIcons();
+		
 		setTitle("JumpIn Game");
 		setSize(700, 700);
 		setResizable(false);
@@ -127,7 +129,7 @@ public class GameView extends JFrame implements Serializable {
 		add(container); // add the container to the jframe
 		addMenuItems();
 		createBoard();
-		instantiateIcons();
+		
 		putIconsOnBoard();
 	}
 	
