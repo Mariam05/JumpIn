@@ -25,6 +25,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  * This is the view class for the GUI. It has a model (Game object) and updates
@@ -39,7 +41,6 @@ public class GameView extends JFrame implements Serializable {
 	private Container container;
 	private JPanel startPage, levelsPage;
 	private JButton newGameBtn, loadGameBtn;
-	private JScrollPane defaultLevelsPane, customLevelsPane;
 	JButton board[][], startBtn; // This will be a board of squares
 
 	private int size; // The size of the board
@@ -59,6 +60,7 @@ public class GameView extends JFrame implements Serializable {
 	// These will hold the names of all the levels
 	private static JList<String> defaultLevels, customLevels;
 	private static DefaultListModel<String> defaultList = new DefaultListModel<>(), customList = new DefaultListModel<>();
+	private String selectedLevel;
 	
 	/**
 	 * Create a new view
@@ -102,6 +104,15 @@ public class GameView extends JFrame implements Serializable {
 		remove(startPage);
 		initializeDefaultLevels();
 		createLevelsPage();
+	}
+	
+	/**
+	 * Returns the most recently selected level
+	 * 
+	 * @return level selected
+	 */
+	public String getSelectedLevel() {
+		return this.selectedLevel;
 	}
 
 	/**
@@ -227,6 +238,30 @@ public class GameView extends JFrame implements Serializable {
 		
 		defaultLevels = new JList<>(defaultList);
 		customLevels = new JList<>(customList);
+		
+		// Add listener to default levels list
+		defaultLevels.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if (!e.getValueIsAdjusting()) {
+					// Stores only the number associated with the level name
+                    selectedLevel = defaultLevels.getSelectedValue().split("Level ")[1];
+                    System.out.println(selectedLevel);
+                }
+			}
+		});
+		
+		// Add listener to custom levels list
+		customLevels.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if (!e.getValueIsAdjusting()) {
+					// Stores the whole custom level name
+                    selectedLevel = defaultLevels.getSelectedValue();
+                    System.out.println(selectedLevel);
+                }
+			}
+		});
 	}
 	
 	/**
@@ -351,8 +386,6 @@ public class GameView extends JFrame implements Serializable {
 			}
 		});
 		menuBar.add(menuItemSave);
-		
-		
 		
 		add(menuBar, BorderLayout.NORTH);
 	}
@@ -483,10 +516,6 @@ public class GameView extends JFrame implements Serializable {
 	 */
 	public void addLevelListener(ActionListener a) {
 		startBtn.addActionListener(a);
-	}
-	
-	public void addLevelSelectionListener(ActionListener a) {
-		
 	}
 
 }
