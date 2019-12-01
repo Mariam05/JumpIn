@@ -25,21 +25,12 @@ public class Solver {
 	private Node source;
 
 	/**
-	 * The animals on that board
-	 */
-	private List<Piece> sourceAnimals;
-
-	/**
 	 * Create a new solver with the current state of the game.
 	 * 
 	 * @param game
 	 */
-	public Solver(Game game) {
-		// Get all the animals that are on the board currently
-		sourceAnimals = game.getPiecesExceptTails();
-
-		source = new Node(null, game.getBoard().getStringRepresentation(), null);
-		
+	public Solver(Board board) {
+		source = new Node(null, board.getStringRepresentation(), null);
 	}
 
 	/**

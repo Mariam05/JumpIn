@@ -209,10 +209,20 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 				rollOverPic = mushroomPic;
 				currPieceSelected = "Mushroom";
 				break;
+			case("Save"):
+				handleSave();break;
 			}
 
 		}
 
+	}
+	
+	private void handleSave() {
+		if (board.hasWon()) {
+			JOptionPane.showMessageDialog(this, "There is nothing to solve, this game is in winning state!");
+		}
+		Solver solver = new Solver(board);
+		
 	}
 
 	/**

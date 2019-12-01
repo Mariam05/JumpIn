@@ -226,6 +226,26 @@ public class Board {
 	}
 
 	/**
+	 * Return an array list of the animals on the board, except for the tails. This
+	 * is for the solver, because it would be redundant to check for heads and
+	 * tails.
+	 * 
+	 * @return
+	 */
+	public ArrayList<Piece> getPiecesExceptTails() {
+
+		ArrayList<Piece> animals = new ArrayList<>();
+		for (String s : piecesOnBoard.keySet()) {
+			if (!((piecesOnBoard.get(s) instanceof Fox) && !((Fox) piecesOnBoard.get(s)).isHead())) { // if it's not a
+																									// tail, add it
+				animals.add(piecesOnBoard.get(s));
+			}
+		}
+
+		return animals;
+	}
+	
+	/**
 	 * Remove the piece at the specified square's location
 	 * 
 	 * @param x

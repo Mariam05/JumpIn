@@ -66,26 +66,6 @@ public class Game {
 	}
 
 	/**
-	 * Return an array list of the animals on the board, except for the tails. This
-	 * is for the solver, because it would be redundant to check for heads and
-	 * tails.
-	 * 
-	 * @return
-	 */
-	public ArrayList<Piece> getPiecesExceptTails() {
-
-		ArrayList<Piece> animals = new ArrayList<>();
-		for (String s : pieces.keySet()) {
-			if (!((pieces.get(s) instanceof Fox) && !((Fox) pieces.get(s)).isHead())) { // if it's not a
-																									// tail, add it
-				animals.add(pieces.get(s));
-			}
-		}
-
-		return animals;
-	}
-
-	/**
 	 * Given a command, process (that is: execute) the command.
 	 * 
 	 * @param command The command to be processed.

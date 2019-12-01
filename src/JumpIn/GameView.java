@@ -340,7 +340,7 @@ public class GameView extends JFrame implements Serializable {
 		//Add hint button
 		menuItemHint = new JMenuItem("Hint", KeyEvent.VK_H);
 		menuItemHint.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-		menuItemHint.addActionListener(e -> {displayHint((new Solver(game)).getHint());});
+		menuItemHint.addActionListener(e -> {displayHint((new Solver(game.getBoard())).getHint());});
 		menuItemHint.setAccelerator(KeyStroke.getKeyStroke('h')); //can activate hint by pressing h
 		menuBar.add(menuItemHint);
 		
