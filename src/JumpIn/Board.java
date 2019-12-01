@@ -125,7 +125,7 @@ public class Board {
 				String currPiece = elements[i];
 				FoxType type = null;
 				Piece temp;
-				switch (currPiece) {
+				switch (currPiece) { 
 				
 				case ("RA1"): // send down, white rabbit
 					c = Color.WHITE;
