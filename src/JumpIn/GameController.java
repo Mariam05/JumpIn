@@ -110,6 +110,10 @@ public class GameController {
 	class LevelListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			if(gameView.getSelectedLevel() == null) {
+				gameView.displayMessage("Please select a level");
+				return;
+			}
 			game.setBoard(gameView.getSelectedLevel());
 			gameView.goToGame();
 			addActionListeners();
