@@ -23,7 +23,8 @@ public class LevelsParser {
 	 * Represent the json levels as a hashmap
 	 */
 	private static HashMap<String, String> levels = new HashMap<>();
-	
+	private static HashMap<String, String> defaults = new HashMap<>();
+	private static HashMap<String, String> customs = new HashMap<>();
 	
 	private static JsonArray defaultLevels,  customLevels;
 	
@@ -40,6 +41,7 @@ public class LevelsParser {
 				  String name = dLevel.asObject().getString("name","");
 				  if (name.equals("")) return;
 				  levels.put(name, board);
+				  defaults.put(name, board);
 			}
 			customLevels = Json.parse(new FileReader(FILENAME)).asObject().get(CUSTOM_LEVELS_LABEL).asArray();
 			for (JsonValue dLevel : customLevels) {
@@ -47,6 +49,7 @@ public class LevelsParser {
 				  String name = dLevel.asObject().getString("name","");
 				  if (name.equals("")) return; //so that we don't store empty boards
 				  levels.put(name, board);
+				  customs.put(name, board);
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -72,6 +75,24 @@ public class LevelsParser {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	/**
+	 * returns the hashmap of all the default levels in the json
+	 * 
+	 * @return
+	 */
+	public static HashMap<String, String> getDefaultLevels(){
+		return defaults;
+	}
+	
+	/**
+	 * returns the hashmap of all the default levels in the json
+	 * 
+	 * @return
+	 */
+	public static HashMap<String, String> getCustomLevels(){
+		return customs;
 	}
 	
 	/**

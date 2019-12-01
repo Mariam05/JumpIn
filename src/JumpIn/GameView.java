@@ -80,7 +80,6 @@ public class GameView extends JFrame implements Serializable {
 		this.game = model;
 		size = model.getBoard().SIZE;
 		
-		selectedLevel = null;
 		previousPanels = new Stack<>();
 		
 		// Creating start page
@@ -113,7 +112,6 @@ public class GameView extends JFrame implements Serializable {
 	 */
 	public void goToLevelPage() {
 		remove(startPage);
-		initializeDefaultLevels();
 		createLevelsPage();
 	}
 	
@@ -195,6 +193,8 @@ public class GameView extends JFrame implements Serializable {
 	 * 
 	 */
 	private void createLevelsPage() {
+		initializeLevels();
+		
 		// JPanel to store all the levels options and labels
 		levelsPage = new JPanel();
 		previousPanels.add(levelsPage);
@@ -249,16 +249,24 @@ public class GameView extends JFrame implements Serializable {
 	}
 	
 	/**
-	 * Initializes the list of levels
+	 * Initializes the list of levels based on what is in the json
 	 */
-	private void initializeDefaultLevels() {
+	private void initializeLevels() {
+		// Getting all the levels from the json
+		HashMap<String,String> d = LevelsParser.getDefaultLevels();
+		HashMap<String,String> c = LevelsParser.getCustomLevels();
+		
+		selectedLevel = null;
+		
 		// Ensures default list is initialized once
 		// Prevents the levels list being duplicated after going back to start page
 		if(defaultList.isEmpty()) {
-			for(int i = 1; i <= 6; i++) {
-				defaultList.addElement("Level " + i);
-			}
-		}	
+			d.forEach((key,value) -> defaultList.addElement("Level " + key));
+		}
+		
+		if(customList.isEmpty()) {
+			c.forEach((key,value) -> customList.addElement(key));
+		}
 		
 		defaultLevels = new JList<>(defaultList);
 		customLevels = new JList<>(customList);
@@ -270,6 +278,7 @@ public class GameView extends JFrame implements Serializable {
 				if (!e.getValueIsAdjusting()) {
 					// Stores only the number associated with the level name
                     selectedLevel = defaultLevels.getSelectedValue().split("Level ")[1];
+                    System.out.println(selectedLevel);
                 }
 			}
 		});
@@ -280,7 +289,8 @@ public class GameView extends JFrame implements Serializable {
 			public void valueChanged(ListSelectionEvent e) {
 				if (!e.getValueIsAdjusting()) {
 					// Stores the whole custom level name
-                    selectedLevel = defaultLevels.getSelectedValue();
+                    selectedLevel = customLevels.getSelectedValue();
+                    System.out.println(selectedLevel);
                 }
 			}
 		});
