@@ -212,7 +212,7 @@ public class GameView extends JFrame implements Serializable {
 		levelsPage.add(buttons, BorderLayout.SOUTH);		
 
 		JButton backBtn = new JButton("Back");
-		backBtn.addActionListener(e -> {defaultList.clear();dispose(); Main.main(null);});
+		backBtn.addActionListener(e -> {dispose();Main.main(null);});
 		buttons.add(backBtn);		
 
 		startBtn = new JButton("Start");
@@ -242,9 +242,13 @@ public class GameView extends JFrame implements Serializable {
 	 * Initializes the list of levels
 	 */
 	private void initializeDefaultLevels() {
-		for(int i = 1; i <= 6; i++) {
-			defaultList.addElement("Level " + i);
-		}
+		// Ensures default list is initialized once
+		// Prevents the levels list being duplicated after going back to start page
+		if(defaultList.isEmpty()) {
+			for(int i = 1; i <= 6; i++) {
+				defaultList.addElement("Level " + i);
+			}
+		}	
 		
 		defaultLevels = new JList<>(defaultList);
 		customLevels = new JList<>(customList);
@@ -256,7 +260,6 @@ public class GameView extends JFrame implements Serializable {
 				if (!e.getValueIsAdjusting()) {
 					// Stores only the number associated with the level name
                     selectedLevel = defaultLevels.getSelectedValue().split("Level ")[1];
-                    System.out.println(selectedLevel);
                 }
 			}
 		});
@@ -268,7 +271,6 @@ public class GameView extends JFrame implements Serializable {
 				if (!e.getValueIsAdjusting()) {
 					// Stores the whole custom level name
                     selectedLevel = defaultLevels.getSelectedValue();
-                    System.out.println(selectedLevel);
                 }
 			}
 		});
@@ -368,7 +370,7 @@ public class GameView extends JFrame implements Serializable {
 		// Add reset button
 		menuItemReset = new JMenuItem("Reset");
 		menuItemReset.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-		menuItemReset.addActionListener(e -> {defaultList.clear();dispose(); Main.main(null);});
+		menuItemReset.addActionListener(e -> {dispose(); Main.main(null);});
 		menuBar.add(menuItemReset);
 
 		// Add quit button
