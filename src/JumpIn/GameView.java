@@ -345,7 +345,7 @@ public class GameView extends JFrame {
 		}
 	}
 
-	/*
+	/**
 	 * All the animals, mushrooms and holes will be added by using this method
 	 */
 	private void instantiateIcons() {
