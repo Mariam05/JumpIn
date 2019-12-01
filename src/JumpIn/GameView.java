@@ -39,7 +39,7 @@ public class GameView extends JFrame {
 	private JPanel startPage, levelsPage;
 	private JButton newGameBtn, loadGameBtn;
 	private JScrollPane defaultLevelsPane, customLevelsPane;
-	JButton board[][]; // This will be a board of squares
+	JButton board[][], startBtn; // This will be a board of squares
 
 	private int size; // The size of the board
 
@@ -186,8 +186,7 @@ public class GameView extends JFrame {
 		backBtn.addActionListener(e -> {defaultList.clear();dispose(); Main.main(null);});
 		buttons.add(backBtn);		
 
-		JButton startBtn = new JButton("Start");
-		startBtn.addActionListener(e -> {goToGame();});
+		startBtn = new JButton("Start");
 		buttons.add(startBtn);		
 
 		JButton buildLvlBtn = new JButton("Build A Level");
@@ -444,6 +443,14 @@ public class GameView extends JFrame {
 	 */
 	public void addNewGameListener(ActionListener a) {
 		newGameBtn.addActionListener(a);
+	}
+	
+	/**
+	 * Listens for when a level has been selected for a new game
+	 * @param a
+	 */
+	public void addLevelListener(ActionListener a) {
+		startBtn.addActionListener(a);
 	}
 
 }
