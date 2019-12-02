@@ -1,6 +1,7 @@
 package JumpIn;
 
 import java.awt.Color;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +17,12 @@ import JumpIn.Fox.FoxType;
  *         Create a new enum class for boardlevels.
  *
  */
-public class Board {
+public class Board implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * A 2D array of squares that makes up the board

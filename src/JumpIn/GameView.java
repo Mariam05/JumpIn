@@ -58,8 +58,8 @@ public class GameView extends JFrame implements Serializable {
 
 	private Game game;
 	private JMenuBar menuBar;
-	private JMenuItem menuItemHelp, menuItemQuit, menuItemReset, menuItemUndo, menuItemRedo, menuItemHint, menuItemSave,
-			menuItemLoad;
+	private JMenuItem menuItemHelp, menuItemQuit, menuItemReset, menuItemUndo, menuItemRedo, menuItemHint, menuItemBack,
+			menuItemSave;
 
 	// These will hold the names of all the levels
 	private static JList<String> defaultLevels, customLevels;
@@ -80,17 +80,14 @@ public class GameView extends JFrame implements Serializable {
 		this.setLayout(new BorderLayout());
 
 		this.game = model;
-		size = model.getBoard().SIZE;
+		size = game.getBoard().SIZE;
 
 		previousPanels = new Stack<>();
 
+		instantiateIcons();
+
 		// Creating start page
 		createStartPage();
-
-	
-		
-
-		instantiateIcons();
 
 		setTitle("JumpIn Game");
 		setSize(700, 700);
@@ -106,6 +103,12 @@ public class GameView extends JFrame implements Serializable {
 	 */
 	public void goToGame() {
 		remove(levelsPage);
+		displayGame();
+	}
+
+	public void goToLoadedGame(Game game) {
+		this.game = game;
+		remove(startPage);
 		displayGame();
 	}
 
@@ -135,14 +138,14 @@ public class GameView extends JFrame implements Serializable {
 		container.setLayout(new GridLayout(size, size));
 		gamePanel = new JPanel(new BorderLayout());
 		gamePanel.add(container);
-		
+
 		add(gamePanel); // add the container to the jframe
 		gamePanel.setVisible(true);
 		addMenuItems();
 		createBoard();
 
 		putIconsOnBoard();
-		
+
 		previousPanels.add(gamePanel);
 	}
 
@@ -151,10 +154,9 @@ public class GameView extends JFrame implements Serializable {
 	 */
 	private void createStartPage() {
 		startPage = new JPanel();
-		
+
 		startPage.setLayout(null);
 		startPage.setBackground(new Color(0, 204, 0));
-		
 
 		// Adding button to go to levels page
 		newGameBtn = new JButton("Start a New Game");
@@ -172,19 +174,6 @@ public class GameView extends JFrame implements Serializable {
 		loadGameBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 		loadGameBtn.setForeground(Color.BLUE);
 
-		// When the user will press save so we'll create a SaveData object and pass this
-		// as we want the user
-		// to save this view then after that call the save method in ResourceManager
-		// class and pass the save object and fileName
-		loadGameBtn.addActionListener(event -> {
-			try {
-				SaveData data = (SaveData) ResourceManager.load("levelSaved");// levelSaved is the file that will be
-																				// loaded and don't use xxx/levelSaved
-			} catch (Exception e) {
-				System.out.println("Couldn't load: " + e.getMessage());
-			}
-		});
-
 		// Adding game title
 		JLabel title = new JLabel("JUMP IN");
 		title.setFont(new Font("Monospaced", Font.BOLD, 125));
@@ -196,10 +185,6 @@ public class GameView extends JFrame implements Serializable {
 		startPage.add(newGameBtn);
 		startPage.add(loadGameBtn);
 
-		loadGameBtn.addActionListener(e -> {
-			displayMessage("load saved game");
-		});
-		
 		add(startPage);
 		previousPanels.add(startPage);
 		currPanel = startPage;
@@ -215,7 +200,7 @@ public class GameView extends JFrame implements Serializable {
 
 		// JPanel to store all the levels options and labels
 		levelsPage = new JPanel();
-		
+
 		levelsPage.setLayout(new BorderLayout());
 		levelsPage.setBackground(new Color(0, 204, 0));
 		add(levelsPage);
@@ -355,11 +340,11 @@ public class GameView extends JFrame implements Serializable {
 			int pieceCol = p.getXPos();
 			if (p instanceof Rabbit) { // if it's a rabbit, associate it with the appropriate rabbit image
 				Rabbit r = (Rabbit) p;
-				if (r.getColour() == Color.WHITE)
+				if (r.toString().equals("RA1"))
 					piece = whiteRabbit.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
-				if (r.getColour() == Color.GRAY)
+				if (r.toString().equals("RA2"))
 					piece = greyRabbit.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
-				if (r.getColour() == Color.YELLOW)
+				if (r.toString().equals("RA3"))
 					piece = yellowRabbit.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
 				board[pieceRow][pieceCol].setIcon(new ImageIcon(piece)); // add the image to the animal's location
 
@@ -450,25 +435,29 @@ public class GameView extends JFrame implements Serializable {
 		menuItemHint.setAccelerator(KeyStroke.getKeyStroke('h')); // can activate hint by pressing h
 		menuBar.add(menuItemHint);
 
-		// Add save BUTTON
+		// Add back button
+		menuItemBack = new JMenuItem("Back");
+		menuItemBack.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		menuItemBack.addActionListener(e -> menuItemBackPressed());
+		menuBar.add(menuItemBack);
 
+		// Add save BUTTON
 		menuItemSave = new JMenuItem("Save");
 		menuItemSave.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-		// When the user will press save so we'll create a SaveData object and pass this
-		// as we want the user
-		// to save this view then after that call the save method in ResourceManager
-		// class and pass the save object and fileName
-		menuItemSave.addActionListener(event -> {
-			SaveData data = new SaveData(game);
-			try {
-				ResourceManager.save(data, "levelSaved");// levelSaved is the file and don't use xxx/levelSaved
-			} catch (Exception e) {
-				System.out.println("Couldn't save: " + e.getMessage());
-			}
-		});
 		menuBar.add(menuItemSave);
 
 		gamePanel.add(menuBar, BorderLayout.NORTH);
+	}
+
+	private void menuItemBackPressed() {
+		int i = JOptionPane.showConfirmDialog(this,
+				"Would you like to save before leaving? Warning: this will override your previous save");
+		if (i == 2) return; //cancel, don't do anything
+		if (i == 0) { //used said yes
+			game.saveGame();
+			displayMessage("Saved");
+		}
+		goBack();
 	}
 
 	/*
@@ -597,6 +586,14 @@ public class GameView extends JFrame implements Serializable {
 	 */
 	public void addLevelListener(ActionListener a) {
 		startBtn.addActionListener(a);
+	}
+
+	public void addSaveGameListener(ActionListener a) {
+		menuItemSave.addActionListener(a);
+	}
+
+	public void addLoadGameListener(ActionListener a) {
+		loadGameBtn.addActionListener(a);
 	}
 
 }

@@ -1,4 +1,7 @@
 package JumpIn;
+
+import java.io.Serializable;
+
 /**
  * This class helps the Board class to create it's (5 * 5) board grid formed of
  * squares. In addition, identifies what is on the square and if the square is
@@ -7,9 +10,13 @@ package JumpIn;
  * @author Mariam Almalki
  * @version 2.0
  */
-public class Square {
+public class Square implements Serializable{
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Piece piece;
 	private boolean hasPiece;
 	private boolean isHole;

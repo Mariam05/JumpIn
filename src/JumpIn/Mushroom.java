@@ -1,5 +1,6 @@
 package JumpIn;
 
+import java.io.Serializable;
 import java.util.Scanner;
 
 /**
@@ -7,7 +8,13 @@ import java.util.Scanner;
  * @author tomar
  *
  */
-public class Mushroom extends Piece {
+public class Mushroom extends Piece implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 
 	public Mushroom(String pieceName) {
 		super(pieceName);

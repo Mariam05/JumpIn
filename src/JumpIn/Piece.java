@@ -1,5 +1,6 @@
 package JumpIn;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -7,7 +8,12 @@ import java.util.ArrayList;
  * @author Mariam Almalki
  *
  */
-public abstract class Piece {
+public abstract class Piece implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	/**
 	 * Used to identify which piece it is

@@ -1,5 +1,6 @@
 package JumpIn;
 
+import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +18,12 @@ import java.util.Set;
  * @author Mariam Almalki
  *
  */
-public class Solver {
+public class Solver implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * The state of the game at which the player pressed hint.

@@ -2,6 +2,7 @@ package JumpIn;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 
 /**
  * The controller of the MVC Pattern.
@@ -11,8 +12,12 @@ import java.awt.event.ActionListener;
  * @author Team members of //TODO: Get Team Name
  *
  */
-public class GameController {
+public class GameController implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Game game; //the model
 	private GameView gameView; //the view
 	private int numOfButtonsPressed; //the number of buttons pressed by the user in a round
@@ -31,8 +36,27 @@ public class GameController {
 		numOfButtonsPressed = 0;
 		
 		// Adds listener for when user wants to start a new game
-		gameView.addNewGameListener(new GameListener()); 
+		gameView.addNewGameListener(new GameListener());
+		
+		gameView.addLoadGameListener(new LoadListener());
 
+	}
+	
+	class SaveListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			gameView.displayMessage("Saved");
+			game.saveGame();
+		}
+	}
+	
+	class LoadListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			game = game.loadGame();
+			gameView.goToLoadedGame(game);
+			gameView.update();
+		}
 	}
 	
 	/**
@@ -45,6 +69,7 @@ public class GameController {
 				gameView.board[i][j].addActionListener(new ButtonListener(i, j));
 			}
 		}
+		gameView.addSaveGameListener(new SaveListener());
 	}
 
 	/**
