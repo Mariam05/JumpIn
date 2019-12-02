@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Stack;
 
 import javax.swing.BorderFactory;
@@ -40,7 +41,7 @@ import javax.swing.event.ListSelectionListener;
 public class GameView extends JFrame implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel container, gamePanel, currPanel;
+	private JPanel container, gamePanel;
 	private JPanel startPage, levelsPage;
 
 	private JButton newGameBtn, loadGameBtn;
@@ -120,7 +121,6 @@ public class GameView extends JFrame implements Serializable {
 	 */
 	public void goToLevelPage() {
 		remove(startPage);
-		currPanel = levelsPage;
 		createLevelsPage();
 	}
 
@@ -190,7 +190,6 @@ public class GameView extends JFrame implements Serializable {
 
 		add(startPage);
 		previousPanels.add(startPage);
-		currPanel = startPage;
 
 	}
 
@@ -316,8 +315,6 @@ public class GameView extends JFrame implements Serializable {
 			currPanel.setVisible(false);
 			remove(currPanel);
 			JPanel newPanel = previousPanels.peek();
-			currPanel = newPanel;
-			//if(newPanel == levelsPage) goToLevelPage();
 			add(newPanel);
 			newPanel.setVisible(true);
 		}
@@ -335,10 +332,9 @@ public class GameView extends JFrame implements Serializable {
 			board[dimensions[i - 1]][dimensions[i]].setBackground(new Color(153, 0, 0));
 		}
 
-		// Add the animals
-		HashMap<String, Piece> pieces = game.getAnimalsOnBoard(); // get the animals from the model
-		for (String s : pieces.keySet()) { // for each animal
-			Piece p = pieces.get(s);
+		// Add the pieces
+		List<Piece> pieceList = game.getBoard().getPieceObjects();
+		for (Piece p : pieceList) {
 			int pieceRow = p.getYPos();
 			int pieceCol = p.getXPos();
 			if (p instanceof Rabbit) { // if it's a rabbit, associate it with the appropriate rabbit image

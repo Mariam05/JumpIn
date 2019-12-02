@@ -212,7 +212,7 @@ public class Fox extends Piece implements Serializable{
 					return false;
 
 				for (int i = start; i <= end; i++) { // ensure path is clear
-					if (board.getSquare(i, currY).hasPiece())
+					if (board.getSquare(i, currY).hasPiece()|| board.getSquare(i, currY).isHole())
 						return false;
 				}
 
@@ -229,7 +229,7 @@ public class Fox extends Piece implements Serializable{
 					return false;
 
 				for (int i = end; i <= start; i++) { // check if path is clear
-					if (board.hasPiece(i, currY))
+					if (board.hasPiece(i, currY) || board.getSquare(i, currY).isHole())
 						return false;
 				}
 
@@ -249,7 +249,7 @@ public class Fox extends Piece implements Serializable{
 					return false;
 
 				for (int i = start; i >= end; i--) { // reprompt if path isn't clear
-					if (board.getSquare(currX, i).hasPiece())
+					if (board.getSquare(currX, i).hasPiece()|| board.getSquare(currX, i).isHole())
 						return false;
 				}
 
@@ -266,7 +266,7 @@ public class Fox extends Piece implements Serializable{
 					return false;
 
 				for (int i = start; i <= end; i++) { // reprompt if path isn't clear
-					if (board.getSquare(currX, i).hasPiece())
+					if (board.getSquare(currX, i).hasPiece() || board.getSquare(currX, i).isHole() )
 						return false;
 				}
 

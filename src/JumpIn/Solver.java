@@ -88,8 +88,7 @@ public class Solver implements Serializable{
 																									// piece
 						for (Command c : commands) { // for each command, create a new node based on what state it leads
 														// to
-							System.out.println("In solver: " + currNode.getBoard().getStringRepresentation());
-							System.out.println("In solver: " + c);
+							
 							Node newNode = new Node(currNode, currNode.getBoard().getStringRepresentation(), c);
 
 							queue.add(newNode); // add the new node to the queue so that we can explore it

@@ -286,11 +286,10 @@ public class LevelBuilderPanel extends JPanel implements ActionListener, Seriali
 			// Won't save level to json without a valid name
 			if(levelName != null) {
 				String boardRepresentation = board.getStringRepresentation();
-				System.out.println(board.getStringRepresentation());
 				LevelsParser.addCustomLevelToFile(levelName, boardRepresentation);
 				gameView.goBack();
-			}
-			
+				gameView.goBack();
+			}	
 			
 		}
 
@@ -313,23 +312,24 @@ public class LevelBuilderPanel extends JPanel implements ActionListener, Seriali
 			break;
 		case ("HFox"):
 
-			F1H = new Fox("F1H" + fCount, FoxType.HORIZONTAL, true);
+			F1H = new Fox("F1H" , FoxType.HORIZONTAL, true);
 			Piece tail = ((Fox) F1H).getAssociatedPart();
 			board.addPiece(F1H, j, i);
 			board.addPiece(tail, tail.getXPos(), tail.getYPos());
-			board.addToPieceHashmap(F1H.toString(), F1H);
-			board.addToPieceHashmap(tail.toString(), tail);
+			board.addToPieceHashmap(F1H.toString()+ fCount, F1H);
+			board.addToPieceHashmap(tail.toString()+ fCount, tail);
 			piecesAdded.add(F1H.toString());
 			fCount++;
 			break;
 		case ("VFox"):
-			F2V = new Fox("F2V"+fCount, FoxType.VERTICAL, true);
+			
+			F2V = new Fox("F2V", FoxType.VERTICAL, true);
 			Piece vtail = ((Fox) F2V).getAssociatedPart();
 			board.addPiece(F2V, j, i);
 			board.addPiece(vtail, vtail.getXPos(), vtail.getYPos());
 
-			board.addToPieceHashmap(F2V.toString(), F2V);
-			board.addToPieceHashmap(vtail.toString(), vtail);
+			board.addToPieceHashmap(F2V.toString()+fCount, F2V);
+			board.addToPieceHashmap(vtail.toString()+fCount, vtail);
 
 			piecesAdded.add(F2V.toString());
 

@@ -65,14 +65,14 @@ public class Node implements Serializable{
 	public Node(Node parentNode, String parentBoard, Command command) {
 		this.parentNode = parentNode;
 		this.command = command;
-		animalList = new ArrayList<>();
 
 		board = Board.makeBoard(parentBoard);
-		
-		animalList = board.getPieceObjects();
+	
+		animalList = board.getPiecesExceptTails();
 
 		if (command != null) { // command could be null if this is the source
 			pieceToMove = command.getPiece();
+			
 			newX = command.getX();
 			newY = command.getY();
 
