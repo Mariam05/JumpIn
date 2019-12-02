@@ -348,7 +348,6 @@ public class GameView extends JFrame implements Serializable {
 			int pieceCol = p.getXPos();
 			if (p instanceof Rabbit) { // if it's a rabbit, associate it with the appropriate rabbit image
 				Rabbit r = (Rabbit) p;
-				System.out.println(r.toString());
 				if (r.toString().equals("RA1"))
 					piece = whiteRabbit.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
 				if (r.toString().equals("RA2"))

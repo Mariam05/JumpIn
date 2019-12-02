@@ -281,8 +281,6 @@ public class Game implements java.io.Serializable{
 			
 			out.close(); 
 			file.close(); 
-			
-			System.out.println("Object has been serialized"); 
 
 		} 
 		
@@ -311,8 +309,6 @@ public class Game implements java.io.Serializable{
 			
 			in.close(); 
 			file.close(); 
-			
-			System.out.println("Object has been deserialized "); 
 
 			return object1;
 		} 

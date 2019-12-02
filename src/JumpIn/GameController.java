@@ -22,7 +22,7 @@ public class GameController {
 	private static final String COMMAND = "move"; //The default command (other commands are represented by buttons in view)
 
 	/**
-	 * Create the game controller instance by adding listeners to the view
+	 * Create the game controller instance by adding listeners to the view 
 	 * @param game the model
 	 * @param gameView the view
 	 */
