@@ -40,7 +40,7 @@ import javax.swing.event.ListSelectionListener;
 public class GameView extends JFrame implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel container, gamePanel;
+	private JPanel container, gamePanel, currPanel;
 	private JPanel startPage, levelsPage;
 
 	private JButton newGameBtn, loadGameBtn;
@@ -87,10 +87,8 @@ public class GameView extends JFrame implements Serializable {
 		// Creating start page
 		createStartPage();
 
-		container = new JPanel();
-		container.setLayout(new GridLayout(size, size));
-		gamePanel = new JPanel(new BorderLayout());
-		gamePanel.add(container);
+	
+		
 
 		instantiateIcons();
 
@@ -116,6 +114,7 @@ public class GameView extends JFrame implements Serializable {
 	 */
 	public void goToLevelPage() {
 		remove(startPage);
+		currPanel = levelsPage;
 		createLevelsPage();
 	}
 
@@ -132,12 +131,19 @@ public class GameView extends JFrame implements Serializable {
 	 * Setting up the game board
 	 */
 	private void displayGame() {
+		container = new JPanel();
+		container.setLayout(new GridLayout(size, size));
+		gamePanel = new JPanel(new BorderLayout());
+		gamePanel.add(container);
+		
 		add(gamePanel); // add the container to the jframe
-		previousPanels.add(gamePanel);
+		gamePanel.setVisible(true);
 		addMenuItems();
 		createBoard();
 
 		putIconsOnBoard();
+		
+		previousPanels.add(gamePanel);
 	}
 
 	/**
@@ -196,6 +202,7 @@ public class GameView extends JFrame implements Serializable {
 		
 		add(startPage);
 		previousPanels.add(startPage);
+		currPanel = startPage;
 
 	}
 
@@ -320,9 +327,11 @@ public class GameView extends JFrame implements Serializable {
 		if (!previousPanels.isEmpty()) {
 			JPanel currPanel = previousPanels.pop();
 			currPanel.setVisible(false);
+			remove(currPanel);
 			JPanel newPanel = previousPanels.peek();
-			newPanel.setVisible(true);
+			currPanel = newPanel;
 			add(newPanel);
+			newPanel.setVisible(true);
 		}
 	}
 
