@@ -88,6 +88,7 @@ public class LevelsParser implements Serializable{
 	 * @return
 	 */
 	public static HashMap<String, String> getDefaultLevels(){
+		getLevelsFromJson();
 		return defaults;
 	}
 	
@@ -97,6 +98,7 @@ public class LevelsParser implements Serializable{
 	 * @return
 	 */
 	public static HashMap<String, String> getCustomLevels(){
+		getLevelsFromJson();
 		return customs;
 	}
 	

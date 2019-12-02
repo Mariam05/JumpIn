@@ -2,6 +2,7 @@ package JumpIn;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 
 
 /**
@@ -12,8 +13,12 @@ import java.awt.event.ActionListener;
  * @author Team members of //TODO: Get Team Name
  *
  */
-public class GameController {
+public class GameController implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Game game; //the model
 	private GameView gameView; //the view
 	private int numOfButtonsPressed; //the number of buttons pressed by the user in a round
@@ -34,11 +39,11 @@ public class GameController {
 		// Adds listener for when user wants to start a new game
 		gameView.addNewGameListener(new GameListener()); 
 		
-		// Adds listener for when the user wants to loads a previuos game
 		gameView.addLoadGameListener(new LoadListener());
 
 	}
 	
+
 	
 	/*
 	 * Listener for the save button when playing the game
@@ -51,6 +56,7 @@ public class GameController {
 		}
 	}
 	
+
 	
 	/*
 	 * Listener for the load button at the start of the game
@@ -62,6 +68,7 @@ public class GameController {
 			gameView.goToLoadedGame(game);	
 			addActionListeners();
 		}
+
 	}
 	
 	/**

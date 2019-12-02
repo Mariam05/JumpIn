@@ -30,7 +30,6 @@ import javax.swing.KeyStroke;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-
 /**
  * This is the view class for the GUI. It has a model (Game object) and updates
  * whenever the model updates
@@ -49,7 +48,7 @@ public class GameView extends JFrame implements Serializable {
 
 	private int size; // The size of the board
 
-	private Image piece, whiteRabbit, yellowRabbit, greyRabbit, mushroom, foxface, foxtail, hole;
+	Image piece, whiteRabbit, yellowRabbit, greyRabbit, mushroom, foxface, foxtail, hole;
 
 	/**
 	 * this will be used twice firstly to add holes and secondly to change the
@@ -59,8 +58,8 @@ public class GameView extends JFrame implements Serializable {
 
 	private Game game;
 	private JMenuBar menuBar;
-	private JMenuItem menuItemHelp, menuItemQuit, menuItemReset, menuItemUndo, menuItemRedo, menuItemHint, menuItemSave,
-			menuItemLoad;
+	private JMenuItem menuItemHelp, menuItemQuit, menuItemReset, menuItemUndo, menuItemRedo, menuItemHint, menuItemBack,
+			menuItemSave;
 
 	// These will hold the names of all the levels
 	private static JList<String> defaultLevels, customLevels;
@@ -81,17 +80,14 @@ public class GameView extends JFrame implements Serializable {
 		this.setLayout(new BorderLayout());
 
 		this.game = model;
-		size = model.getBoard().SIZE;
+		size = game.getBoard().SIZE;
 
 		previousPanels = new Stack<>();
 
+		instantiateIcons();
+
 		// Creating start page
 		createStartPage();
-
-	
-		
-
-		instantiateIcons();
 
 		setTitle("JumpIn Game");
 		setSize(700, 700);
@@ -109,16 +105,16 @@ public class GameView extends JFrame implements Serializable {
 		remove(levelsPage);
 		displayGame();
 	}
-	
+
 	/*
 	 * Switches to the previous game from start page
 	 */
-	public void goToLoadedGame(Game game) {		
+	public void goToLoadedGame(Game game) {
 		remove(startPage);
 		this.game = game;
 		displayGame();
 	}
-	
+
 	/**
 	 * Switches from start page to levels page
 	 */
@@ -145,14 +141,14 @@ public class GameView extends JFrame implements Serializable {
 		container.setLayout(new GridLayout(size, size));
 		gamePanel = new JPanel(new BorderLayout());
 		gamePanel.add(container);
-		
+
 		add(gamePanel); // add the container to the jframe
 		gamePanel.setVisible(true);
 		addMenuItems();
 		createBoard();
 
 		putIconsOnBoard();
-		
+
 		previousPanels.add(gamePanel);
 	}
 
@@ -161,10 +157,9 @@ public class GameView extends JFrame implements Serializable {
 	 */
 	private void createStartPage() {
 		startPage = new JPanel();
-		
+
 		startPage.setLayout(null);
 		startPage.setBackground(new Color(0, 204, 0));
-		
 
 		// Adding button to go to levels page
 		newGameBtn = new JButton("Start a New Game");
@@ -208,7 +203,7 @@ public class GameView extends JFrame implements Serializable {
 
 		// JPanel to store all the levels options and labels
 		levelsPage = new JPanel();
-		
+
 		levelsPage.setLayout(new BorderLayout());
 		levelsPage.setBackground(new Color(0, 204, 0));
 		add(levelsPage);
@@ -263,26 +258,25 @@ public class GameView extends JFrame implements Serializable {
 	/**
 	 * Initializes the list of levels based on what is in the json
 	 */
-	private void initializeLevels() {
+	public void initializeLevels() {
 		// Getting all the levels from the json
 		HashMap<String, String> d = LevelsParser.getDefaultLevels();
 		HashMap<String, String> c = LevelsParser.getCustomLevels();
 
 		selectedLevel = null;
+		
 
 		// Ensures default list is initialized once
 		// Prevents the levels list being duplicated after going back to start page
-		if (defaultList.isEmpty()) {
-			d.forEach((key, value) -> defaultList.addElement("Level " + key));
-		}
+		defaultList.removeAllElements();
+		d.forEach((key, value) -> defaultList.addElement("Level " + key));
 
-		if (customList.isEmpty()) {
-			c.forEach((key, value) -> customList.addElement(key));
-		}
+		customList.removeAllElements();
+		c.forEach((key, value) -> customList.addElement(key));
 
 		defaultLevels = new JList<>(defaultList);
 		customLevels = new JList<>(customList);
-
+		
 		// Add listener to default levels list
 		defaultLevels.addListSelectionListener(new ListSelectionListener() {
 			@Override
@@ -323,6 +317,7 @@ public class GameView extends JFrame implements Serializable {
 			remove(currPanel);
 			JPanel newPanel = previousPanels.peek();
 			currPanel = newPanel;
+			//if(newPanel == levelsPage) goToLevelPage();
 			add(newPanel);
 			newPanel.setVisible(true);
 		}
@@ -443,13 +438,30 @@ public class GameView extends JFrame implements Serializable {
 		menuItemHint.setAccelerator(KeyStroke.getKeyStroke('h')); // can activate hint by pressing h
 		menuBar.add(menuItemHint);
 
-		// Add save BUTTON
+		// Add back button
+		menuItemBack = new JMenuItem("Back");
+		menuItemBack.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		menuItemBack.addActionListener(e -> menuItemBackPressed());
+		menuBar.add(menuItemBack);
 
+		// Add save BUTTON
 		menuItemSave = new JMenuItem("Save");
 		menuItemSave.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 		menuBar.add(menuItemSave);
 
 		gamePanel.add(menuBar, BorderLayout.NORTH);
+	}
+
+	private void menuItemBackPressed() {
+		int i = JOptionPane.showConfirmDialog(this,
+				"Would you like to save before leaving? Warning: this will override your previous save");
+		if (i == 2)
+			return; // cancel, don't do anything
+		if (i == 0) { // used said yes
+			game.saveGame();
+			displayMessage("Saved");
+		}
+		goBack();
 	}
 
 	/*
@@ -475,7 +487,7 @@ public class GameView extends JFrame implements Serializable {
 	/**
 	 * All the animals, mushrooms and holes will be added by using this method
 	 */
-	private void instantiateIcons() {
+	public void instantiateIcons() {
 		// we are adding the holes on the board
 		hole = new ImageIcon(this.getClass().getResource("/JumpIn/Icons/black-hole.png")).getImage();
 
@@ -579,7 +591,7 @@ public class GameView extends JFrame implements Serializable {
 	public void addLevelListener(ActionListener a) {
 		startBtn.addActionListener(a);
 	}
-	
+
 	/**
 	 * Listens for when the user wants to save the current game
 	 * 
@@ -588,7 +600,7 @@ public class GameView extends JFrame implements Serializable {
 	public void addSaveGameListener(ActionListener a) {
 		menuItemSave.addActionListener(a);
 	}
-	
+
 	/**
 	 * Listens for when the user wants to load a previuos game
 	 * 

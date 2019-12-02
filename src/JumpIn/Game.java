@@ -6,10 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Stack;
-
-
 
 /**
  * This is the main class for the JumpIn came. It acts as the model in the MVC
@@ -22,15 +21,14 @@ import java.util.Stack;
  * @version 3.0 of JumpIn
  *
  */
-public class Game implements java.io.Serializable{
-
+public class Game implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
 	private Board board;
-	
+
 	String filename = "file.ser";
 
 	private HashMap<String, Piece> pieces;
@@ -41,8 +39,8 @@ public class Game implements java.io.Serializable{
 	 * Instantiate the parser and commandWords objects. Set up the board with the
 	 * pieces
 	 */
-	public Game() {
-		setBoard("4"); // Init to level 1 by default
+	public Game(String level) {
+		setBoard(level); // Init to level 1 by default
 		undo = new Stack<Command>();
 		redo = new Stack<Command>();
 
@@ -56,7 +54,7 @@ public class Game implements java.io.Serializable{
 	public Board getBoard() {
 		return this.board;
 	}
-	
+
 	/**
 	 * Create the board associated with the level name
 	 * 
@@ -216,7 +214,8 @@ public class Game implements java.io.Serializable{
 		}
 		Command c = undo.pop(); // Get the most recent undo command
 		redo.add(getRevertCommand(c)); // Add command to reverse undo
-		handleMove(c); // Process undo move. we already know it's valid, doesn't need to go through process command
+		handleMove(c); // Process undo move. we already know it's valid, doesn't need to go through
+						// process command
 		return true;
 	}
 
@@ -231,10 +230,9 @@ public class Game implements java.io.Serializable{
 			return false;
 		}
 		Command c = redo.pop(); // Get the most recent redo command
-		processCommand(c); // Process redo move. 
+		processCommand(c); // Process redo move.
 		return true; // Removes previous state from redo stack and returns it
 	}
-	
 
 	public String printGameInstructions() {
 		String title = "JumpIN Instructions: \n\n";
@@ -263,65 +261,53 @@ public class Game implements java.io.Serializable{
 		// System.out.println(title + obstacles + movements + objective + abbreviations
 		// + commands);
 		return title + obstacles + movements + objective + howTo;
-
 	}
-	
-	/*
-	 * Saves the current game to file.ser
-	 */
+
 	public void saveGame() {
-		try
-		{ 
-			//Saving of object in a file 
-			FileOutputStream file = new FileOutputStream(filename); 
-			ObjectOutputStream out = new ObjectOutputStream(file); 
-			
-			// Method for serialization of object 
-			out.writeObject(this); 
-			
-			out.close(); 
-			file.close(); 
+		try {
+			// Saving of object in a file
+			FileOutputStream file = new FileOutputStream(filename);
+			ObjectOutputStream out = new ObjectOutputStream(file);
 
-		} 
-		
-		catch(IOException ex) 
-		{ 
-			System.out.println("IOException is caught"); 
-		} 
+			// Method for serialization of object
+			out.writeObject(this);
+
+			out.close();
+			file.close();
+
+		}
+
+		catch (IOException ex) {
+			System.out.println("IOException is caught. Couldn't save.\n");
+			ex.printStackTrace();
+		}
 	}
-	
-	
-	/*
-	 * Imports the previous played game
-	 */
+
 	public Game loadGame() {
-		
-		Game object1 = null; 
-		
-		try
-		{ 
-			// Reading the object from a file 
-			FileInputStream file = new FileInputStream(filename); 
-			ObjectInputStream in = new ObjectInputStream(file); 
-			
-			// Method for deserialization of object 
-			object1 = (Game)in.readObject(); 
-			
-			in.close(); 
-			file.close(); 
+
+		Game object1 = null;
+
+		try {
+			// Reading the object from a file
+			FileInputStream file = new FileInputStream(filename);
+			ObjectInputStream in = new ObjectInputStream(file);
+
+			// Method for deserialization of object
+			object1 = (Game) in.readObject();
+
+			in.close();
+			file.close();
 
 			return object1;
-		} 
-		
-		catch(IOException ex) 
-		{ 
-			System.out.println("IOException is caught"); 
+		}
+
+		catch (IOException ex) {
+			System.out.println("IOException is caught. Couldn't load.");
 			return object1;
-		} 
-		
-		catch(ClassNotFoundException ex) 
-		{ 
-			System.out.println("ClassNotFoundException is caught"); 
+		}
+
+		catch (ClassNotFoundException ex) {
+			System.out.println("ClassNotFoundException is caught");
 			return object1;
 		}
 	}

@@ -74,45 +74,7 @@ public class Board implements Serializable{
 	public void addToPieceHashmap(String name, Piece p) {
 		piecesOnBoard.put(name, p);
 	}
-	public void addDefaultPieces() {
-		Mushroom mushroom1 = new Mushroom("MSH");
-		Mushroom mushroom2 = new Mushroom("MSH");
-		addPiece(mushroom1, 2, 4);
-		addPiece(mushroom2, 3, 1);
-
-		// Instantiate the pieces on the board
-
-		fox1 = new Fox("F1H", Fox.FoxType.HORIZONTAL, true);
-		fox1T = ((Fox) fox1).getAssociatedPart();
-
-		fox2 = new Fox("F2V", Fox.FoxType.VERTICAL, true);
-		fox2T = ((Fox) fox2).getAssociatedPart();
-
-		rabbit1 = new Rabbit("RA1", Color.WHITE);
-		rabbit2 = new Rabbit("RA2", Color.GRAY);
-		rabbit3 = new Rabbit("RA3", Color.YELLOW);
-
-		// Add the pieces to the piece hashmap
-		piecesOnBoard.put(fox1.toString(), fox1);
-		piecesOnBoard.put(fox2.toString(), fox2);
-		piecesOnBoard.put(fox1T.toString(), fox1T);
-		piecesOnBoard.put(fox2T.toString(), fox2T);
-		piecesOnBoard.put(rabbit1.toString(), rabbit1);
-		piecesOnBoard.put(rabbit2.toString(), rabbit2);
-		piecesOnBoard.put(rabbit3.toString(), rabbit3);
-
-		// Add the pieces to the board. Coordinates are row col
-		addPiece(fox1, 4, 3);
-		addPiece(fox1T, fox1T.getXPos(), fox1T.getYPos()); // add fox1 tail
-
-		addPiece(fox2, 1, 1);
-		addPiece(fox2T, fox2.getXPos(), fox2.getYPos() - 1); // add fox2 tail
-
-		addPiece(rabbit1, 3, 0);
-		addPiece(rabbit2, 4, 2);
-		addPiece(rabbit3, 1, 4);
-	}
-
+	
 	/**
 	 * Factory method to make a new board based on a string representation
 	 * 
@@ -129,6 +91,7 @@ public class Board implements Serializable{
 		for (int y = 0; y < newBoard.SIZE; y++) { // row
 			for (int x = 0; x < newBoard.SIZE; x++) { // col
 				String currPiece = elements[i];
+				if (currPiece.length() > 3) currPiece = currPiece.substring(0,3);
 				FoxType type = null;
 				Piece temp;
 				switch (currPiece) { 
@@ -185,7 +148,6 @@ public class Board implements Serializable{
 					newBoard.pieceObjectsList.add(temp);
 					break;
 				}
-				// System.out.println("i: " + currPiece + " y: " + y + " x: " + x);
 				i++;
 			}
 		}
@@ -214,14 +176,16 @@ public class Board implements Serializable{
 	}
 
 	public boolean hasWon() {
+		int numOfRabbits = 0;
 		for (String s : piecesOnBoard.keySet()) {
 			Piece p = piecesOnBoard.get(s);
 			if (p instanceof Rabbit) {
+				numOfRabbits++;
 				if (!(((Rabbit) p).isInHole()))
 					return false;
 			}
 		}
-		return true;
+		return (!(numOfRabbits == 0)) ; //if there are 0 rabbits on the baord return false, otherwise true
 	}
 
 	/**
