@@ -26,7 +26,7 @@ public class GameTest {
 	 */
 	@Before
 	public void setUp() {
-		g = new Game();
+		g = new Game("4");
 		cmd1 = "move"; // starting with a fully valid command
 		cmd2 = "ra1";
 		cmd3 = "32";
