@@ -9,7 +9,7 @@ package JumpIn;
 public class Main {
 	
 	public static void main(String[] args) {
-		Game game = new Game("1");
+		Game game = new Game();
 		GameView view = new GameView(game);
 		new GameController(game, view);
 		
