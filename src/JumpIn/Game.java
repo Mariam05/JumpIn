@@ -39,8 +39,8 @@ public class Game implements Serializable {
 	 * Instantiate the parser and commandWords objects. Set up the board with the
 	 * pieces
 	 */
-	public Game() {
-		setBoard("4"); // Init to level 4 by default
+	public Game(String level) {
+		setBoard(level); // Init to level 1 by default
 		undo = new Stack<Command>();
 		redo = new Stack<Command>();
 

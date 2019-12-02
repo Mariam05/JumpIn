@@ -5,7 +5,9 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import JumpIn.*;
+import JumpIn.Command;
+
+import JumpIn.Game;
 
 
 public class RedoTest {
@@ -45,7 +47,7 @@ public class RedoTest {
 		assertEquals(game.getBoard().getSquare(3, 3).getPieceString(),"F1T");
 		//Vertical Fox
 		assertEquals(game.getBoard().getSquare(1, 1).getPieceString(),"F2V");
-		assertEquals(game.getBoard().getSquare(1, 0).getPieceString(),"F2T"); 
+		assertEquals(game.getBoard().getSquare(1, 0).getPieceString(),"F2T");
 	}
 	
 	/*

@@ -5,7 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import JumpIn.*;
+import JumpIn.Command;
+import JumpIn.Game;
 
 
 public class UndoTest {
@@ -30,7 +31,6 @@ public class UndoTest {
 	 */
 	@Test
 	public void undotestwithNoMoves() {
-		
 		//Check if undo will not work with no moves made
 		assertEquals(false,game.undo());
 		
