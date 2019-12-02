@@ -103,6 +103,7 @@ public class GameView extends JFrame implements Serializable {
 	 * 
 	 */
 	public void goToGame() {
+		levelsPage.setVisible(false);
 		remove(levelsPage);
 		displayGame();
 	}
@@ -205,7 +206,6 @@ public class GameView extends JFrame implements Serializable {
 
 		levelsPage.setLayout(new BorderLayout());
 		levelsPage.setBackground(new Color(0, 204, 0));
-		add(levelsPage);
 
 		// Adding headers for the different levels options
 		JPanel headers = new JPanel();
@@ -251,6 +251,7 @@ public class GameView extends JFrame implements Serializable {
 		levelsPage.add(splitPane, BorderLayout.CENTER);
 
 		previousPanels.add(levelsPage);
+		add(levelsPage);
 		setVisible(true);
 	}
 
@@ -283,6 +284,7 @@ public class GameView extends JFrame implements Serializable {
 				if (!e.getValueIsAdjusting()) {
 					// Stores only the number associated with the level name
 					selectedLevel = defaultLevels.getSelectedValue().split("Level ")[1];
+//					System.out.println(selectedLevel);
 				}
 			}
 		});
@@ -294,6 +296,7 @@ public class GameView extends JFrame implements Serializable {
 				if (!e.getValueIsAdjusting()) {
 					// Stores the whole custom level name
 					selectedLevel = customLevels.getSelectedValue();
+//					System.out.println(selectedLevel);
 				}
 			}
 		});
@@ -313,10 +316,16 @@ public class GameView extends JFrame implements Serializable {
 		if (!previousPanels.isEmpty()) {
 			JPanel currPanel = previousPanels.pop();
 			currPanel.setVisible(false);
+			
 			remove(currPanel);
+//			if(currPanel instanceof LevelBuilderPanel) {
+//				createLevelsPage();
+//				System.out.println("Yes");
+//			} else {
 			JPanel newPanel = previousPanels.peek();
 			add(newPanel);
 			newPanel.setVisible(true);
+//			}
 		}
 	}
 
