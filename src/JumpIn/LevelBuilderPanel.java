@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.Serializable;
 import java.util.Stack;
 
 import javax.swing.BorderFactory;
@@ -33,7 +34,12 @@ import JumpIn.Fox.FoxType;
  * @author Mariam Almalki
  *
  */
-public class LevelBuilderPanel extends JPanel implements ActionListener {
+public class LevelBuilderPanel extends JPanel implements ActionListener, Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * size of the grid = size of baord = 5

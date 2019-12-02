@@ -1,5 +1,6 @@
 package JumpIn;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -13,7 +14,12 @@ import java.util.Scanner;
  * @author Mariam
  *
  */
-public class Fox extends Piece {
+public class Fox extends Piece implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * The type of fox, whether it's horizontal or vertical Specifies how it moves.

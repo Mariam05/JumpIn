@@ -3,6 +3,7 @@ package JumpIn;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
 /**
  * The controller of the MVC Pattern.
  * This class updates the model based on the the player's interactions with the view,
@@ -32,7 +33,35 @@ public class GameController {
 		
 		// Adds listener for when user wants to start a new game
 		gameView.addNewGameListener(new GameListener()); 
+		
+		// Adds listener for when the user wants to loads a previuos game
+		gameView.addLoadGameListener(new LoadListener());
 
+	}
+	
+	
+	/*
+	 * Listener for the save button when playing the game
+	 */
+	class SaveListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			gameView.displayMessage("Saved");
+			game.saveGame();
+		}
+	}
+	
+	
+	/*
+	 * Listener for the load button at the start of the game
+	 */
+	class LoadListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			game = game.loadGame();			
+			gameView.goToLoadedGame(game);	
+			addActionListeners();
+		}
 	}
 	
 	/**
@@ -45,6 +74,7 @@ public class GameController {
 				gameView.board[i][j].addActionListener(new ButtonListener(i, j));
 			}
 		}
+		gameView.addSaveGameListener(new SaveListener());
 	}
 
 	/**

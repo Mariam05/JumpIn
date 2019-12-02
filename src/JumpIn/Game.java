@@ -1,8 +1,15 @@
 
 package JumpIn;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Stack;
+
+
 
 /**
  * This is the main class for the JumpIn came. It acts as the model in the MVC
@@ -15,9 +22,16 @@ import java.util.Stack;
  * @version 3.0 of JumpIn
  *
  */
-public class Game {
+public class Game implements java.io.Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private Board board;
+	
+	String filename = "file.ser";
 
 	private HashMap<String, Piece> pieces;
 
@@ -250,5 +264,69 @@ public class Game {
 		// + commands);
 		return title + obstacles + movements + objective + howTo;
 
+	}
+	
+	/*
+	 * Saves the current game to file.ser
+	 */
+	public void saveGame() {
+		try
+		{ 
+			//Saving of object in a file 
+			FileOutputStream file = new FileOutputStream(filename); 
+			ObjectOutputStream out = new ObjectOutputStream(file); 
+			
+			// Method for serialization of object 
+			out.writeObject(this); 
+			
+			out.close(); 
+			file.close(); 
+			
+			System.out.println("Object has been serialized"); 
+
+		} 
+		
+		catch(IOException ex) 
+		{ 
+			System.out.println("IOException is caught"); 
+		} 
+	}
+	
+	
+	/*
+	 * Imports the previous played game
+	 */
+	public Game loadGame() {
+		
+		Game object1 = null; 
+		
+		try
+		{ 
+			// Reading the object from a file 
+			FileInputStream file = new FileInputStream(filename); 
+			ObjectInputStream in = new ObjectInputStream(file); 
+			
+			// Method for deserialization of object 
+			object1 = (Game)in.readObject(); 
+			
+			in.close(); 
+			file.close(); 
+			
+			System.out.println("Object has been deserialized "); 
+
+			return object1;
+		} 
+		
+		catch(IOException ex) 
+		{ 
+			System.out.println("IOException is caught"); 
+			return object1;
+		} 
+		
+		catch(ClassNotFoundException ex) 
+		{ 
+			System.out.println("ClassNotFoundException is caught"); 
+			return object1;
+		}
 	}
 }

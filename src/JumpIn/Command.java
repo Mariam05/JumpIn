@@ -1,4 +1,7 @@
 package JumpIn;
+
+import java.io.Serializable;
+
 /**
  * This class holds information about a command that was issued by the user. A
  * command currently consists of three parts: (1) the command word (2) the piece
@@ -11,7 +14,11 @@ package JumpIn;
  * @author Mariam Almalki
  *
  */
-public class Command {
+public class Command implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String commandWord;
 	private String piece;
 	private String destinationPos;

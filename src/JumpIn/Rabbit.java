@@ -1,6 +1,7 @@
 package JumpIn;
 
 import java.awt.Color;
+import java.io.Serializable;
 import java.util.Scanner;
 
 /**
@@ -11,7 +12,12 @@ import java.util.Scanner;
  * @author Mariam Almalki
  *
  */
-public class Rabbit extends Piece {
+public class Rabbit extends Piece implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * The colour of the rabbit

@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.Writer;
 import java.util.HashMap;
 import com.eclipsesource.json.*;
@@ -13,8 +14,12 @@ import com.eclipsesource.json.*;
  * @author tomar
  *
  */
-public class LevelsParser {
+public class LevelsParser implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static final String CUSTOM_LEVELS_LABEL = "customLevels";
 	private static final String DEFAULT_LEVELS_LABEL = "defaultLevels";
 	private static final String FILENAME = "LevelsV2.json";

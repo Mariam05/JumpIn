@@ -1,6 +1,7 @@
 package JumpIn;
 
 import java.awt.Color;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,7 +15,12 @@ import java.util.Set;
  * 
  * @author Mariam Almalki
  */
-public class Node {
+public class Node implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * The Node's parent. the source will have this as null

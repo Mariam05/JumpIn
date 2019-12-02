@@ -30,6 +30,7 @@ import javax.swing.KeyStroke;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+
 /**
  * This is the view class for the GUI. It has a model (Game object) and updates
  * whenever the model updates
@@ -108,7 +109,16 @@ public class GameView extends JFrame implements Serializable {
 		remove(levelsPage);
 		displayGame();
 	}
-
+	
+	/*
+	 * Switches to the previous game from start page
+	 */
+	public void goToLoadedGame(Game game) {		
+		remove(startPage);
+		this.game = game;
+		displayGame();
+	}
+	
 	/**
 	 * Switches from start page to levels page
 	 */
@@ -172,19 +182,6 @@ public class GameView extends JFrame implements Serializable {
 		loadGameBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 		loadGameBtn.setForeground(Color.BLUE);
 
-		// When the user will press save so we'll create a SaveData object and pass this
-		// as we want the user
-		// to save this view then after that call the save method in ResourceManager
-		// class and pass the save object and fileName
-		loadGameBtn.addActionListener(event -> {
-			try {
-				SaveData data = (SaveData) ResourceManager.load("levelSaved");// levelSaved is the file that will be
-																				// loaded and don't use xxx/levelSaved
-			} catch (Exception e) {
-				System.out.println("Couldn't load: " + e.getMessage());
-			}
-		});
-
 		// Adding game title
 		JLabel title = new JLabel("JUMP IN");
 		title.setFont(new Font("Monospaced", Font.BOLD, 125));
@@ -196,10 +193,6 @@ public class GameView extends JFrame implements Serializable {
 		startPage.add(newGameBtn);
 		startPage.add(loadGameBtn);
 
-		loadGameBtn.addActionListener(e -> {
-			displayMessage("load saved game");
-		});
-		
 		add(startPage);
 		previousPanels.add(startPage);
 		currPanel = startPage;
@@ -355,13 +348,14 @@ public class GameView extends JFrame implements Serializable {
 			int pieceCol = p.getXPos();
 			if (p instanceof Rabbit) { // if it's a rabbit, associate it with the appropriate rabbit image
 				Rabbit r = (Rabbit) p;
-				if (r.getColour() == Color.WHITE)
+				System.out.println(r.toString());
+				if (r.toString().equals("RA1"))
 					piece = whiteRabbit.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
-				if (r.getColour() == Color.GRAY)
+				if (r.toString().equals("RA2"))
 					piece = greyRabbit.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
-				if (r.getColour() == Color.YELLOW)
+				if (r.toString().equals("RA3"))
 					piece = yellowRabbit.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
-				board[pieceRow][pieceCol].setIcon(new ImageIcon(piece)); // add the image to the animal's location
+				board[pieceRow][pieceCol].setIcon(new ImageIcon(piece));
 
 			} else if (p instanceof Fox) { // if it's a fox, associate it with the appropriate fox image depending
 											// on whether it's a head/tail
@@ -454,18 +448,6 @@ public class GameView extends JFrame implements Serializable {
 
 		menuItemSave = new JMenuItem("Save");
 		menuItemSave.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-		// When the user will press save so we'll create a SaveData object and pass this
-		// as we want the user
-		// to save this view then after that call the save method in ResourceManager
-		// class and pass the save object and fileName
-		menuItemSave.addActionListener(event -> {
-			SaveData data = new SaveData(game);
-			try {
-				ResourceManager.save(data, "levelSaved");// levelSaved is the file and don't use xxx/levelSaved
-			} catch (Exception e) {
-				System.out.println("Couldn't save: " + e.getMessage());
-			}
-		});
 		menuBar.add(menuItemSave);
 
 		gamePanel.add(menuBar, BorderLayout.NORTH);
@@ -597,6 +579,24 @@ public class GameView extends JFrame implements Serializable {
 	 */
 	public void addLevelListener(ActionListener a) {
 		startBtn.addActionListener(a);
+	}
+	
+	/**
+	 * Listens for when the user wants to save the current game
+	 * 
+	 * @param a
+	 */
+	public void addSaveGameListener(ActionListener a) {
+		menuItemSave.addActionListener(a);
+	}
+	
+	/**
+	 * Listens for when the user wants to load a previuos game
+	 * 
+	 * @param a
+	 */
+	public void addLoadGameListener(ActionListener a) {
+		loadGameBtn.addActionListener(a);
 	}
 
 }
