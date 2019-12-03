@@ -49,7 +49,7 @@ public class GameView extends JFrame implements Serializable {
 
 	private int size; // The size of the board
 
-	Image piece, whiteRabbit, yellowRabbit, greyRabbit, mushroom, foxface, foxtail, hole;
+	Image piece, whiteRabbit, yellowRabbit, greyRabbit, mushroom, foxface, foxtail, hole, grassPic;
 
 	/**
 	 * this will be used twice firstly to add holes and secondly to change the
@@ -94,7 +94,7 @@ public class GameView extends JFrame implements Serializable {
 		setSize(700, 700);
 		setResizable(false);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setVisible(true);
+		setVisible(true); 
 
 	}
 
@@ -513,6 +513,8 @@ public class GameView extends JFrame implements Serializable {
 
 		// instantiate the fox tail image
 		foxtail = new ImageIcon(this.getClass().getResource("/JumpIn/Icons/foxtail.png")).getImage();
+		
+		grassPic = new ImageIcon(this.getClass().getResource("/JumpIn/Icons/grass.png")).getImage();
 	}
 
 	/**

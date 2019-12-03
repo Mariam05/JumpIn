@@ -53,13 +53,13 @@ public class LevelBuilderPanel extends JPanel implements ActionListener, Seriali
 
 	private JMenuItem rabbit, vFox, hFox, mushroomMenuItem, done, removeLast, back;
 	private JMenuBar menuBar;
-	private Image mushroom, foxface, foxtail, whiteRabbit, rollOverPic, hole, grassPic;
+	private Image  rollOverPic;
 	private JButton[][] bBoard;
 	private Board board;
 	private int dimensions[] = { 0, 0, 0, 4, 4, 0, 4, 4, 2, 2 };
 
 	private String[] rabbits = { "RA1", "RA2", "RA3" };
-	private Color[] rabbitColours = { Color.WHITE, Color.GRAY, Color.YELLOW };
+	private Color[] rabbitColours = { Color.WHITE, Color.GRAY, Color.YELLOW }; 
 	private int rCount, fCount, mCount; // counts of rabbits, foxes, and mushrooms, respectively
 
 	String currPieceSelected = null;
@@ -166,7 +166,7 @@ public class LevelBuilderPanel extends JPanel implements ActionListener, Seriali
 
 		rollOverPic = null;
 
-		grassPic = new ImageIcon(this.getClass().getResource("/JumpIn/Icons/grass.png")).getImage();
+		
 	}
 
 	/*
@@ -175,7 +175,7 @@ public class LevelBuilderPanel extends JPanel implements ActionListener, Seriali
 	 */
 	private void createButtonsBoard(JButton[][] board) {
 
-		Image grassIcon = grassPic.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
+		Image grassIcon = gameView.grassPic.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
 
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
@@ -192,10 +192,8 @@ public class LevelBuilderPanel extends JPanel implements ActionListener, Seriali
 		}
 
 		// Set the holes
-		hole = new ImageIcon(this.getClass().getResource("/JumpIn/Icons/black-hole.png")).getImage();
-		Image piece = hole.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH);
 		for (int i = 1; i < dimensions.length; i = i + 2) {
-			board[dimensions[i - 1]][dimensions[i]].setIcon(new ImageIcon(piece));
+			board[dimensions[i - 1]][dimensions[i]].setIcon(new ImageIcon(gameView.hole.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH)));
 			board[dimensions[i - 1]][dimensions[i]].setBackground(new Color(153, 0, 0));
 		}
 	}
@@ -239,9 +237,9 @@ public class LevelBuilderPanel extends JPanel implements ActionListener, Seriali
 						board.removePiece(tail.getXPos(), tail.getYPos());
 
 						bBoard[p.getYPos()][p.getXPos()].setIcon(
-								new ImageIcon(grassPic.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH)));
+								new ImageIcon(gameView.grassPic.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH)));
 						bBoard[tail.getYPos()][tail.getXPos()].setIcon(
-								new ImageIcon(grassPic.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH)));
+								new ImageIcon(gameView.grassPic.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH)));
 					}
 					if (p instanceof Rabbit) {
 						rCount--;
@@ -265,7 +263,7 @@ public class LevelBuilderPanel extends JPanel implements ActionListener, Seriali
 					.setIcon(new ImageIcon(gameView.hole.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH)));
 		} else {
 			bBoard[p.getYPos()][p.getXPos()]
-					.setIcon(new ImageIcon(grassPic.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH)));
+					.setIcon(new ImageIcon(gameView.grassPic.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH)));
 		}
 		board.removePiece(p.getXPos(), p.getYPos());
 	}
@@ -524,12 +522,12 @@ public class LevelBuilderPanel extends JPanel implements ActionListener, Seriali
 		public void mouseExited(MouseEvent e) {
 			if (hFoxSelected) {
 				bBoard[i][j - 1]
-						.setIcon(new ImageIcon(grassPic.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH)));
+						.setIcon(new ImageIcon(gameView.grassPic.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH)));
 				hFoxSelected = false;
 			}
 			if (vFoxSelected) {
 				bBoard[i - 1][j]
-						.setIcon(new ImageIcon(grassPic.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH)));
+						.setIcon(new ImageIcon(gameView.grassPic.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH)));
 				vFoxSelected = false;
 			}
 		}

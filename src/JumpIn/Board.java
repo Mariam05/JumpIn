@@ -72,7 +72,7 @@ public class Board implements Serializable{
 	}
 
 	public void addToPieceHashmap(String name, Piece p) {
-		piecesOnBoard.put(name, p);
+		piecesOnBoard.put(name, p); 
 	}
 	
 	/**
