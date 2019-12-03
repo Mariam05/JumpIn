@@ -20,7 +20,7 @@ public class RedoTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		game = new Game("4");
+		game = new Game();
 		command = new Command("move","RA1","32");
 		command1 = new Command("move","RA2","22");
 		command4 = new Command("move","F2V","13");
@@ -80,7 +80,7 @@ public class RedoTest {
 	 * Testing Undo after two moves
 	 */
 	@Test
-	public void undotestwithtwoUndo() {
+	public void redotestwithtwoUndo() {
 		
 		game.processCommand(command);
 		game.processCommand(command1);
@@ -124,7 +124,7 @@ public class RedoTest {
 	 * Testing Undo after three moves
 	 */
 	@Test
-	public void undotestwithThreeMoves() {
+	public void redotestwithThreeMoves() {
 		
 		game.processCommand(command);
 		game.processCommand(command1);
@@ -185,7 +185,7 @@ public class RedoTest {
 	 * Testing Undo after Four moves
 	 */
 	@Test
-	public void undotestwithFourMoves() {
+	public void redotestwithFourMoves() {
 		
 		game.processCommand(command);
 		game.processCommand(command1);
