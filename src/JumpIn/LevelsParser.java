@@ -31,12 +31,12 @@ public class LevelsParser implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final String CUSTOM_LEVELS_LABEL = "customLevels";
 	private static final String DEFAULT_LEVELS_LABEL = "defaultLevels";
-	private static final String FILENAME = "SYSC3110Project/LevelsV2.json";
+	private static final String FILENAME = "/LevelsV2.json";
 
 	/**
 	 * Represent the json levels as a hashmap
 	 */
-	private static HashMap<String, String> levels = new HashMap<>(); 
+	private static HashMap<String, String> levels = new HashMap<>();  
 	
 	/**
 	 * hashmap to hold all default levels 
@@ -52,6 +52,8 @@ public class LevelsParser implements Serializable {
 	 * The levels in json format. 
 	 */
 	private static JsonArray defaultLevels, customLevels;
+	
+	private InputStream is;
 
 	/**
 	 * Add the levels from the json file to the hashmap
@@ -103,11 +105,11 @@ public class LevelsParser implements Serializable {
 		JsonObject allLevels = Json.object().add(DEFAULT_LEVELS_LABEL, defaultLevels).add(CUSTOM_LEVELS_LABEL,
 				customLevels);
 		try {
-			Writer fileWriter = new FileWriter(FILENAME, false); // false overwrites the file
+			File file = new File(LevelsParser.class.getClass().getResource("/LevelsV2.json").getFile());
+			Writer fileWriter = new FileWriter(file, false); // false overwrites the file
 			fileWriter.write(allLevels.toString());
 			fileWriter.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

@@ -87,7 +87,7 @@ public class GameTest {
 	public void testHandleRabbitMove() {
 		// valid destination
 		c = new Command("move", rabbit.toString(), "32"); 
-		assert(g.processCommand(c));
+		assert(g.processCommand(c)); 
 		
 		// invalid destination
 		c = new Command("move", rabbit.toString(), "20");

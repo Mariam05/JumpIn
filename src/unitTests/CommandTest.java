@@ -11,7 +11,7 @@ import JumpIn.Command;
  * @author Nazifa Tanzim & Taher
  *
  */
-public class CommandTest {
+public class CommandTest { 
 	private String validCmd1;
 	private String piece;
 	private String destinationX;
