@@ -11,11 +11,12 @@
   Note: Abdulla Al-wazzan was part of our team but has now switched to another team.
   
 ### CONTENTS OF THIS README
-* Description of Current Version
-* Changes from Previous Version
+* Description of Current Version & Changes from Previous Version
 * User Manual
   * The Main Class
   * How to Play
+  * Level Builder
+  * Save/Load feature
 * Design Decisions
 * Known Issues
 * Team Member Roles
@@ -23,17 +24,20 @@
 * UML
 * Sequence Diagram
 
-### Description of Current Version:
+### Description of Current Version & Changes from Previous Version:
+Milestone 4 now lets the player save/load their progress in the game. The user can also build their own level and choose between default levels to play. 
+Sequence diagram and UML and all other contents of this UML were updated. 
+
 An MVC model is implemented with the game GUI, controller, and model to allow the game to be playable using the mouse. In addition, JUnit tests were added for the model logic testing if the expected results are achieved.
 The documentation for this version includes the sequence diagrams, an updated UML, CRC cards, design decisions, team member roles and responsibilities, a user manual, and the road map ahead.
 
 Milestone 2 consists of reimplemented model with new classes such as Fox, rabbit, Piece, Mushroom, Command, CommandWord, Parser to enable more encapsulation and decoupling in the model. JUnit tests were added and reimplementation of the game using MVC design pattern. A sequence diagram was created for milestone 1. The feedback from milestone 1 was implemented and the changes can be found on branch Milestone1V.
 
-### Changes from Previous Version:
-Milestone 3 has new classes Node and Solver to implement the hint button functionality. Method to validate Fox and Rabbit moves were moved to their respective classes. JUnit tests were added and fixed to test new and altered classes. Additional buttons and their functionalities were implemented (undo, redo, reset, hint).
 
 ### User Manual:
 The main class for this version of the project is called Main.java in the JumpIn package. The game is played using the mouse by pressing the animal to be moved first then pressing on the desired location for the animal to be placed.
+
+####Game Rules
 The following are the list of menu options you can use: _quit help hint reset undo redo_\
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_quit_ will end the game.\
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_hint_ will highlight the piece to move and the location to move it to in order to do in order to solve the puzzle.\
@@ -55,6 +59,20 @@ Mushrooms and holes are stationary.
 
 The objective of the game is to move the rabbits and foxes, through a series of movements
 around the obstacles until all the rabbits are safely in their hole.
+
+####Make A Level
+You can now create and play your own level! Simply press 'Start New Game' then 'Build Level' in the bottom right corner. Select the piece you'd like to put on your board and find a suitable place for it. 
+
+You can press CTRL-Z or 'Undo' to undo the last placement you made. 
+
+You are limited to 2 foxes, 3 rabbits, and 3 mushrooms. 
+
+If the puzzle you made is unsolveable, you won't be able to save it!
+
+####Save Game State
+You can now save your progress for a game! Simply press 'save' while playing and when you come back you can press 'load' and be taken back to exactly where you were. 
+
+
 
 
 ### Design Decisions:
@@ -93,29 +111,41 @@ We removed classes such as Parser and CommandWord as well as methods such as pla
 
 We decided to change the way that a Fox is created: instead of creating a Fox head and a Fox tail and then associating them with eachother, we made it so that once a Fox head is created, it automatically creates a an associated Fox tail. This was necessary for the solver so that the two pieces move together, and so that only the fox head can be included in the array of animals such that we are not checking two extra pieces unnecessarily. 
 
+###### Milestone 4:
+For this milestone, we had to include the option of multiple levels as well as impload a save/load feature and a level builder. 
+
+For the level selector, we decided to let the user choose which level to start with and then go back and choose another level in case they want something easier / harder (instead of immediately going to the next highest level after they finish one)
+
+For the level builder, we decided to create a new class that extends panel that will appear if that option is chosen. In this class, a mouse listener was used on the grid panel to show the user all the possible places that they can place their pieces. We decided to stick to the original JumpIn game rules and limit the number of pieces that the user can place on the board. 
+
+For the save/load, it was decided to only allow the user to save their most recent game (i.e. everytime 'save' is pressed it overrides the previous save). This was done to allow the user to just pick up from where they left off last time. 
+
 ### Known Issues:
-No known issues as of now.
+After playing a level, if the user goes back to the start page pressing 'Start new game' will result in an error.
 
 ### Team member roles:
-**Mariam Almalki**: Made it so that Fox and Rabbit handle their own moves. Created Node and Solver classes and functionality. Implemented hint button functionality (outputs next command in console). Fixed issues with reset button. Worked on sequence diagram for Milestone 3. Created UML diagram.
+**Mariam Almalki**: Implemented level builder and level parser
 
-**Nazifa Tanzim**: Created and implemented undo and redo buttons, as well as initial version of reset button. Implemented hint display in view. Worked on sequence diagram.
+**Nazifa Tanzim**: Created GUI for level selection and handled panel logic for GUI. 
 
-**Taher Shabaan**: Fixed issues with icons disappearing from package after initially pulling repository. Fixed existing JUint tests for classes that were altered. Worked on sequence diagram. 
+**Taher Shabaan**: Worked on Save/Load feature and testing
 
-**Hassan Hassan**: Refined alternate MVC of code that was not implemented to reflect (can be found in branch HassanController). Worked on JUnit testing for new classes that were created. Worked on sequence diagram. 
+**Hassan Hassan**: Worked on Save/Load feature and testing
+
+All members contributed to documentation and design decisions. 
 
 ### Things to Note:
-1. The 'hint' may take a few seconds to load based on how far the puzzle is from completion
-2. The design not used for connecting the MVC together was worked on in the HassanController branch.
-3. For the sequence diagram, for some methods such as processCommand(), the sequence of calls was only shown once to avoid clutter.
+1. In the level builder, if 'back' was pressed after 'save' it will still prompt to save, just in case user made any new changes. 
 
 ### Roadmap Ahead
-Add Save/Load features using a database to the game to allow the user to save the positions of the pieces in the game and come back to it later to continue playing the game. Add levels using XML/JSON.
+We think we'll take a break for now :) But, features to add in the future can include:
+ - Let user save multiple levels.
+ - Let user delete some of their custom levels
+ 
 
 ### UML
 The following UML is also attached as a .violet.html file in the documentation (can be opened and viewed in a browser if downloaded)
-![UML](Documentation/milestone3UML.png)
+![UML](Documentation/milestone4UML.png)
 
 ### Sequence Diagram
-![UML](Documentation/milestone3Sequence.png)
+![UML](Documentation/milestone4Sequence.png)

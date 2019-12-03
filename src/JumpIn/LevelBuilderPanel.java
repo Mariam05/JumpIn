@@ -28,8 +28,7 @@ import javax.swing.KeyStroke;
 import JumpIn.Fox.FoxType;
 
 /**
- * Can make this an inner class to game view after so that some of gameView's
- * methods could be used.
+ * This class holds the view and logic of the level builder
  * 
  * @author Mariam Almalki
  *
@@ -51,14 +50,33 @@ public class LevelBuilderPanel extends JPanel implements ActionListener, Seriali
 	 */
 	private JPanel boardPanel;
 
+	/**
+	 * Options for user as a menu 
+	 */
 	private JMenuItem rabbit, vFox, hFox, mushroomMenuItem, done, removeLast, back;
 	private JMenuBar menuBar;
+	
+	/**
+	 * The picture to use as a rollover
+	 */
 	private Image  rollOverPic;
+	
+	/**
+	 * Board of buttons
+	 */
 	private JButton[][] bBoard;
+	
+	/**
+	 * Actual model board
+	 */
 	private Board board;
-	private int dimensions[] = { 0, 0, 0, 4, 4, 0, 4, 4, 2, 2 };
+	
+	/**
+	 * Holds coordinates of holes
+	 */
+	private int dimensions[] = { 0, 0, 0, 4, 4, 0, 4, 4, 2, 2 }; 
 
-	private String[] rabbits = { "RA1", "RA2", "RA3" };
+	private String[] rabbits = { "RA1", "RA2", "RA3" }; //all the possible rabbits
 	private Color[] rabbitColours = { Color.WHITE, Color.GRAY, Color.YELLOW }; 
 	private int rCount, fCount, mCount; // counts of rabbits, foxes, and mushrooms, respectively
 
@@ -69,6 +87,11 @@ public class LevelBuilderPanel extends JPanel implements ActionListener, Seriali
 
 	private Stack<String> piecesAdded;
 
+	/**
+	 * Create a new panel and set it up to start building
+	 * @param size
+	 * @param gameView
+	 */
 	public LevelBuilderPanel(int size, GameView gameView) {
 		super(new BorderLayout());
 		rCount = 0;
@@ -92,6 +115,9 @@ public class LevelBuilderPanel extends JPanel implements ActionListener, Seriali
 		add(boardPanel, BorderLayout.CENTER);
 	}
 
+	/**
+	 * Instantiate the menu items and add them to panel. Add action listeners. 
+	 */
 	private void createPieceMenu() {
 
 		JPanel pieceMenu = new JPanel();
@@ -147,6 +173,9 @@ public class LevelBuilderPanel extends JPanel implements ActionListener, Seriali
 
 	}
 	
+	/**
+	 * If the user wants to go back (ie quit the level builder)
+	 */
 	private void menuItemBackPressed() {
 		int i = JOptionPane.showConfirmDialog(this,
 				"Would you like to save before leaving?");
@@ -165,8 +194,7 @@ public class LevelBuilderPanel extends JPanel implements ActionListener, Seriali
 		gameView.instantiateIcons();
 
 		rollOverPic = null;
-
-		
+	
 	}
 
 	/*
@@ -198,6 +226,11 @@ public class LevelBuilderPanel extends JPanel implements ActionListener, Seriali
 		}
 	}
 
+	/**
+	 * What to do if each menu item was pressed. 
+	 * Basically,change the rollover pic if the user changes a piece.
+	 * if undo, execute stack logic. 
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
@@ -257,6 +290,10 @@ public class LevelBuilderPanel extends JPanel implements ActionListener, Seriali
 
 	}
 
+	/**
+	 * Remove a rabbit or a mushroom from the board. this is a helper method
+	 * @param p
+	 */
 	private void removeMushroomOrRabbit(Piece p) {
 		if (board.isHole(p.getXPos(), p.getYPos())) {
 			bBoard[p.getYPos()][p.getXPos()]
@@ -268,6 +305,9 @@ public class LevelBuilderPanel extends JPanel implements ActionListener, Seriali
 		board.removePiece(p.getXPos(), p.getYPos());
 	}
 
+	/**
+	 * If the user is done making their level, this method checks if it is solveable. 
+	 */
 	private void handleDone() {
 		if (board.hasWon()) {
 			JOptionPane.showMessageDialog(this, "There is nothing to solve, this game is in winning state!");
@@ -443,8 +483,6 @@ public class LevelBuilderPanel extends JPanel implements ActionListener, Seriali
 			vFoxSelected = false;
 		}
 
-		// TODO: put the stuff inside setIcon in a variable so that the code is
-		// cleaner(ie. have var for rollOverPic and foxtails
 		/**
 		 * Set the icon permanently to the button board and add the respective piece to
 		 * the board.
@@ -452,12 +490,13 @@ public class LevelBuilderPanel extends JPanel implements ActionListener, Seriali
 		@Override
 		public void mouseClicked(MouseEvent e) {
 
-			if (rollOverPic != null) {
-				if (isSelectionValid(currPieceSelected, i, j)) {
+			if (rollOverPic != null) { //make sure a piece was selected 
+				if (isSelectionValid(currPieceSelected, i, j)) { //make sure destination is valid
 
 					bBoard[i][j].setIcon(
 							new ImageIcon(rollOverPic.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH)));
 
+					//if fox, also change icon of tail 
 					if (currPieceSelected.equals("HFox")) {
 						bBoard[i][j - 1].setIcon(
 								new ImageIcon(gameView.foxtail.getScaledInstance(110, 110, java.awt.Image.SCALE_SMOOTH)));
@@ -471,7 +510,7 @@ public class LevelBuilderPanel extends JPanel implements ActionListener, Seriali
 						vFoxSelected = false;
 					}
 
-					addPieceToBoard(i, j);
+					addPieceToBoard(i, j); //add the piece to the board
 
 				} else if (arePiecesUsedUp(currPieceSelected)) {
 					sendPiecesUsedUpMessage(currPieceSelected);

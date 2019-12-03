@@ -32,7 +32,7 @@ public class GameController implements Serializable{
 	 * @param gameView the view
 	 */
 	public GameController(Game game, GameView gameView) {
-		this.game = game;
+		this.game = game; 	
 		this.gameView = gameView;
 		numOfButtonsPressed = 0;
 		

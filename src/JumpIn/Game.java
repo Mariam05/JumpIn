@@ -29,7 +29,7 @@ public class Game implements Serializable {
 
 	private Board board;
 
-	String filename = "file.ser";
+	String filename = "file.ser"; 
 
 	private HashMap<String, Piece> pieces;
 

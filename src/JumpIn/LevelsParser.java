@@ -36,10 +36,21 @@ public class LevelsParser implements Serializable {
 	/**
 	 * Represent the json levels as a hashmap
 	 */
-	private static HashMap<String, String> levels = new HashMap<>();
+	private static HashMap<String, String> levels = new HashMap<>(); 
+	
+	/**
+	 * hashmap to hold all default levels 
+	 */
 	private static HashMap<String, String> defaults = new HashMap<>();
+	
+	/**
+	 * Hashmap to hold all custom levels
+	 */
 	private static HashMap<String, String> customs = new HashMap<>();
 
+	/**
+	 * The levels in json format. 
+	 */
 	private static JsonArray defaultLevels, customLevels;
 
 	/**
@@ -51,14 +62,10 @@ public class LevelsParser implements Serializable {
 			InputStream is = LevelsParser.class.getClass().getResourceAsStream("/LevelsV2.json");
 
 			Scanner s = new Scanner(is).useDelimiter("\\A");
-			String result = s.hasNext() ? s.next() : "";
-			
-//			File f = new File(LevelsParser.class.getClassLoader().getResource("LevelsV2.json").toURI());
+			String result = s.hasNext() ? s.next() : ""; //the json file in string format
 
+			//get all default levels
 			defaultLevels = Json.parse(result).asObject().get(DEFAULT_LEVELS_LABEL).asArray();
-
-			// defaultLevels = Json.parse(new
-			// FileReader("LevelsV2.json")).asObject().get(DEFAULT_LEVELS_LABEL).asArray();
 			for (JsonValue dLevel : defaultLevels) {
 				String board = dLevel.asObject().getString("board", "");
 				String name = dLevel.asObject().getString("name", "");
@@ -68,10 +75,8 @@ public class LevelsParser implements Serializable {
 				defaults.put(name, board);
 			}
 
+			//get all custom levels 
 			customLevels = Json.parse(result).asObject().get(CUSTOM_LEVELS_LABEL).asArray();
-
-			// customLevels = Json.parse(new
-			// FileReader("LevelsV2.json")).asObject().get(CUSTOM_LEVELS_LABEL).asArray();
 			for (JsonValue dLevel : customLevels) {
 				String board = dLevel.asObject().getString("board", "");
 				String name = dLevel.asObject().getString("name", "");
@@ -86,6 +91,11 @@ public class LevelsParser implements Serializable {
 
 	}
 
+	/**
+	 * Update the json file to include a custom level 
+	 * @param levelName the name of the level to save
+	 * @param boardRepresentation the board to save
+	 */
 	public static void addCustomLevelToFile(String levelName, String boardRepresentation) {
 		getLevelsFromJson();
 		JsonObject newLevel = Json.object().add("name", levelName).add("board", boardRepresentation);
@@ -102,36 +112,6 @@ public class LevelsParser implements Serializable {
 		}
 
 	}
-
-//	private static String getJsonString() {
-//		StringBuilder stringBuilder = new StringBuilder();
-//		String line = null;
-//
-//		String ls = System.getProperty("line.separator");
-//		try {
-//
-////			System.out.println(LevelsParser.class.getClass().getResource(FILENAME).getFile());
-////			File inputStream = new File(LevelsParser.class.getClass().getResource(FILENAME).getFile());
-//			InputStream is = LevelsParser.class.getClassLoader().getResourceAsStream(FILENAME);
-//
-//			Scanner s = new Scanner(is).useDelimiter("\\A");
-//			String result = s.hasNext() ? s.next() : "";
-//			System.out.print(result);
-//			BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-//
-//			while ((line = reader.readLine()) != null) {
-//				stringBuilder.append(line);
-//				stringBuilder.append(ls);
-//			}
-//
-//			reader.close();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//
-//		return stringBuilder.toString();
-//
-//	}
 
 	/**
 	 * returns the hashmap of all the default levels in the json
@@ -163,17 +143,5 @@ public class LevelsParser implements Serializable {
 	public static String getLevel(String levelName) {
 		getLevelsFromJson();
 		return levels.get(levelName);
-	}
-
-	public static void main(String[] args) {
-		System.out.println("Entering main");
-		// LevelsParser.getJsonString();
-		System.out.println("Done");
-		InputStream is = LevelsParser.class.getClass().getResourceAsStream("/LevelsV2.json");
-
-		Scanner s = new Scanner(is).useDelimiter("\\A");
-		String result = s.hasNext() ? s.next() : "";
-		System.out.println(result);
-		
 	}
 }
