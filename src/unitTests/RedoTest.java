@@ -20,7 +20,7 @@ public class RedoTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		game = new Game();
+		game = new Game("4"); 
 		command = new Command("move","RA1","32");
 		command1 = new Command("move","RA2","22");
 		command4 = new Command("move","F2V","13");

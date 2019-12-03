@@ -6,7 +6,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ CommandTest.class,  FoxTest.class, MushroomTest.class, 
-		RabbitTest.class, GameTest.class, NodeTest.class, RedoTest.class, UndoTest.class })
+		RabbitTest.class, GameTest.class, NodeTest.class, RedoTest.class, UndoTest.class, SaveLoadTest.class })
 public class AllTests {
 
 }
