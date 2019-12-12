@@ -2,6 +2,7 @@ package JumpIn;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -47,7 +48,7 @@ public class GameView extends JFrame implements Serializable {
 	private JButton newGameBtn, loadGameBtn;
 	JButton board[][], startBtn; // This will be a board of squares
 
-	private int size; // The size of the board
+	public int size; // The size of the board
 
 	Image piece, whiteRabbit, yellowRabbit, greyRabbit, mushroom, foxface, foxtail, hole, grassPic;
 
@@ -61,12 +62,6 @@ public class GameView extends JFrame implements Serializable {
 	private JMenuBar menuBar;
 	private JMenuItem menuItemHelp, menuItemQuit, menuItemReset, menuItemUndo, menuItemRedo, menuItemHint, menuItemBack,
 			menuItemSave;
-
-	// These will hold the names of all the levels
-	private static JList<String> defaultLevels, customLevels;
-	private static DefaultListModel<String> defaultList = new DefaultListModel<>(),
-			customList = new DefaultListModel<>();
-	private String selectedLevel;
 
 	private Stack<JPanel> previousPanels;
 
@@ -88,13 +83,13 @@ public class GameView extends JFrame implements Serializable {
 		instantiateIcons();
 
 		// Creating start page
-		createStartPage();
+		new StartPagePanel(this);
 
 		setTitle("JumpIn Game");
 		setSize(700, 700);
 		setResizable(false);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setVisible(true); 
+		setVisible(true);
 
 	}
 
@@ -117,21 +112,14 @@ public class GameView extends JFrame implements Serializable {
 		displayGame();
 	}
 
-	/**
-	 * Switches from start page to levels page
-	 */
-	public void goToLevelPage() {
-		remove(startPage);
-		createLevelsPage();
-	}
+	@Override
+	public Component add(Component c) {
+		super.add(c);
+		if (c instanceof JPanel) {
+			previousPanels.add((JPanel)c);
+		}
+		return c;
 
-	/**
-	 * Returns the most recently selected level
-	 * 
-	 * @return level selected
-	 */
-	public String getSelectedLevel() {
-		return this.selectedLevel;
 	}
 
 	/**
@@ -154,155 +142,6 @@ public class GameView extends JFrame implements Serializable {
 	}
 
 	/**
-	 * Creating start page
-	 */
-	private void createStartPage() {
-		startPage = new JPanel();
-
-		startPage.setLayout(null);
-		startPage.setBackground(new Color(0, 204, 0));
-
-		// Adding button to go to levels page
-		newGameBtn = new JButton("Start a New Game");
-		newGameBtn.setBounds(250, 350, 210, 50);
-		newGameBtn.setFont(new Font("Monospaced", Font.BOLD, 20));
-		newGameBtn.setBackground(Color.WHITE);
-		newGameBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-		newGameBtn.setForeground(Color.BLUE);
-
-		// Adding button to load previous game
-		loadGameBtn = new JButton("Load Previous Game");
-		loadGameBtn.setBounds(230, 450, 250, 50);
-		loadGameBtn.setFont(new Font("Monospaced", Font.BOLD, 20));
-		loadGameBtn.setBackground(Color.WHITE);
-		loadGameBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-		loadGameBtn.setForeground(Color.BLUE);
-
-		// Adding game title
-		JLabel title = new JLabel("JUMP IN");
-		title.setFont(new Font("Monospaced", Font.BOLD, 125));
-		title.setBounds(70, 100, 900, 100);
-		title.setForeground(Color.WHITE);
-
-		// Adding all components to panel
-		startPage.add(title);
-		startPage.add(newGameBtn);
-		startPage.add(loadGameBtn);
-
-		add(startPage);
-		previousPanels.add(startPage);
-
-	}
-
-	/**
-	 * creating levels page
-	 * 
-	 */
-	private void createLevelsPage() {
-		initializeLevels();
-
-		// JPanel to store all the levels options and labels
-		levelsPage = new JPanel();
-
-		levelsPage.setLayout(new BorderLayout());
-		levelsPage.setBackground(new Color(0, 204, 0));
-
-		// Adding headers for the different levels options
-		JPanel headers = new JPanel();
-		levelsPage.add(headers, BorderLayout.NORTH);
-
-		JLabel defaultLvl = new JLabel("Default Levels        ");
-		defaultLvl.setFont(new Font("Monospaced", Font.BOLD, 20));
-		headers.add(defaultLvl);
-
-		JLabel customLvl = new JLabel("|      Custom Levels   ");
-		customLvl.setFont(new Font("Monospaced", Font.BOLD, 20));
-		headers.add(customLvl);
-
-		// Adding buttons to navigate the page
-		JPanel buttons = new JPanel();
-		buttons.setLayout(new GridLayout(1, 2));
-		levelsPage.add(buttons, BorderLayout.SOUTH);
-
-		JButton backBtn = new JButton("Back");
-		backBtn.addActionListener(e -> goBack());
-		buttons.add(backBtn);
-
-		startBtn = new JButton("Start");
-		buttons.add(startBtn);
-
-		JButton buildLvlBtn = new JButton("Build A Level");
-		buttons.add(buildLvlBtn);
-		buildLvlBtn.addActionListener(e -> {
-			remove(levelsPage);
-			JPanel levelBuilderPanel = new LevelBuilderPanel(size, this);
-			previousPanels.add(levelBuilderPanel);
-			add(levelBuilderPanel);
-			setVisible(true);
-		});
-
-		// Adding the levels lists to scroll panes
-		JScrollPane pane1 = new JScrollPane(defaultLevels);
-		JScrollPane pane2 = new JScrollPane(customLevels);
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, pane1, pane2);
-
-		splitPane.setDividerLocation(345);
-		splitPane.setBounds(0, 30, 700, 600);
-		levelsPage.add(splitPane, BorderLayout.CENTER);
-
-		previousPanels.add(levelsPage);
-		add(levelsPage);
-		setVisible(true);
-	}
-
-	/**
-	 * Initializes the list of levels based on what is in the json
-	 */
-	public void initializeLevels() {
-		// Getting all the levels from the json
-		HashMap<String, String> d = LevelsParser.getDefaultLevels();
-		HashMap<String, String> c = LevelsParser.getCustomLevels();
-
-		selectedLevel = null;
-		
-
-		// Ensures default list is initialized once
-		// Prevents the levels list being duplicated after going back to start page
-		defaultList.removeAllElements();
-		d.forEach((key, value) -> defaultList.addElement("Level " + key));
-
-		customList.removeAllElements();
-		c.forEach((key, value) -> customList.addElement(key));
-
-		defaultLevels = new JList<>(defaultList);
-		customLevels = new JList<>(customList);
-		
-		// Add listener to default levels list
-		defaultLevels.addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				if (!e.getValueIsAdjusting()) {
-					// Stores only the number associated with the level name
-					selectedLevel = defaultLevels.getSelectedValue().split("Level ")[1];
-//					System.out.println(selectedLevel);
-				}
-			}
-		});
-
-		// Add listener to custom levels list
-		customLevels.addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				if (!e.getValueIsAdjusting()) {
-					// Stores the whole custom level name
-					selectedLevel = customLevels.getSelectedValue();
-//					System.out.println(selectedLevel);
-				}
-			}
-		});
-	}
-
-	/**
 	 * Get the size of the view's board
 	 * 
 	 * @return int of size (in one way bc it's a square)
@@ -316,16 +155,11 @@ public class GameView extends JFrame implements Serializable {
 		if (!previousPanels.isEmpty()) {
 			JPanel currPanel = previousPanels.pop();
 			currPanel.setVisible(false);
-			
+
 			remove(currPanel);
-//			if(currPanel instanceof LevelBuilderPanel) {
-//				createLevelsPage();
-//				System.out.println("Yes");
-//			} else {
 			JPanel newPanel = previousPanels.peek();
 			add(newPanel);
 			newPanel.setVisible(true);
-//			}
 		}
 	}
 
@@ -513,7 +347,7 @@ public class GameView extends JFrame implements Serializable {
 
 		// instantiate the fox tail image
 		foxtail = new ImageIcon(this.getClass().getResource("/JumpIn/Icons/foxtail.png")).getImage();
-		
+
 		grassPic = new ImageIcon(this.getClass().getResource("/JumpIn/Icons/grass.png")).getImage();
 	}
 

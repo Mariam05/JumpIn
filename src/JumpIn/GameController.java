@@ -37,9 +37,9 @@ public class GameController implements Serializable{
 		numOfButtonsPressed = 0;
 		
 		// Adds listener for when user wants to start a new game
-		gameView.addNewGameListener(new GameListener()); 
+		//gameView.addNewGameListener(new GameListener()); 
 		
-		gameView.addLoadGameListener(new LoadListener());
+//		gameView.addLoadGameListener(new LoadListener());
 
 	}
 	
@@ -143,34 +143,34 @@ public class GameController implements Serializable{
 	 * Allows controller to add action listeners at the appropriate time
 	 * 
 	 * @author Nazifa Tanzim
-	 *
-	 */
-	class LevelListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if(gameView.getSelectedLevel() == null) {
-				gameView.displayMessage("Please select a level");
-				return;
-			}
-			game.setBoard(gameView.getSelectedLevel());
-			gameView.goToGame();
-			addActionListeners();
-		}
-	}
-	
-	/**
-	 * Listens to see if user wants to start a new game
-	 * 
-	 * @author Nazifa Tanzim
-	 *
-	 */
-	class GameListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			gameView.goToLevelPage();
-			gameView.addLevelListener(new LevelListener()); 
-		}
-	}
+//	 *
+//	 */
+//	class LevelListener implements ActionListener {
+//		@Override
+//		public void actionPerformed(ActionEvent e) {
+////			if(gameView.getSelectedLevel() == null) {
+////				gameView.displayMessage("Please select a level");
+////				return;
+////			}
+////			game.setBoard(gameView.getSelectedLevel());
+////			gameView.goToGame();
+////			addActionListeners();
+//		}
+//	}
+//	
+//	/**
+//	 * Listens to see if user wants to start a new game
+//	 * 
+//	 * @author Nazifa Tanzim
+//	 *
+//	 */
+//	class GameListener implements ActionListener {
+//		@Override
+//		public void actionPerformed(ActionEvent e) {
+//			gameView.goToLevelPage();
+//			gameView.addLevelListener(new LevelListener()); 
+//		}
+//	}
 
 	/**
 	 * Listener for button events. Holds information on the button it is associated with.

@@ -27,7 +27,7 @@ public class LevelsParserTest {
 	
 	@Test
 	public void testAddCustomLevelToFile() {
-		LevelsParser.addCustomLevelToFile("Test", board); //add level 1 as a custom level 
-		assertEquals(LevelsParser.getLevel("Test"), board);
+		LevelsParser.addCustomLevelToFile("Test1", board); //add level 1 as a custom level 
+		assertEquals(LevelsParser.getLevel("Test1"), board);
 	}
 }

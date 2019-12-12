@@ -20,6 +20,7 @@
 * Design Decisions
 * Known Issues
 * Team Member Roles
+* Things to Note
 * Roadmap Ahead
 * UML
 * Sequence Diagram
@@ -73,8 +74,6 @@ If the puzzle you made is unsolveable, you won't be able to save it!
 You can now save your progress for a game! Simply press 'save' while playing and when you come back you can press 'load' and be taken back to exactly where you were. 
 
 
-
-
 ### Design Decisions:
 
 ###### Milestone 2:
@@ -121,7 +120,7 @@ For the level builder, we decided to create a new class that extends panel that 
 For the save/load, it was decided to only allow the user to save their most recent game (i.e. everytime 'save' is pressed it overrides the previous save). This was done to allow the user to just pick up from where they left off last time. 
 
 ### Known Issues:
-After playing a level, if the user goes back to the start page pressing 'Start new game' will result in an error.
+- After playing a level, if the user goes back to the start page pressing 'Start new game' will result in an error.
 
 ### Team member roles:
 **Mariam Almalki**: Implemented level builder and level parser
@@ -136,6 +135,9 @@ All members contributed to documentation and design decisions.
 
 ### Things to Note:
 1. In the level builder, if 'back' was pressed after 'save' it will still prompt to save, just in case user made any new changes. 
+
+2. When playing the game from the .jar file, you won't be able to save your custom level because jars are read-only. To use this functionality, please run the code from an IDE.
+
 
 ### Roadmap Ahead
 We think we'll take a break for now :) But, features to add in the future can include:

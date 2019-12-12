@@ -113,6 +113,8 @@ public class LevelBuilderPanel extends JPanel implements ActionListener, Seriali
 		piecesAdded = new Stack<>();
 
 		add(boardPanel, BorderLayout.CENTER);
+		setVisible(true);
+		gameView.add(this);
 	}
 
 	/**

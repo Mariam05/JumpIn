@@ -1,19 +1,16 @@
 package JumpIn;
 
+
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.io.Serializable;
 import java.io.Writer;
 import java.util.HashMap;
-import java.util.Scanner;
 
 import com.eclipsesource.json.*;
 
@@ -31,7 +28,6 @@ public class LevelsParser implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final String CUSTOM_LEVELS_LABEL = "customLevels";
 	private static final String DEFAULT_LEVELS_LABEL = "defaultLevels";
-	private static final String FILENAME = "/LevelsV2.json";
 
 	/**
 	 * Represent the json levels as a hashmap
@@ -53,21 +49,16 @@ public class LevelsParser implements Serializable {
 	 */
 	private static JsonArray defaultLevels, customLevels;
 	
-	private InputStream is;
-
+	
 	/**
 	 * Add the levels from the json file to the hashmap
 	 */
 	public static void getLevelsFromJson() {
+		//copyToExtern();
 
 		try {
-			InputStream is = LevelsParser.class.getClass().getResourceAsStream("/LevelsV2.json");
-
-			Scanner s = new Scanner(is).useDelimiter("\\A");
-			String result = s.hasNext() ? s.next() : ""; //the json file in string format
-
 			//get all default levels
-			defaultLevels = Json.parse(result).asObject().get(DEFAULT_LEVELS_LABEL).asArray();
+			defaultLevels = Json.parse(new FileReader("LevelsV2.json")).asObject().get(DEFAULT_LEVELS_LABEL).asArray();
 			for (JsonValue dLevel : defaultLevels) {
 				String board = dLevel.asObject().getString("board", "");
 				String name = dLevel.asObject().getString("name", "");
@@ -78,7 +69,7 @@ public class LevelsParser implements Serializable {
 			}
 
 			//get all custom levels 
-			customLevels = Json.parse(result).asObject().get(CUSTOM_LEVELS_LABEL).asArray();
+			customLevels = Json.parse(new FileReader("LevelsV2.json")).asObject().get(CUSTOM_LEVELS_LABEL).asArray();
 			for (JsonValue dLevel : customLevels) {
 				String board = dLevel.asObject().getString("board", "");
 				String name = dLevel.asObject().getString("name", "");
@@ -88,7 +79,7 @@ public class LevelsParser implements Serializable {
 				customs.put(name, board);
 			}
 		} catch (Exception e) {
-			System.out.println("COuldn't parse file");
+			System.out.println("Couldn't parse file");
 		}
 
 	}
@@ -105,8 +96,8 @@ public class LevelsParser implements Serializable {
 		JsonObject allLevels = Json.object().add(DEFAULT_LEVELS_LABEL, defaultLevels).add(CUSTOM_LEVELS_LABEL,
 				customLevels);
 		try {
-			File file = new File(LevelsParser.class.getClass().getResource("/LevelsV2.json").getFile());
-			Writer fileWriter = new FileWriter(file, false); // false overwrites the file
+//			String file = LevelsParser.class.getClass().getResource("/LevelsV2.json").getFile();
+			Writer fileWriter = new FileWriter("LevelsV2.json", false); // false overwrites the file
 			fileWriter.write(allLevels.toString());
 			fileWriter.close();
 		} catch (IOException e) {

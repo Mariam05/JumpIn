@@ -27,13 +27,6 @@ public class MushroomTest {
 		assertEquals(mushroom.toString(), "Mushroom1");
 	}
 	
-	/*
-	 * mushroom will not move so it has to be false
-	 */
-	@Test
-	public void ValidatemoveTest() {
-		assertEquals(false,mushroom.validateMove(board, 0, 2));
-	}
 	
 	@Test
 	public void toStringTest() {
