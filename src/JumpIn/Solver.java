@@ -18,12 +18,8 @@ import java.util.Set;
  * @author Mariam Almalki
  *
  */
-public class Solver implements Serializable{
+public class Solver  {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	/**
 	 * The state of the game at which the player pressed hint.
 	 */

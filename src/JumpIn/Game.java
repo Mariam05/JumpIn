@@ -29,7 +29,7 @@ public class Game implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private ArrayList<ActionListener> gameListeners;
+	private static ArrayList<ActionListener> gameListeners;
 
 	private Board board;
 
@@ -90,7 +90,6 @@ public class Game implements Serializable {
 	 * @return false If the command ends the game, true otherwise.
 	 */
 	public boolean processCommand(Command command) {
-		boolean b = false;
 		if (command.isUnknown()) {
 			return false;
 		}
