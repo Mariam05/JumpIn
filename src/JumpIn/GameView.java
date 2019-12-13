@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.Serializable;
@@ -39,13 +40,13 @@ import javax.swing.event.ListSelectionListener;
  * @author Taher Shabaan, Hassan Hassan, Mariam Almalki, Nazifa Tanzim
  *
  */
-public class GameView extends JFrame implements Serializable {
+public class GameView extends JFrame implements Serializable, ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel container, gamePanel;
-	private JPanel startPage, levelsPage;
+	private JPanel startPage, currPanel;
 
-	private JButton newGameBtn, loadGameBtn;
+	private JButton loadGameBtn;
 	JButton board[][], startBtn; // This will be a board of squares
 
 	public int size; // The size of the board
@@ -58,7 +59,7 @@ public class GameView extends JFrame implements Serializable {
 	 */
 	private int dimensions[] = { 0, 0, 0, 4, 4, 0, 4, 4, 2, 2 };
 
-	private Game game;
+	public Game game;
 	private JMenuBar menuBar;
 	private JMenuItem menuItemHelp, menuItemQuit, menuItemReset, menuItemUndo, menuItemRedo, menuItemHint, menuItemBack,
 			menuItemSave;
@@ -72,6 +73,7 @@ public class GameView extends JFrame implements Serializable {
 	 */
 	public GameView(Game model) {
 		super();
+		model.addGameListener(this);
 
 		this.setLayout(new BorderLayout());
 
@@ -93,16 +95,6 @@ public class GameView extends JFrame implements Serializable {
 
 	}
 
-	/**
-	 * Switches from levels page to game
-	 * 
-	 */
-	public void goToGame() {
-		levelsPage.setVisible(false);
-		remove(levelsPage);
-		displayGame();
-	}
-
 	/*
 	 * Switches to the previous game from start page
 	 */
@@ -114,9 +106,12 @@ public class GameView extends JFrame implements Serializable {
 
 	@Override
 	public Component add(Component c) {
-		super.add(c);
+
+		((JPanel) c).setVisible(true);
+		super.add((JPanel) c);
 		if (c instanceof JPanel) {
-			previousPanels.add((JPanel)c);
+			previousPanels.push((JPanel) c);
+			currPanel = (JPanel) c;
 		}
 		return c;
 
@@ -125,20 +120,22 @@ public class GameView extends JFrame implements Serializable {
 	/**
 	 * Setting up the game board
 	 */
-	private void displayGame() {
+	public void displayGame() {
 		container = new JPanel();
 		container.setLayout(new GridLayout(size, size));
+
 		gamePanel = new JPanel(new BorderLayout());
 		gamePanel.add(container);
 
-		add(gamePanel); // add the container to the jframe
-		gamePanel.setVisible(true);
 		addMenuItems();
-		createBoard();
 
+		createBoard();
 		putIconsOnBoard();
 
-		previousPanels.add(gamePanel);
+		gamePanel.setVisible(true);
+		gamePanel.setName("GamePanel");
+		add(gamePanel); // add the container to the jframe
+
 	}
 
 	/**
@@ -152,14 +149,14 @@ public class GameView extends JFrame implements Serializable {
 	}
 
 	public void goBack() {
-		if (!previousPanels.isEmpty()) {
-			JPanel currPanel = previousPanels.pop();
+		
+		if (previousPanels.pop() != null) {
+			
 			currPanel.setVisible(false);
-
 			remove(currPanel);
-			JPanel newPanel = previousPanels.peek();
+			
+			JPanel newPanel = previousPanels.pop();
 			add(newPanel);
-			newPanel.setVisible(true);
 		}
 	}
 
@@ -297,7 +294,7 @@ public class GameView extends JFrame implements Serializable {
 		if (i == 2)
 			return; // cancel, don't do anything
 		if (i == 0) { // used said yes
-			game.saveGame();
+			// game.saveGame();
 			displayMessage("Saved");
 		}
 		goBack();
@@ -317,6 +314,7 @@ public class GameView extends JFrame implements Serializable {
 				button.setPreferredSize(new Dimension(200, 200));
 				button.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
 				button.setBackground(new Color(0, 204, 0));// the backGround of the buttons
+				button.addActionListener(new JumpInController(i, j, game));
 				button.setOpaque(true);
 				container.add(button);
 			}
@@ -355,7 +353,8 @@ public class GameView extends JFrame implements Serializable {
 	 * Remove all current icons and then Update the view
 	 * 
 	 */
-	public void update() {
+	public void update(Game g, boolean won) {
+		this.game = g;
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
 				board[i][j].setIcon(null);
@@ -363,6 +362,14 @@ public class GameView extends JFrame implements Serializable {
 			}
 		}
 		putIconsOnBoard();
+
+		if (won) {
+			int i = JOptionPane.showConfirmDialog(this,
+					"CONGRATS! You solved the puzzle!" + " Would you like to go back to the level selector page?");
+			if (i == 0) { // user said yes
+				goBack();
+			}
+		}
 	}
 
 	/**
@@ -387,7 +394,7 @@ public class GameView extends JFrame implements Serializable {
 		if (!game.undo()) {
 			displayMessage("No more undo's left");
 		} else {
-			update(); // Update the view
+			update(game, false); // Update the view
 		}
 	}
 
@@ -400,7 +407,7 @@ public class GameView extends JFrame implements Serializable {
 		if (!game.redo()) {
 			displayMessage("No more redo's left");
 		} else {
-			update(); // Update the view
+			update(game, false); // Update the view
 		}
 
 	}
@@ -413,24 +420,6 @@ public class GameView extends JFrame implements Serializable {
 	 */
 	public void displayMessage(String message) {
 		JOptionPane.showMessageDialog(this, message);
-	}
-
-	/**
-	 * Listens for when user wants to start a new game
-	 * 
-	 * @param a
-	 */
-	public void addNewGameListener(ActionListener a) {
-		newGameBtn.addActionListener(a);
-	}
-
-	/**
-	 * Listens for when a level has been selected for a new game
-	 * 
-	 * @param a
-	 */
-	public void addLevelListener(ActionListener a) {
-		startBtn.addActionListener(a);
 	}
 
 	/**
@@ -449,6 +438,12 @@ public class GameView extends JFrame implements Serializable {
 	 */
 	public void addLoadGameListener(ActionListener a) {
 		loadGameBtn.addActionListener(a);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
