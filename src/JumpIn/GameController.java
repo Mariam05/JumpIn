@@ -94,7 +94,7 @@ public class GameController implements Serializable{
 			getPieceSelected(b);
 		} else if (numOfButtonsPressed == 2) { //if it's the second button pressed in this round it represents the destination
 			getDestinationPos(b);
-			processCommand(word2, word3); //round is over so process command
+//			processCommand(word2, word3); //round is over so process command
 			numOfButtonsPressed = 0; // reset to 0 because at 2 a complete play has been made
 		}
 	}
@@ -116,27 +116,27 @@ public class GameController implements Serializable{
 		word3 = b.getStringXY();
 	}
 
-	/**
-	 * Process the command of the user
-	 * @param word2 the piece to move
-	 * @param word3 the destination
-	 */
-	private void processCommand(String word2, String word3) {
-		command = new Command(COMMAND, word2, word3); //create a command object
-		boolean validMove = game.processCommand(command); //send it to the model
-
-		if (!validMove) { // if the move is invalid notify the player
-			gameView.displayMessage("Invalid move");
-		} else { // otherwise check for winner and update view
-			if (game.getBoard().hasWon()) {
-				gameView.update();
-				gameView.displayMessage("CONGRATS! You solved the puzzle!");
-				gameView.goBack();
-			} else {
-			gameView.update();
-			}
-		}
-	}
+//	/**
+//	 * Process the command of the user
+//	 * @param word2 the piece to move
+//	 * @param word3 the destination
+//	 */
+//	private void processCommand(String word2, String word3) {
+//		command = new Command(COMMAND, word2, word3); //create a command object
+//		boolean validMove = game.processCommand(command); //send it to the model
+//
+//		if (!validMove) { // if the move is invalid notify the player
+//			gameView.displayMessage("Invalid move");
+//		} else { // otherwise check for winner and update view
+//			if (game.getBoard().hasWon()) {
+//				gameView.update(game);
+//				gameView.displayMessage("CONGRATS! You solved the puzzle!");
+//				gameView.goBack();
+//			} else {
+//			gameView.update(game);
+//			}
+//		}
+//	}
 	
 	/**
 	 * Listens to see if the user has chosen a level to play

@@ -11,7 +11,6 @@ public class Main {
 	public static void main(String[] args) {
 		Game game = new Game("1");
 		GameView view = new GameView(game);
-		new GameController(game, view);
 		
 		view.setVisible(true);
 	}

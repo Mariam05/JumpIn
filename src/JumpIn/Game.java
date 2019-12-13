@@ -1,12 +1,14 @@
 
 package JumpIn;
 
+import java.awt.event.ActionListener;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -26,6 +28,8 @@ public class Game implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private ArrayList<ActionListener> gameListeners;
 
 	private Board board;
 
@@ -43,7 +47,12 @@ public class Game implements Serializable {
 		setBoard(level); // Init to level 1 by default
 		undo = new Stack<Command>();
 		redo = new Stack<Command>();
+		gameListeners = new ArrayList<>();
 
+	}
+	
+	public void addGameListener(ActionListener a) {
+		gameListeners.add(a);
 	}
 
 	/**
@@ -81,7 +90,7 @@ public class Game implements Serializable {
 	 * @return false If the command ends the game, true otherwise.
 	 */
 	public boolean processCommand(Command command) {
-
+		boolean b = false;
 		if (command.isUnknown()) {
 			return false;
 		}
@@ -98,7 +107,7 @@ public class Game implements Serializable {
 			if (!validateLocation(command.getX(), command.getY()))
 				return false;
 			undo.add(getRevertCommand(command));
-			return handleMove(command);
+			return handleMove(command); 
 
 		} else if (commandWord.equals("quit")) {
 			System.out.println(quitMessage());
@@ -106,6 +115,15 @@ public class Game implements Serializable {
 		}
 
 		return false;
+	}
+	
+	private void notifyListeners() {
+		boolean won = board.hasWon();
+		for (ActionListener a : gameListeners) {
+			if (a instanceof GameView) {
+				((GameView)a).update(this, won);
+			}
+		}
 	}
 
 	/**
@@ -178,7 +196,8 @@ public class Game implements Serializable {
 		}
 
 		piece.handleMove(board, command.getX(), command.getY());
-
+		
+		notifyListeners();
 		return true;
 	}
 
