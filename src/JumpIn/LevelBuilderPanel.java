@@ -380,8 +380,6 @@ public class LevelBuilderPanel extends JPanel implements ActionListener {
 
 			board.addToPieceHashmap(F2V.toString() + fCount, F2V);
 			board.addToPieceHashmap(vtail.toString() + fCount, vtail);
-			
-			System.out.println(board.getStringRepresentation());
 
 			piecesAdded.add(F2V.toString() + fCount);
 
