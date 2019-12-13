@@ -1,5 +1,6 @@
 package JumpIn;
 
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -19,7 +20,7 @@ import com.eclipsesource.json.*;
  * @author tomar
  *
  */
-public class LevelsParser {
+public class LevelsParser  {
 
 	private static final String CUSTOM_LEVELS_LABEL = "customLevels";
 	private static final String DEFAULT_LEVELS_LABEL = "defaultLevels";
@@ -27,57 +28,54 @@ public class LevelsParser {
 	/**
 	 * Represent the json levels as a hashmap
 	 */
-	private static HashMap<String, String> levels = new HashMap<>();
-
+	private static HashMap<String, String> levels = new HashMap<>();  
+	
 	/**
-	 * hashmap to hold all default levels
+	 * hashmap to hold all default levels 
 	 */
 	private static HashMap<String, String> defaults = new HashMap<>();
-
+	
 	/**
 	 * Hashmap to hold all custom levels
 	 */
 	private static HashMap<String, String> customs = new HashMap<>();
 
 	/**
-	 * The levels in json format.
+	 * The levels in json format. 
 	 */
 	private static JsonArray defaultLevels, customLevels;
-
-	private static File homeDir, dir;
-
+	
+	private static  File homeDir, dir;
+	
+	
 	public static File createExternFile() {
-
-		InputStream in = LevelsParser.class.getClass().getClass().getResourceAsStream("/JumpIn/LevelsV2.json");
+		
+		InputStream in = LevelsParser.class.getClass().getClass().getResourceAsStream("/JumpIn/LevelsV2.json"); 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-
+		
 		homeDir = new File(System.getProperty("user.home"));
 		dir = new File(homeDir, "Levels.json");
-
-		if (!dir.exists()) {
-
-			try {
-				FileWriter fWriter = new FileWriter(dir, false);
-				fWriter.write(reader.readLine());
-				fWriter.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
+		try {
+			FileWriter fWriter = new FileWriter(dir, false);
+			fWriter.write(reader.readLine());
+			fWriter.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
+		
+		
 		return dir;
 	}
-
+	
 	/**
 	 * Add the levels from the json file to the hashmap
 	 */
 	public static void getLevelsFromJson() {
 
-		// createExternFile();
+		//createExternFile();
 		try {
-			// get all default levels
+			//get all default levels
 			defaultLevels = Json.parse(new FileReader(dir)).asObject().get(DEFAULT_LEVELS_LABEL).asArray();
 			for (JsonValue dLevel : defaultLevels) {
 				String board = dLevel.asObject().getString("board", "");
@@ -88,7 +86,7 @@ public class LevelsParser {
 				defaults.put(name, board);
 			}
 
-			// get all custom levels
+			//get all custom levels 
 			customLevels = Json.parse(new FileReader(dir)).asObject().get(CUSTOM_LEVELS_LABEL).asArray();
 			for (JsonValue dLevel : customLevels) {
 				String board = dLevel.asObject().getString("board", "");
@@ -105,9 +103,8 @@ public class LevelsParser {
 	}
 
 	/**
-	 * Update the json file to include a custom level
-	 * 
-	 * @param levelName           the name of the level to save
+	 * Update the json file to include a custom level 
+	 * @param levelName the name of the level to save
 	 * @param boardRepresentation the board to save
 	 */
 	public static void addCustomLevelToFile(String levelName, String boardRepresentation) {
@@ -147,6 +144,7 @@ public class LevelsParser {
 		return customs;
 	}
 
+	
 	/**
 	 * Return the board corresponding to the specified level
 	 * 
