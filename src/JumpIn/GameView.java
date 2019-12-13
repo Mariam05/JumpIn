@@ -40,13 +40,11 @@ import javax.swing.event.ListSelectionListener;
  * @author Taher Shabaan, Hassan Hassan, Mariam Almalki, Nazifa Tanzim
  *
  */
-public class GameView extends JFrame implements Serializable, ActionListener {
+public class GameView extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel container, gamePanel;
-	private JPanel startPage, currPanel;
+	private JPanel container, gamePanel, currPanel;
 
-	private JButton loadGameBtn;
 	JButton board[][], startBtn; // This will be a board of squares
 
 	public int size; // The size of the board
@@ -99,8 +97,10 @@ public class GameView extends JFrame implements Serializable, ActionListener {
 	 * Switches to the previous game from start page
 	 */
 	public void goToLoadedGame(Game game) {
-		remove(startPage);
+		currPanel.setVisible(false);
+		remove(currPanel);
 		this.game = game;
+	//	this.game.addGameListener(this);
 		displayGame();
 	}
 
@@ -149,12 +149,12 @@ public class GameView extends JFrame implements Serializable, ActionListener {
 	}
 
 	public void goBack() {
-		
+
 		if (previousPanels.pop() != null) {
-			
+
 			currPanel.setVisible(false);
 			remove(currPanel);
-			
+
 			JPanel newPanel = previousPanels.pop();
 			add(newPanel);
 		}
@@ -284,6 +284,10 @@ public class GameView extends JFrame implements Serializable, ActionListener {
 		menuItemSave = new JMenuItem("Save");
 		menuItemSave.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 		menuBar.add(menuItemSave);
+		menuItemSave.addActionListener(e -> {
+			displayMessage("Saved");
+			game.saveGame();
+		});
 
 		gamePanel.add(menuBar, BorderLayout.NORTH);
 	}
@@ -314,7 +318,7 @@ public class GameView extends JFrame implements Serializable, ActionListener {
 				button.setPreferredSize(new Dimension(200, 200));
 				button.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
 				button.setBackground(new Color(0, 204, 0));// the backGround of the buttons
-				button.addActionListener(new JumpInController(i, j, game));
+				button.addActionListener(new GameController(i, j, game));
 				button.setOpaque(true);
 				container.add(button);
 			}
@@ -365,7 +369,7 @@ public class GameView extends JFrame implements Serializable, ActionListener {
 
 		if (won) {
 			int i = JOptionPane.showConfirmDialog(this,
-					"CONGRATS! You solved the puzzle!" + " Would you like to go back to the level selector page?");
+					"CONGRATS! You solved the puzzle!" + " Would you like to go back?");
 			if (i == 0) { // user said yes
 				goBack();
 			}
@@ -420,24 +424,6 @@ public class GameView extends JFrame implements Serializable, ActionListener {
 	 */
 	public void displayMessage(String message) {
 		JOptionPane.showMessageDialog(this, message);
-	}
-
-	/**
-	 * Listens for when the user wants to save the current game
-	 * 
-	 * @param a
-	 */
-	public void addSaveGameListener(ActionListener a) {
-		menuItemSave.addActionListener(a);
-	}
-
-	/**
-	 * Listens for when the user wants to load a previuos game
-	 * 
-	 * @param a
-	 */
-	public void addLoadGameListener(ActionListener a) {
-		loadGameBtn.addActionListener(a);
 	}
 
 	@Override

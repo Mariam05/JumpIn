@@ -34,7 +34,6 @@ public abstract class Piece implements Serializable{
 	 */
 	public Piece(String pieceName) {
 		this.pieceName = pieceName;
-		//this.pieceType = pieceType;
 	}
 	
 	

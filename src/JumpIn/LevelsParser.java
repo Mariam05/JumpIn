@@ -20,12 +20,8 @@ import com.eclipsesource.json.*;
  * @author tomar
  *
  */
-public class LevelsParser implements Serializable {
+public class LevelsParser  {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private static final String CUSTOM_LEVELS_LABEL = "customLevels";
 	private static final String DEFAULT_LEVELS_LABEL = "defaultLevels";
 

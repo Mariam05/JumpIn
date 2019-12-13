@@ -1,12 +1,8 @@
 package JumpIn;
 
-import java.awt.Color;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+
 import java.util.List;
-import java.util.Set;
 
 /**
  * A node represents the state of the game, which includes all its pieces and
@@ -15,12 +11,8 @@ import java.util.Set;
  * 
  * @author Mariam Almalki
  */
-public class Node implements Serializable{
+public class Node {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	/**
 	 * The Node's parent. the source will have this as null
