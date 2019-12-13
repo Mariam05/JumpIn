@@ -44,10 +44,12 @@ public class Game implements Serializable {
 	 * pieces
 	 */
 	public Game(String level) {
+		LevelsParser.createExternFile();
 		setBoard(level); // Init to level 1 by default
 		undo = new Stack<Command>();
 		redo = new Stack<Command>();
 		gameListeners = new ArrayList<>();
+		
 
 	}
 	

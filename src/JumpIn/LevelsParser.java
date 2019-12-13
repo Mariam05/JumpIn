@@ -45,16 +45,38 @@ public class LevelsParser  {
 	 */
 	private static JsonArray defaultLevels, customLevels;
 	
+	private static  File homeDir, dir;
+	
+	
+	public static File createExternFile() {
+		
+		InputStream in = LevelsParser.class.getClass().getClass().getResourceAsStream("/JumpIn/LevelsV2.json"); 
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		
+		homeDir = new File(System.getProperty("user.home"));
+		dir = new File(homeDir, "Levels.json");
+		try {
+			FileWriter fWriter = new FileWriter(dir, false);
+			fWriter.write(reader.readLine());
+			fWriter.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return dir;
+	}
 	
 	/**
 	 * Add the levels from the json file to the hashmap
 	 */
 	public static void getLevelsFromJson() {
-		//copyToExtern();
 
+		//createExternFile();
 		try {
 			//get all default levels
-			defaultLevels = Json.parse(new FileReader("LevelsV2.json")).asObject().get(DEFAULT_LEVELS_LABEL).asArray();
+			defaultLevels = Json.parse(new FileReader(dir)).asObject().get(DEFAULT_LEVELS_LABEL).asArray();
 			for (JsonValue dLevel : defaultLevels) {
 				String board = dLevel.asObject().getString("board", "");
 				String name = dLevel.asObject().getString("name", "");
@@ -65,7 +87,7 @@ public class LevelsParser  {
 			}
 
 			//get all custom levels 
-			customLevels = Json.parse(new FileReader("LevelsV2.json")).asObject().get(CUSTOM_LEVELS_LABEL).asArray();
+			customLevels = Json.parse(new FileReader(dir)).asObject().get(CUSTOM_LEVELS_LABEL).asArray();
 			for (JsonValue dLevel : customLevels) {
 				String board = dLevel.asObject().getString("board", "");
 				String name = dLevel.asObject().getString("name", "");
@@ -93,7 +115,7 @@ public class LevelsParser  {
 				customLevels);
 		try {
 //			String file = LevelsParser.class.getClass().getResource("/LevelsV2.json").getFile();
-			Writer fileWriter = new FileWriter("LevelsV2.json", false); // false overwrites the file
+			Writer fileWriter = new FileWriter(dir, false); // false overwrites the file
 			fileWriter.write(allLevels.toString());
 			fileWriter.close();
 		} catch (IOException e) {
