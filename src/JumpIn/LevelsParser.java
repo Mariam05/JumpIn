@@ -7,7 +7,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.io.Writer;
 import java.util.HashMap;
 
@@ -48,20 +47,19 @@ public class LevelsParser {
 
 	public static File createExternFile() {
 
-		InputStream in = LevelsParser.class.getClass().getClass().getResourceAsStream("/JumpIn/LevelsV2.json");
+		InputStream in = LevelsParser.class.getClassLoader().getResourceAsStream("JumpIn/LevelsV2.json");
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
 		homeDir = new File(System.getProperty("user.home"));
 		dir = new File(homeDir, "Levels.json");
-		if (!dir.exists()) {
-			try {
-				FileWriter fWriter = new FileWriter(dir, false);
-				fWriter.write(reader.readLine());
-				fWriter.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		System.out.println(dir.getPath());
+		try {
+			FileWriter fWriter = new FileWriter(dir, false);
+			fWriter.write(reader.readLine());
+			fWriter.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		return dir;
